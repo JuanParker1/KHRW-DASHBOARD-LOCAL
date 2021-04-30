@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>داشبورد مدیریتی مطالعات منابع آب</title>
+
+    <link
+      rel="icon"
+      type="image/png"
+      href="/static/registration/login/images/icons/favicon.ico"
+    />
+
+    <!-- Bootstrap core CSS -->
+    <link
+      href="{% static 'home/vendor/bootstrap/css/bootstrap.min.css' %}"
+      rel="stylesheet"
+    />
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'home/css/heroic-features.css' %}" rel="stylesheet" />
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    {% include "home/partials/navbar.html" %}
+    <!-- Page Content -->
+    <div class="container">
+      <!-- Jumbotron Header -->
+      <header class="jumbotron my-3 py-5 transitionCard">
+        <h1 class="display-5 font-weight-bold">
+          داشبورد مدیریتی مطالعات منابع آب
+        </h1>
+        <p class="lead text-justify mt-4">
+          در اسفند ماه سال 1342 وزارت آب و برق تشکیل شد و به استناد مواد 3 و 4
+          قانون تاسیس این وزارتخانه سازمان‌های آب و برق منطقه‌ای تشکیل شد. وزارت
+          مذکور در سال 1353 به وزارت نیرو تغییر نام داد. در همین راستا در سال
+          1355 اداره کل آبیاری خراسان به عنوان شرکت به ثبت رسیده و در سال 1356
+          سازمان آب مشهد نیز از شهرداری جدا و در شرکت مذکور ادغام شد و تحت پوشش
+          وزارت نیرو قرار گرفت.
+        </p>
+      </header>
+      <!-- App Card -->
+      {% include "home/partials/appcards.html" %}
+    </div>
+    <!-- Footer -->
+    {% include "home/partials/footer.html" %}
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static 'home/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'home/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  </body>
+</html>

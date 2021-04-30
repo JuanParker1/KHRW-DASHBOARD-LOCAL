@@ -1,0 +1,4 @@
+django
+flask
+Pillow
+django-widget-tweaks

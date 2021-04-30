@@ -1,0 +1,43 @@
+@font-face {
+  font-family: "Sahel-FD";
+  src: url("../fonts/persian-font/Sahel-FD.eot");
+  src: url("../fonts/persian-font/Sahel-FD.woff2") format("woff2"),
+    url("../fonts/persian-font/Sahel-FD.woff") format("woff"),
+    url("../fonts/persian-font/Sahel-FD.ttf") format("truetype");
+  font-weight: normal;
+}
+
+body {
+  text-align: right !important;
+  direction: rtl !important;
+  font-family: "Sahel-FD" !important;
+}
+
+.myfont,
+.input100 {
+  font-family: "Sahel-FD" !important;
+}
+
+.label-input100 {
+  font-size: 20px !important;
+  padding-bottom: 12px !important;
+}
+
+input.input100 {
+  margin-top: 5px;
+}
+
+.container-login100-form-btn {
+  margin-top: 15px;
+  align-content: center;
+  justify-content: center;
+}
+
+.errors {
+  color: rgb(255, 255, 255);
+  background-color: rgb(255, 0, 0);
+  padding: 30px 40px;
+  font-size: 20px !important;
+  text-align: center;
+  text-justify: center;
+}
