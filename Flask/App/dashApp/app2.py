@@ -6,6 +6,8 @@ import plotly.express as px
 import pandas as pd
 from flask_login.utils import login_required
 
+from App.dashApp.callback import callbackgen
+
 df = pd.read_csv(
     'https://raw.githubusercontent.com/plotly/datasets/master/gapminderDataFiveYear.csv')
 
@@ -32,19 +34,7 @@ def create_dashApp2(app):
         )
     ])
 
-    @dashApp_2.callback(
-        Output('graph-with-slider', 'figure'),
-        Input('year-slider', 'value'))
-    def update_figure(selected_year):
-        filtered_df = df[df.year == selected_year]
-
-        fig = px.scatter(filtered_df, x="gdpPercap", y="lifeExp",
-                         size="pop", color="continent", hover_name="country",
-                         log_x=True, size_max=55)
-
-        fig.update_layout(transition_duration=500)
-
-        return fig
+    callbackgen(dashApp_2)
 
     for view_function in dashApp_2.server.view_functions:
         if view_function.startswith(dashApp_2.config.url_base_pathname):

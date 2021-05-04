@@ -1,4 +1,14 @@
 django
-flask
-Pillow
 django-widget-tweaks
+django_plotly_dash
+django-redis
+flask
+redis
+channels-redis
+Pillow
+channels
+daphne
+numpy
+pandas
+plotly
+dash

@@ -91,3 +91,8 @@ def dashApp1():
 @login_required
 def dashApp2():
     return app.index()
+
+
+@app.route('/myAppAQ')
+def myAppAQ():
+    return app.server()

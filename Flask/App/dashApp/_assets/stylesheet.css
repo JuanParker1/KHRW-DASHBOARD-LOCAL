@@ -1,0 +1,265 @@
+:root{
+    --main-radius: 5px;
+    --main-padding: 5px;
+}
+
+.mainLayoutTabs{
+    background: #a9a9a9;
+    margin: 0;
+    padding-left: 2px;
+}
+
+.tabClassName{
+    width: 15%;
+    text-align: center;
+    margin: 2px;
+    background-color: #f8f9fa;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.labelClassName{
+    font-weight: bold;
+    font-size: 16px;
+    font-family: "B Koodak";
+}
+
+.headerText{
+    width: 100%;
+    font-family: "B Koodak";
+    font-weight: bold;
+    font-size: 20px;
+    color: #191970;
+    text-align: center;
+    padding-top: 10px;
+}
+
+.formgroupSidebar{
+    padding-right: 15px;
+    direction: rtl;
+    font-family: "B Koodak";
+    font-size: 18px;
+    color: #000000;
+    text-align: right;
+}
+
+.formgroupSidebar .uploadButton{
+    padding-right: 15px;
+    font-size: 14px;
+
+}
+
+.formgroupSidebar .uploadButtonInfo{
+    font-size: 14px;
+    padding-right: 10px;
+}
+
+.containerTab1{
+    display: grid;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    grid-template-columns: 300px 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+            "sidebarTab1 content1Tab1 content2Tab1"
+            "sidebarTab1 content3Tab1 content3Tab1";
+    grid-gap: 0.2rem;
+    font-family: sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 12px;
+    /*color: #004d40;*/
+    text-align: center;
+}
+
+.sidebarTab1{
+    grid-area: sidebarTab1;
+    background: #f8f9fa;
+    border-radius: var(--main-radius);
+    padding-top: var(--main-padding);
+}
+
+.content1Tab1{
+    grid-area: content1Tab1;
+    /*background: #00c800;*/
+    border-radius: var(--main-radius);
+    padding: var(--main-padding);
+}
+
+.content2Tab1{
+    grid-area: content2Tab1;
+    /*background: #aa1777;*/
+    border-radius: var(--main-radius);
+    padding: var(--main-padding);
+}
+
+.content3Tab1{
+    grid-area: content3Tab1;
+    /*background: #000fff;*/
+    border-radius: var(--main-radius);
+    padding-top: var(--main-padding);
+}
+
+.containerTab2{
+    display: grid;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+            "sidebarTab2 content1Tab2";
+    grid-gap: 0.2rem;
+    font-family: sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 12px;
+    /*color: #004d40;*/
+    text-align: center;
+}
+
+.sidebarTab2{
+    grid-area: sidebarTab2;
+    background: #f8f9fa;
+    border-radius: var(--main-radius);
+    padding-top: var(--main-padding);
+}
+
+.content1Tab2 {
+    grid-area: content1Tab2;
+    /*background: #000000;*/
+    border-radius: var(--main-radius);
+    border-radius: var(--main-radius);
+}
+
+
+.mapTab1{
+    width: 100%;
+    height: 100%;
+    border-radius: var(--main-radius)
+}
+
+.dropdown{
+    font-family: 'B Koodak';
+    font-size: 14px;
+    padding-left: 15px;
+}
+
+.figTab2{
+    border-radius: var(--main-radius);
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-left: 5%;
+}
+
+
+.figTab3{
+    border-radius: var(--main-radius);
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-left: 5%;
+}
+
+
+
+.cardTab2{
+    border-radius: var(--main-radius)
+}
+
+.mapSidebarTab2{
+    padding-left: 15px;
+    width: 100%;
+    height: 270px;
+    border-radius: var(--main-radius)
+}
+
+.mapSidebarTab3{
+    padding-left: 15px;
+    width: 100%;
+    height: 270px;
+    border-radius: var(--main-radius)
+}
+
+
+.div_switch{
+    font-family: 'B Koodak';
+    color: #177199;
+}
+
+
+.containerTab3{
+    display: grid;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+            "sidebarTab3 content1Tab3";
+    grid-gap: 0.2rem;
+    font-family: sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 12px;
+    /*color: #004d40;*/
+    text-align: center;
+}
+
+.sidebarTab3{
+    grid-area: sidebarTab3;
+    background: #f8f9fa;
+    border-radius: var(--main-radius);
+    padding-top: var(--main-padding);
+}
+
+.content1Tab3{
+    grid-area: content1Tab3;
+    /*background: #000000;*/
+    border-radius: var(--main-radius);
+    border-radius: var(--main-radius);
+}
+
+.sider_sidebar_tab3{
+    padding-left: 15px;
+    padding-right: 30px;
+}
+
+
+.calculate_button_div{
+    text-align: center;
+    padding-left: 15px;
+}
+
+.calculate_button_div .calculate_button{
+    font-family: 'B Koodak';
+    font-size: 14px;
+    text-align: center;
+    width: 200px;
+    color: #000000;
+}
+
+.sider_sidebar_tab3_div{
+    text-align: center;
+    font-family: 'B Koodak';
+    font-size: 10px;
+}
+
+.div_show_delta_select{
+    text-align: center;
+    font-size: 24px;
+}
+
+.card_sidebar_tab1{
+    direction: rtl;
+    text-align: center;
+    font-family: 'B Koodak';
+    font-size: 16px;
+    margin-left: 15px;
+    margin-right: 15px;
+}

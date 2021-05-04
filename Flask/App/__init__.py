@@ -16,6 +16,7 @@ login_manager.login_view = 'login'
 login_manager.login_message = 'لطفاً ابتدا وارد بشوید!'
 login_manager.login_message_category = "info"
 
+
 create_dashApp1(app=app)
 create_dashApp2(app=app)
 

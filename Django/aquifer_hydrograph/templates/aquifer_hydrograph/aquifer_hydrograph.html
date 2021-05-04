@@ -1,0 +1,5 @@
+{% extends 'base.html' %}{% load static %}{% load plotly_dash %}{% block content%}
+<div class="{% plotly_class name='Aquifer_Hydrograph_App' %} card" style="height: 100%; width: 100%">
+  {% plotly_app name="Aquifer_Hydrograph_App" ratio=0.65 %}
+</div>
+{% endblock content %}
