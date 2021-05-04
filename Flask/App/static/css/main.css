@@ -1,0 +1,158 @@
+@font-face {
+  font-family: "Vazir";
+  src: url("../fonts/vazir.eot"), url("../fonts/vazir.woff2") format("woff2"),
+    url("../fonts/vazir.woff") format("woff"),
+    url("../fonts/vazir.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "IRANSansWeb";
+  src: url("../fonts/IRANSansWeb.eot"),
+    url("../fonts/IRANSansWeb.woff2") format("woff2"),
+    url("../fonts/IRANSansWeb.woff") format("woff"),
+    url("../fonts/IRANSansWeb.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "BBCNassim";
+  src: url("../fonts/BBCNassim.eot"),
+    url("../fonts/BBCNassim.woff2") format("woff2"),
+    url("../fonts/BBCNassim.woff") format("woff"),
+    url("../fonts/BBCNassim.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "ArabicNaskhSSK";
+  src: url("../fonts/ArabicNaskhSSK.eot"),
+    url("../fonts/ArabicNaskhSSK.woff2") format("woff2"),
+    url("../fonts/ArabicNaskhSSK.woff") format("woff"),
+    url("../fonts/ArabicNaskhSSK.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "webYekanWeb";
+  src: url("../fonts/webYekanWeb.eot"),
+    url("../fonts/webYekanWeb.woff2") format("woff2"),
+    url("../fonts/webYekanWeb.woff") format("woff"),
+    url("../fonts/webYekanWeb.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "ReithQalam";
+  src: url("../fonts/webYekanWeb.eot"),
+    url("../fonts/ReithQalam.woff2") format("woff2"),
+    url("../fonts/ReithQalam.woff") format("woff"),
+    url("../fonts/webYekanWeb.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Behdad-Regular";
+  src: url("../fonts/Behdad-Regular.eot"),
+    url("../fonts/Behdad-Regular.woff2") format("woff2"),
+    url("../fonts/Behdad-Regular.woff") format("woff"),
+    url("../fonts/Behdad-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Gandom-FD";
+  src: url("../fonts/Gandom-FD.eot");
+  src: url("../fonts/Gandom-FD.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/Gandom-FD.woff") format("woff"),
+    url("../fonts/Gandom-FD.ttf") format("truetype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Sahel-FD";
+  src: url("../fonts/Sahel-FD.eot");
+  src: url("../fonts/Sahel-FD.woff2") format("woff2"),
+    url("../fonts/Sahel-FD.woff") format("woff"),
+    url("../fonts/Sahel-FD.ttf") format("truetype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Tanha";
+  src: url("../fonts/Tanha-FD.eot");
+  src: url("../fonts/Tanha-FD.woff2") format("woff2"),
+    url("../fonts/Tanha-FD.woff") format("woff"),
+    url("../fonts/Tanha-FD.ttf") format("truetype");
+  font-weight: normal;
+}
+
+body {
+  font-family: "Tanha";
+  padding-top: 56px;
+  direction: rtl;
+  text-align: right;
+}
+
+.transitionCard {
+  transition: all 0.3s ease-in-out;
+}
+
+.transitionCard:hover {
+  box-shadow: 4px 4px 20px #000;
+  transition: 0.3s linear all;
+}
+
+.my-login-page {
+  width: 360px;
+  padding: 8% 0 0;
+  margin: auto;
+}
+
+.my-form {
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
+  max-width: 360px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.my-form input {
+  font-family: "Tanha";
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.my-form .button {
+  font-family: "Tanha";
+  text-transform: uppercase;
+  outline: 0;
+  background: #4caf50;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #ffffff;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+
+.my-form .button:hover,
+.my-form .button:active,
+.my-form .button:focus {
+  background: #43a047;
+}
+
+.my-form .my-message {
+  margin: 15px 0 0;
+  color: #b3b3b3;
+  font-size: 12px;
+}
+
+.my-form .my-message a {
+  color: #4caf50;
+  text-decoration: none;
+}

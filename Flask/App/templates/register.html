@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% block content %} {% include "form_errors.html" %}
+
+<div class="my-login-page">
+  <div class="my-form">
+    <form class="register-form" action="" method="POST">
+      {{ form.csrf_token }}
+      <input type="text" placeholder="نام" name="firstname" id="firstname" />
+      <input
+        type="text"
+        placeholder="نام خانوادگی"
+        name="lastname"
+        id="lastname"
+      />
+      <input
+        type="text"
+        placeholder="نام کاربری"
+        name="username"
+        id="username"
+      />
+      <input type="text" placeholder="پست الکترونیک" name="email" id="email" />
+      <input
+        type="password"
+        placeholder="رمز عبور"
+        name="password"
+        id="password"
+      />
+      <input type="submit" value="تکمیل ثبت نام" class="button" />
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

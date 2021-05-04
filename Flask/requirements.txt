@@ -1,0 +1,11 @@
+Flask
+Flask-SQLAlchemy
+WTForms
+Flask-WTF
+flask-bcrypt
+flask-login
+email_validator
+numpy
+pandas
+plotly
+dash

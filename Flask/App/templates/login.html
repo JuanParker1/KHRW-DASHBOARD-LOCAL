@@ -1,0 +1,24 @@
+{% extends 'base.html' %} {% block content %} {% include "form_errors.html" %}
+
+<div class="my-login-page">
+  <div class="my-form">
+    <form class="register-form" action="" method="POST">
+      {{ form.csrf_token }}
+      <input
+        type="text"
+        placeholder="نام کاربری"
+        name="username"
+        id="username"
+      />
+      <input
+        type="password"
+        placeholder="رمز عبور"
+        name="password"
+        id="password"
+      />
+      <input type="submit" value="ورود" class="button" />
+    </form>
+  </div>
+</div>
+
+{% endblock content %}
