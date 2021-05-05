@@ -82,7 +82,7 @@ def geo_info_dataset(data):
 
 # Read Shapefile
 def read_shapfile(
-        file_path = "/App/dashApp/isotope_analysis/assets/ShapeFiles/AreaStudy/AreaStudy.shp",
+        file_path = "App/dashApp/isotope_analysis/assets/ShapeFiles/AreaStudy/AreaStudy.shp",
         mah_code = None
 ):
     if mah_code is not None:

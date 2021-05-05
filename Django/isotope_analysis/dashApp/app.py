@@ -13,8 +13,8 @@ POPPER_JS = "assets/isotope_analysis/js/popper-2.9.1.min.js"
 
 app = DjangoDash(
     'Isotope_Analysis_App',
-    external_stylesheets=[MAIN_CSS, BOOTSTRAP_CSS],
-    external_scripts=[BOOTSTRAP_JS, JQUERY_JS, POPPER_JS],
+    external_stylesheets=[BOOTSTRAP_CSS, MAIN_CSS],
+    external_scripts=[JQUERY_JS, POPPER_JS, BOOTSTRAP_JS],
     add_bootstrap_links=True
 )
 

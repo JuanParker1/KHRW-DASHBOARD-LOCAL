@@ -85,3 +85,9 @@ def profile():
 @login_required
 def isotope_analysis_route():
     return app.index()
+
+
+@app.route('/aquifer_hydrograph')
+@login_required
+def aquifer_hydrograph_route():
+    return app.index()

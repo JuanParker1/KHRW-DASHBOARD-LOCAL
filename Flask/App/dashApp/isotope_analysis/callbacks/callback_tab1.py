@@ -72,7 +72,7 @@ def isotope_analysis_callback_tab1(app):
         if database is None or database == 'No Data' or n == 0:
             return No_Database_Connection
 
-        token = open("assets/.mapbox_token").read()
+        token = open("App/dashApp/isotope_analysis/assets/.mapbox_token").read()
 
         data = pd.read_json(database, orient='split')
         geo_info = geo_info_dataset(data)

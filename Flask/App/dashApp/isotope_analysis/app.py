@@ -2,6 +2,7 @@ import dash
 import pandas as pd
 from flask_login.utils import login_required
 
+
 from App.dashApp.isotope_analysis.layouts.main import MAIN_LAYOUT
 from App.dashApp.isotope_analysis.callbacks.callback import isotope_analysis_callback
 
@@ -19,9 +20,10 @@ def create_isotope_analysis_app(server):
         server=server,
         url_base_pathname="/isotope_analysis/",
         external_stylesheets=[MAIN_CSS, BOOTSTRAP_CSS],
-        external_scripts=[JQUERY_JS, POPPER_JS, BOOTSTRAP_JS]
+        external_scripts=[JQUERY_JS, POPPER_JS, BOOTSTRAP_JS],
+        title='Isotope Analysis'
     )
-
+    
     isotope_analysis_app.layout = MAIN_LAYOUT
     
     
