@@ -4,13 +4,17 @@ from django.contrib import admin
 from django.urls import path, include
 
 from aquifer_hydrograph.views import aquifer_hydrograph_view
+from isotope_analysis.views import isotope_analysis_view
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
     path(route='', view=include('home.urls')),
     path(route='', view=include('accounts.urls')),
     path(route='aquifer_hydrograph/', view=include('aquifer_hydrograph.urls')),
-    path(route='django_plotly_dash/', view=include('django_plotly_dash.urls'))    
+    path(route='isotope_analysis/', view=include('isotope_analysis.urls')),
+    path(route='django_plotly_dash/', view=include('django_plotly_dash.urls'))
+    
 ]
 
 if settings.DEBUG:

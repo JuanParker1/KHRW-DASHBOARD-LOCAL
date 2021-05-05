@@ -2,6 +2,7 @@ django
 django-widget-tweaks
 django_plotly_dash
 django-redis
+django-bootstrap4
 flask
 redis
 channels-redis
@@ -10,5 +11,14 @@ channels
 daphne
 numpy
 pandas
+xlrd
+openpyxl
+geopandas
 plotly
 dash
+dash-bootstrap-components
+dash_dangerously_set_inner_html
+dash_daq
+geopandas
+python-srtm
+dpd-static-support

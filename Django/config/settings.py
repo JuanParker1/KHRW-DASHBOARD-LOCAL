@@ -48,20 +48,23 @@ INSTALLED_APPS = [
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
     'channels',
     'channels_redis',
-    
+    'bootstrap4',
     'aquifer_hydrograph.apps.AquiferHydrographConfig',
-    
-    
+    'isotope_analysis.apps.IsotopeAnalysisConfig'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_plotly_dash.middleware.BaseMiddleware',
+    'django_plotly_dash.middleware.ExternalRedirectionMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -147,17 +150,24 @@ CHANNEL_LAYERS = {
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+
     'django_plotly_dash.finders.DashAssetFinder',
-    'django_plotly_dash.finders.DashComponentFinder'
+    'django_plotly_dash.finders.DashComponentFinder',
+    'django_plotly_dash.finders.DashAppDirectoryFinder',
 ]
 
 
 PLOTLY_COMPONENTS = [
-
+    # Common components
     'dash_core_components',
     'dash_html_components',
     'dash_renderer',
-    'dpd_components'
+    # django-plotly-dash components
+    'dpd_components',
+    # static support if serving local assets
+    'dpd_static_support',
+    # Other components, as needed
+    'dash_bootstrap_components',
 ]
 
 
@@ -168,7 +178,8 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "aquifer_hydrograph/static"
+    BASE_DIR / "aquifer_hydrograph/static",
+    BASE_DIR / "isotope_analysis/static"
 ]
 
 if DEBUG:

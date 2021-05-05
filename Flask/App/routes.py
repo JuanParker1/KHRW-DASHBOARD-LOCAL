@@ -81,18 +81,7 @@ def profile():
     return render_template(template_name_or_list='profile.html', form=form)
 
 
-@app.route('/dashApp1')
+@app.route('/isotope_analysis')
 @login_required
-def dashApp1():
+def isotope_analysis_route():
     return app.index()
-
-
-@app.route('/dashApp2')
-@login_required
-def dashApp2():
-    return app.index()
-
-
-@app.route('/myAppAQ')
-def myAppAQ():
-    return app.server()
