@@ -161,7 +161,8 @@ def aquifer_hydrograph_callback_tab3(app):
                         how='outer',
                         on=['Date_Gregorian', 'Date_Persian']).sort_values(['ID', 'Date_Gregorian'])
 
-            # df.to_excel("output.xlsx", sheet_name='Sheet_name_1')
+            # df_1.to_excel("output.xlsx", sheet_name='Sheet_name_1')
+            # Final_Table.to_excel("Final_Table.xlsx", sheet_name='Sheet_name_1')
             
             fig = go.Figure()
 
@@ -237,7 +238,7 @@ def aquifer_hydrograph_callback_tab3(app):
                     x=0
                 )
             )
-
+            
             return df_1.to_json(date_format='iso', orient='split'), fig
 
 
@@ -316,6 +317,7 @@ def aquifer_hydrograph_callback_tab3(app):
                     x=0
                 )
             )
+
 
             return Final_Table.to_json(date_format='iso', orient='split'), fig
 

@@ -7,11 +7,21 @@
         <li class="nav-item active">
           <a class="nav-link" href="{{ url_for('home') }}">خانه</a>
         </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="{{ url_for('register') }}">ثبت نام</a>
-        </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="{{ url_for('profile') }}">صفحه شخصی</a>
+        <li class="nav-item dropdown active">
+          <a
+            class="nav-link dropdown-toggle"
+            data-toggle="dropdown"
+            href="#"
+            role="button"
+            aria-haspopup="tree"
+            aria-expanded="false"
+            >پنل مدیریتی</a
+          >
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{{ url_for('register') }}">ثبت نام</a>
+            <a class="dropdown-item" href="{{ url_for('profile') }}">به روزرسانی</a>
+            <a class="dropdown-item" href="{{ url_for('user_management') }}">مدیریت کاربرها</a>
+          </div>
         </li>
         <li class="nav-item active">
           <a class="nav-link" href="{{ url_for('logout') }}">خروج</a>
@@ -25,9 +35,7 @@
         {% endif %}
       </ul>
     </div>
-    <a class="navbar-brand mr-auto pl-4" href="http://www.khrw.ir/"
-      >شرکت سهامی آب منطقه‌ای خراسان رضوی</a
-    >
+    <a class="navbar-brand mr-auto pl-4" href="http://www.khrw.ir/">شرکت سهامی آب منطقه‌ای خراسان رضوی</a>
     <button
       class="navbar-toggler"
       type="button"

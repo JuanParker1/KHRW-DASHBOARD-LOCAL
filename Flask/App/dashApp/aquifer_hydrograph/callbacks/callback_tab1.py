@@ -54,7 +54,9 @@ def aquifer_hydrograph_callback_tab1(app):
             thiessen_data_all=raw_data['Thiessen'],
             sc_data_all=raw_data['Storage_Coefficient']
         )
-
+        
+        data.to_csv('data.csv', encoding='utf-8')
+        
         return raw_data['Info'].to_json(date_format='iso', orient='split'), data.to_json(date_format='iso', orient='split')
 
 

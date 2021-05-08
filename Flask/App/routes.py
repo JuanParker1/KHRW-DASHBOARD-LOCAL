@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from App import app, db, bcrypt
 
-from App.forms import RegistrationForm, LoginForm, UpdateProfileForm
+from App.forms import RegistrationForm, LoginForm, UpdateProfileForm, UserManagementForm
 from App.models import User
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -79,6 +79,28 @@ def profile():
     elif request.method == 'GET':
         pass
     return render_template(template_name_or_list='profile.html', form=form)
+
+
+@app.route('/delete/<int:id>')
+@login_required
+def delete(id):
+    user_to_delete = User.query.get_or_404(id)
+    
+    try:
+        db.session.delete(user_to_delete)
+        db.session.commit()
+        return redirect(location=url_for(endpoint='user_management'))
+    except:
+        return "اوپسس ..."
+
+
+
+@app.route('/user_management')
+@login_required
+def user_management():  
+    users = User.query.all()
+    return render_template(template_name_or_list='user_management.html', users=users)
+
 
 
 @app.route('/isotope_analysis')

@@ -59,3 +59,14 @@ class UpdateProfileForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError(message="این ایمیل موجود میباشد.")
+
+
+class UserManagementForm(FlaskForm):
+    firstname = StringField(label='First Name',
+                            validators=[DataRequired(message="وارد کردن نام ضروری میباشد."), Length(min=2, max=30, message="طول نام باید بین 2 تا 30 کارکتر باشد.")])
+    lastname = StringField(label='Last Name',
+                           validators=[DataRequired(message="وارد کردن نام خانوادگی ضروری میباشد."), Length(min=2, max=30, message="طول نام خانوادگی باید بین 2 تا 30 کارکتر باشد.")])
+    username = StringField(label='Username',
+                           validators=[DataRequired(message="وارد کردن نام کاربری ضروری میباشد."), Length(min=4, max=30, message="طول نام کاربری باید بین 8 تا 30 کارکتر باشد.")])
+    email = StringField(label='Email',
+                        validators=[DataRequired(message="وارد کردن ایمیل ضروری میباشد."), Email(message="ایمیل وارد شده صحیح نمیباشد.")])
