@@ -127,80 +127,6 @@ LEFT_CARD_1 = html.Div(
 
 
 
-# """
-# ---------------------------------------
-# Left - Card 2: 
-# ---------------------------------------
-# """
-
-# LEFT_CARD_2_IMG = base64.b64encode(
-#     open('assets/images/excel_logo.png', 'rb').read())  # EDITPATH
-
-# LEFT_CARD_2 = html.Div(
-#     children=[
-#         html.H6(
-#             children=[
-#                 "صفحه گسترده     ",
-#                 html.Img(
-#                     src='data:image/png;base64,{}'.format(LEFT_CARD_2_IMG.decode()), height=30),
-#             ],
-#             className='card-header text-right'
-#         ),
-#         html.Div(
-#             children=[
-#                 html.Div(
-#                     children=[
-#                         html.H6(
-#                             children=[
-#                                 "ایجاد پایگاه داده از فایل صفحه گسترده"
-#                             ],
-#                             className="text-right pb-3"
-#                         ),
-#                         dcc.Upload([
-#                             html.B(
-#                                 'انتخاب فایل',
-#                                 className='font-weight-light'
-#                             ),
-#                         ],
-#                             className="upload-button m-auto",
-#                             #id="CHOOSE_SPREADSHEET-TAB1_SIDEBAR_CARD2",
-#                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-#                         ),
-#                         html.Small(
-#                             dir="rtl",
-#                             #id="FILENAME_SPREADSHEET-TAB1_SIDEBAR_CARD2",
-#                         )
-#                     ],
-#                     className='card-text text-center'
-#                 ),
-#                 html.Div(
-#                     children=[
-#                         html.Button(
-#                             children=[
-#                                 "ایجاد"
-#                             ],
-#                             n_clicks=0,
-#                             className="btn btn-success mt-3",
-#                             #id="CONNECT_TO_SPREADSHEET-TAB1_SIDEBAR_CARD2",
-#                         ),
-#                         dbc.Toast(
-#                             is_open=False,
-#                             dismissable=True,
-#                             duration=5000,
-#                             className="popup-notification",
-#                             #id="POPUP_CONNECT_TO_SPREADSHEET-TAB1_SIDEBAR_CARD2"
-#                         )
-#                     ],
-#                     className="d-flex justify-content-start"
-#                 )
-#             ],
-#             className='card-body text-dark'
-#         ),
-#     ],
-#     className='card border-dark my-2'
-# )
-
-
 """
 ---------------------------------------
 Sidebar Tab 1 - Left
@@ -214,7 +140,6 @@ TAB_2_SIDEBAR_LEFT = html.Div(
                 html.Div(
                     children=[
                         LEFT_CARD_1,
-                        # LEFT_CARD_2,
                     ],
                     className='col px-0'
                 ),
@@ -250,63 +175,62 @@ RIGHT_CARD_1_IMG_2 = base64.b64encode(
 )  # EDITPATH
 
 RIGHT_CARD_1 = html.Div(
+    className='mt-2 text-right border border-secondary rounded',
+    dir="rtl",
     children=[
         html.Div(
+            className='card bg-light',
             children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(src='data:image/png;base64,{}'.format(RIGHT_CARD_1_IMG_1.decode()), height=60)              
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right ',
-                            dir="rtl",
-                            children=[
-                                html.H4(
-                                    #id="INFO_CARD_NUMBER_AQUIFER-TAB1_SIDEBAR_RIGHT_CARD1"
-                                ),
-                                html.Span(
-                                    children="آبخوان‌های موجود"
-                                )                        
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark'
+                
+                html.Img(
+                    id="IMG_OW-TAB2_SIDEBAR_RIGHT_CARD1",
+                    height=220,
+                    width=220,
+                    className="mt-3 rounded mx-auto d-block"
                 ),
-            ],
-            className='card border-dark my-2 bg-light'
-        ),
-        html.Div(
-            children=[
+                
                 html.Div(
+                    className='card-body', 
                     children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(src='data:image/png;base64,{}'.format(RIGHT_CARD_1_IMG_2.decode()), height=60)              
-                            ]
+                        html.H5(
+                            id="NAME_OW-TAB2_SIDEBAR_RIGHT_CARD1",
+                            className='card-title mb-0',
                         ),
-                        html.Div(
-                            className='text-right',
-                            dir="rtl",
-                            children=[
-                                html.H4(
-                                    #id="INFO_CARD_NUMBER_WELL-TAB1_SIDEBAR_RIGHT_CARD1"
-                                ),
-                                html.Span(
-                                    children="چاه‌های مشاهده‌ای موجود"
-                                )                        
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark'
+                        # html.P(
+                        #     className='card-text',
+                        #     children='چاه حسن آباد در آبخوان جوین واقع شده است.'
+                        # )                        
+                    ]
                 ),
-            ],
-            className='card border-dark my-2 bg-light'
-        ),
+                
+                html.Ul(
+                    className='list-group list-group-flush', 
+                    children=[
+                        html.Li(
+                            id="AQUIFER_OW-TAB2_SIDEBAR_RIGHT_CARD1",
+                            className='list-group-item',
+                        ),
+                        html.Li(
+                            id="LONG_OW-TAB2_SIDEBAR_RIGHT_CARD1",
+                            className='list-group-item', 
+                        ),
+                        html.Li(
+                            id="LAT_OW-TAB2_SIDEBAR_RIGHT_CARD1",
+                            className='list-group-item', 
+                        ),
+                        html.Li(
+                            id="ELEV_OW-TAB2_SIDEBAR_RIGHT_CARD1",
+                            className='list-group-item', 
+                        ),
+                        html.Li(
+                            id="DATE_OW-TAB2_SIDEBAR_RIGHT_CARD1",
+                            className='list-group-item'
+                        )                        
+                    ]
+                )
+                
+            ]
+        )
     ]
 )
 

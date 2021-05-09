@@ -226,9 +226,7 @@ def FUNCTION_GRAPH_TAB2_BODY_CONTENT1(aquifers, wells, start, end):
                 data = data[data["Well_Name"].isin(wells)]
                 data = data[data['year_Date_Persian'] >= start]
                 data = data[data['year_Date_Persian'] <= end]
-                
-                data.to_csv("ddd.csv")
-                
+                                
                 # PLOT
                 fig = go.Figure()
                                 
@@ -267,7 +265,7 @@ def FUNCTION_GRAPH_TAB2_BODY_CONTENT1(aquifers, wells, start, end):
                     title=dict(
                         text='تراز ماهانه (روز پانزدهم) سطح آب زیرزمینی',
                         yanchor="top",
-                        y=0.925,
+                        y=0.95,
                         xanchor="center",
                         x=0.500
                     )
@@ -275,3 +273,108 @@ def FUNCTION_GRAPH_TAB2_BODY_CONTENT1(aquifers, wells, start, end):
                 return fig
     else:
         return NO_MATCHING_DATA_FOUND
+
+
+
+
+
+# -----------------------------------------------------------------------------
+# WELL INFORMATION - TAB2 SIDEBAR RIGHT CARD1
+# -----------------------------------------------------------------------------
+@app.callback(
+    Output('IMG_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'src'),    
+    Output('NAME_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
+    Output('AQUIFER_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
+    Output('LONG_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
+    Output('LAT_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
+    Output('ELEV_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
+    Output('DATE_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
+    Input('SELECT_AQUIFER-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    Input('SELECT_WELL-TAB2_SIDEBAR_LEFT_CARD1', 'value')
+)
+def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
+    if (aquifers is not None) and (len(aquifers) != 0) \
+        and (wells is not None) and (len(wells) != 0):
+            if (len(aquifers) == 1) and (len(wells) == 1):
+                data = RawDATA[RawDATA["Aquifer_Name"].isin(aquifers)]
+                data = data[data["Well_Name"].isin(wells)]
+                data['Date_Gregorian'] = pd.to_datetime(data['Date_Gregorian'])
+                data.reset_index(inplace = True)
+                
+                df = data[["year_Date_Persian", "month_Date_Persian", "Well_Head"]]                
+                df = pd.pivot_table(df, values = 'Well_Head', index='year_Date_Persian', columns = 'month_Date_Persian').reset_index()
+                print(df)
+                print(df.columns)
+                
+                
+                column_order = ["year_Date_Persian", 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6]
+                
+                print(df[column_order])
+                
+                # Img OW
+                if aquifers[0] == "جوین":
+                    Img_OW = base64.b64encode(
+                        open('assets/images/ow1.png', 'rb').read()
+                    )
+                    Img_OW_SRC = 'data:image/png;base64,{}'.format(Img_OW.decode())
+                else:
+                    Img_OW = base64.b64encode(
+                        open('assets/images/ow2.png', 'rb').read()
+                    )
+                    Img_OW_SRC = 'data:image/png;base64,{}'.format(Img_OW.decode())
+                    
+                # Para
+                LAT = str(data['X_UTM'].values[0])
+                LONG = str(data['Y_UTM'].values[0])
+                ELEV = str(data['Final_Elevation'].values[0])
+                START_DATE = str(data['year_Date_Persian'].values[data["Date_Gregorian"].idxmin()])
+                END_DATE = str(data['year_Date_Persian'].values[data["Date_Gregorian"].idxmax()])
+                
+                
+                result = [
+                    Img_OW_SRC,
+                    wells[0],
+                    "آبخوان: " + aquifers[0],
+                    "طول جغرافیایی: " + LAT,
+                    "عرض جغرافیایی: " + LONG,
+                    "ارتفاع: " + ELEV + " متر",
+                    "طول دوره آماری: " + START_DATE + " تا " + END_DATE,
+                ]
+                
+                return result
+            else:
+                
+                Img_OW = base64.b64encode(
+                    open('assets/images/placeholder.png', 'rb').read()
+                )  # EDITPATH
+                
+                result = [
+                    'data:image/png;base64,{}'.format(Img_OW.decode()),
+                    "نام چاه مشاهده‌ای",
+                    "نام آبخوان",
+                    "طول جغرافیایی",
+                    "عرض جغرافیایی",
+                    "ارتفاع",
+                    "طول دوره آماری"
+                ]
+                
+                return result
+                
+    else:
+        
+        Img_OW = base64.b64encode(
+            open('assets/images/placeholder.png', 'rb').read()
+        )  # EDITPATH
+        
+        result = [
+            'data:image/png;base64,{}'.format(Img_OW.decode()),
+            "نام چاه مشاهده‌ای",
+            "نام آبخوان",
+            "طول جغرافیایی",
+            "عرض جغرافیایی",
+            "ارتفاع",
+            "طول دوره آماری"
+
+        ]
+        
+        return result

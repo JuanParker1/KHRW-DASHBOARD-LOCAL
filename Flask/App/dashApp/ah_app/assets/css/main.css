@@ -21,18 +21,18 @@
 }
 
 .right-sidebar {
-  width: 300px;
+  width: 250px;
   /* background-color: rgb(220, 220, 220); */
   /* background-color: #2ecc71; */
 }
 
 .my-body {
-  width: calc(100% - 300px - 300px);
+  width: calc(100% - 300px - 250px);
   /* background-color: rebeccapurple; */
 }
 
 .upload-button {
-  width: 40%;
+  width: 50%;
   height: 40px;
   line-height: 40px;
   border-width: 1px;

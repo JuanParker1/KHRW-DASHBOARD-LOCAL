@@ -30,7 +30,7 @@ TAB_2_BODY = [
         ],
         className="row justify-content-center",
         style={
-            "height": "650px",
+            "height": "670px",
             # "margin-bottom": "10px"
         }
     ),

@@ -40,7 +40,8 @@ TAB1_SIDEBAR_LEFT_CARD_1 = html.Div(
                             children=[
                                 html.Button(
                                     children=[
-                                        "اتصال"
+                                        "اتصال",
+                                        html.I(className="fa fa-database ml-2"),
                                     ],
                                     n_clicks=0,
                                     className="btn btn-info mt-3",
@@ -85,7 +86,8 @@ TAB1_SIDEBAR_LEFT_CARD_1 = html.Div(
                             children=[
                                 html.Button(
                                     children=[
-                                        "اتصال"
+                                        "اتصال",
+                                        html.I(className="fa fa-database ml-2"),
                                     ],
                                     n_clicks=0,
                                     className="btn btn-info mt-4",
@@ -144,7 +146,10 @@ TAB1_SIDEBAR_LEFT_CARD_2 = html.Div(
                         ),
                         dcc.Upload([
                             html.B(
-                                'انتخاب فایل',
+                                children=[
+                                    'انتخاب فایل',
+                                    html.I(className="fa fa-cloud-upload ml-2"),
+                                ],
                                 className='font-weight-light'
                             ),
                         ],
@@ -255,7 +260,7 @@ TAB1_SIDEBAR_RIGHT_CARD_1 = html.Div(
                                     id="INFO_CARD_NUMBER_AQUIFER-TAB1_SIDEBAR_RIGHT_CARD1"
                                 ),
                                 html.Span(
-                                    children="آبخوان‌های موجود"
+                                    children="آبخوان‌"
                                 )                        
                             ]
                         )
@@ -283,7 +288,7 @@ TAB1_SIDEBAR_RIGHT_CARD_1 = html.Div(
                                     id="INFO_CARD_NUMBER_WELL-TAB1_SIDEBAR_RIGHT_CARD1"
                                 ),
                                 html.Span(
-                                    children="چاه‌های مشاهده‌ای موجود"
+                                    children="چاه‌ مشاهده‌ای"
                                 )                        
                             ]
                         )
