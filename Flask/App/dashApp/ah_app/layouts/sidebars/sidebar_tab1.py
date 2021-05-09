@@ -14,15 +14,15 @@ Left - Card 1:
 ---------------------------------------
 """
 
-LEFT_CARD_1_IMG = base64.b64encode(
+TAB1_SIDEBAR_LEFT_CARD_1_IMG = base64.b64encode(
     open('assets/images/database_logo.png', 'rb').read())  # EDITPATH
 
-LEFT_CARD_1 = html.Div(
+TAB1_SIDEBAR_LEFT_CARD_1 = html.Div(
     children=[
         html.H6(
             children=[
                 "پایگاه داده     ",
-                html.Img(src='data:image/png;base64,{}'.format(LEFT_CARD_1_IMG.decode()), height=30),
+                html.Img(src='data:image/png;base64,{}'.format(TAB1_SIDEBAR_LEFT_CARD_1_IMG.decode()), height=30),
             ],
             className='card-header text-right'
         ),
@@ -119,16 +119,16 @@ Left - Card 2:
 ---------------------------------------
 """
 
-LEFT_CARD_2_IMG = base64.b64encode(
+TAB1_SIDEBAR_LEFT_CARD_2_IMG = base64.b64encode(
     open('assets/images/excel_logo.png', 'rb').read())  # EDITPATH
 
-LEFT_CARD_2 = html.Div(
+TAB1_SIDEBAR_LEFT_CARD_2 = html.Div(
     children=[
         html.H6(
             children=[
                 "صفحه گسترده     ",
                 html.Img(
-                    src='data:image/png;base64,{}'.format(LEFT_CARD_2_IMG.decode()), height=30),
+                    src='data:image/png;base64,{}'.format(TAB1_SIDEBAR_LEFT_CARD_2_IMG.decode()), height=30),
             ],
             className='card-header text-right'
         ),
@@ -199,8 +199,8 @@ TAB_1_SIDEBAR_LEFT = html.Div(
             children=[
                 html.Div(
                     children=[
-                        LEFT_CARD_1,
-                        LEFT_CARD_2,
+                        TAB1_SIDEBAR_LEFT_CARD_1,
+                        TAB1_SIDEBAR_LEFT_CARD_2,
                     ],
                     className='col px-0'
                 ),
@@ -227,15 +227,15 @@ Right - Card 1
 ---------------------------------------
 """
 
-RIGHT_CARD_1_IMG_1 = base64.b64encode(
+TAB1_SIDEBAR_RIGHT_CARD_1_IMG_1 = base64.b64encode(
    open('assets/images/aquifer.jpg', 'rb').read()
 )  # EDITPATH
 
-RIGHT_CARD_1_IMG_2 = base64.b64encode(
+TAB1_SIDEBAR_RIGHT_CARD_1_IMG_2 = base64.b64encode(
    open('assets/images/well.png', 'rb').read()
 )  # EDITPATH
 
-RIGHT_CARD_1 = html.Div(
+TAB1_SIDEBAR_RIGHT_CARD_1 = html.Div(
     children=[
         html.Div(
             children=[
@@ -244,7 +244,7 @@ RIGHT_CARD_1 = html.Div(
                         html.Div(
                             className='float-left',
                             children=[
-                                html.Img(src='data:image/png;base64,{}'.format(RIGHT_CARD_1_IMG_1.decode()), height=60)              
+                                html.Img(src='data:image/png;base64,{}'.format(TAB1_SIDEBAR_RIGHT_CARD_1_IMG_1.decode()), height=60)              
                             ]
                         ),
                         html.Div(
@@ -272,7 +272,7 @@ RIGHT_CARD_1 = html.Div(
                         html.Div(
                             className='float-left',
                             children=[
-                                html.Img(src='data:image/png;base64,{}'.format(RIGHT_CARD_1_IMG_2.decode()), height=60)              
+                                html.Img(src='data:image/png;base64,{}'.format(TAB1_SIDEBAR_RIGHT_CARD_1_IMG_2.decode()), height=60)              
                             ]
                         ),
                         html.Div(
@@ -310,7 +310,7 @@ TAB_1_SIDEBAR_RIGHT = html.Div(
             children=[
                 html.Div(
                     children=[
-                        RIGHT_CARD_1
+                        TAB1_SIDEBAR_RIGHT_CARD_1
                     ],
                     className='col px-0'
                 ),

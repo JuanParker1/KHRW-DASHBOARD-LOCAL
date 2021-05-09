@@ -53,6 +53,10 @@ body {
   margin-bottom: 60px; /* Margin bottom by footer height */
 }
 
+.dropdown {
+  text-align: right !important;
+}
+
 .breakLine {
   display: flex;
   flex-direction: row;
@@ -180,4 +184,5 @@ html {
   text-align: center;
   color: white;
   background-color: #e74c3c;
+  align-items: center;
 }

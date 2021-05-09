@@ -15,7 +15,62 @@ from layouts.footers.footer import *
 
 TAB_2 = html.Div(
     children=[
-        "TAB_2"
+        # Header --------------------------------------------------------------
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        # TAB_2_HEADER
+                    ],
+                    className="col text-center"
+                )
+            ],
+            className="row"
+        ),
+        # Sidebars & Body ------------------------------------------------------
+        html.Div(
+            children=[
+                # Sidebar Left ----------------------------
+                html.Div(
+                    children=[
+                        TAB_2_SIDEBAR_LEFT
+                    ],
+                    className='left-sidebar'
+                ),
+                # Body ------------------------------------
+                html.Div(
+                    children=[
+                        html.Div(
+                            children=TAB_2_BODY,
+                            className="container-fluid"
+                        )
+                    ],
+                    className='my-body pt-2'
+                ),
+                # Sidebar right ---------------------------
+                html.Div(
+                    children=[
+                        TAB_2_SIDEBAR_RIGHT
+                    ],
+                    className='right-sidebar'
+                ),
+            ],
+            className="row p-0 m-0 w-100"
+        ),
+        # Footer --------------------------------------------------------------
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        TAB_2_FOOTER
+                    ],
+                    className="col"
+                )
+            ],
+            className="row"
+        ),
     ],
-    className="container-fluid p-0"
+    className="container-fluid p-0",
+    style={"position": "relativ"}
 )
+

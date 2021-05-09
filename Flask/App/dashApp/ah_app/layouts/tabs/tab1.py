@@ -73,7 +73,7 @@ TAB_1 = html.Div(
         html.Div(
             children=[
                 html.Div(
-                    id="database",
+                    id="TABLE_RAWDATA-TAB1_SIDEBAR",
                 )
             ],
             style={

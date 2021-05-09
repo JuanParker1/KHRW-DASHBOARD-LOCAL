@@ -9,6 +9,7 @@ from srtm import Srtm1HeightMapCollection
 import statistics
 import assets.jalali as jalali
 import json
+import sqlite3
 
 
 # -----------------------------------------------------------------------------
@@ -27,7 +28,6 @@ def read_spreadsheet(contents, filename):
         return data
 
 
-
 # -----------------------------------------------------------------------------
 # EXTRACT GEOGRAPHICAL INFORMATION DATASET
 # -----------------------------------------------------------------------------
@@ -40,7 +40,6 @@ def extract_geo_info_dataset(data):
     data = data[columns]
     data.drop_duplicates(keep="first", inplace=True)
     return data
-
 
 
 # -----------------------------------------------------------------------------
@@ -64,7 +63,9 @@ def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_
         Well_Info = well_info_data[Columns_Info]
 
         Well_Info['Aquifer_Name'] = Well_Info['Aquifer_Name'].apply(lambda x: x.rstrip())
+        Well_Info['Aquifer_Name'] = Well_Info['Aquifer_Name'].apply(lambda x: x.lstrip())
         Well_Info['Well_Name'] = Well_Info['Well_Name'].apply(lambda x: x.rstrip())
+        Well_Info['Well_Name'] = Well_Info['Well_Name'].apply(lambda x: x.lstrip())
 
         # Depth to Water (DTW) Data:--------------------------------------------
 
@@ -74,7 +75,9 @@ def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_
                                          dtw_data.columns.tolist()))))
 
         dtw_data['Aquifer_Name'] = dtw_data['Aquifer_Name'].apply(lambda x: x.rstrip())
+        dtw_data['Aquifer_Name'] = dtw_data['Aquifer_Name'].apply(lambda x: x.lstrip())
         dtw_data['Well_Name'] = dtw_data['Well_Name'].apply(lambda x: x.rstrip())
+        dtw_data['Well_Name'] = dtw_data['Well_Name'].apply(lambda x: x.lstrip())
 
         # Convert DTW Data to Wide Format
         DTW_Wide = pd.melt(frame=dtw_data,
@@ -114,7 +117,9 @@ def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_
                                          thiessen_data.columns.tolist()))))
 
         thiessen_data['Aquifer_Name'] = thiessen_data['Aquifer_Name'].apply(lambda x: x.rstrip())
+        thiessen_data['Aquifer_Name'] = thiessen_data['Aquifer_Name'].apply(lambda x: x.lstrip())
         thiessen_data['Well_Name'] = thiessen_data['Well_Name'].apply(lambda x: x.rstrip())
+        thiessen_data['Well_Name'] = thiessen_data['Well_Name'].apply(lambda x: x.lstrip())
 
         # Convert Thiessen Data to Wide Format
         Thiessen_Wide = pd.melt(frame=thiessen_data,
@@ -161,7 +166,9 @@ def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_
                                          sc_data.columns.tolist()))))
 
         sc_data['Aquifer_Name'] = sc_data['Aquifer_Name'].apply(lambda x: x.rstrip())
+        sc_data['Aquifer_Name'] = sc_data['Aquifer_Name'].apply(lambda x: x.lstrip())
         sc_data['Well_Name'] = sc_data['Well_Name'].apply(lambda x: x.rstrip())
+        sc_data['Well_Name'] = sc_data['Well_Name'].apply(lambda x: x.lstrip())
 
         # Convert Storage Coefficient Data to Wide Format
         Storage_Coefficient_Wide = pd.melt(frame=sc_data,
@@ -264,14 +271,21 @@ def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_
         # Add Name Well
         data = data.merge(right=Well_Info[
             ['Mahdodeh_Name', 'Mahdodeh_Code', 'Aquifer_Name', 'Well_Name', 'ID', 'X_UTM', 'Y_UTM', 'X_Decimal',
-             'Y_Decimal', "Final Elevation"]],
+             'Y_Decimal']],
                           how='outer',
                           left_on=['ID'],
                           right_on=['ID']).sort_values(['ID', 'Date_Gregorian'])
 
 
         result = result.append(data)
-
+    result['Aquifer_Name'] = result['Aquifer_Name'].apply(lambda x: x.rstrip())
+    result['Aquifer_Name'] = result['Aquifer_Name'].apply(lambda x: x.lstrip())
+    result['Well_Name'] = result['Well_Name'].apply(lambda x: x.rstrip())
+    result['Well_Name'] = result['Well_Name'].apply(lambda x: x.lstrip())
+    result[['year_Date_Persian','month_Date_Persian', 'day_Date_Persian']] = result.Date_Persian.str.split('-', expand=True)
+    result['year_Date_Persian'] = result['year_Date_Persian'].astype(int)
+    result['month_Date_Persian'] = result['month_Date_Persian'].astype(int)
+    result['day_Date_Persian'] =result['day_Date_Persian'].astype(int)
     return result
 
 
@@ -292,4 +306,27 @@ def read_shapfile(
             feature['id'] = feature['properties']['Mah_code']
 
         return geodf, j_file
-    
+
+
+
+
+
+# -----------------------------------------------------------------------------
+# LOAD DATA
+# -----------------------------------------------------------------------------
+db_path = 'aquifer_hydrograph.sqlite'
+token_path = "assets/.mapbox_token"
+
+token = open(token_path).read()
+
+
+try:
+    db = sqlite3.connect(db_path)
+    table_name = pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", db)
+    if table_name['name'].str.contains('RawDATA').any():
+        RawDATA = pd.read_sql_query(sql="SELECT * FROM RawDATA", con=db)
+        GeoInfoData = extract_geo_info_dataset(RawDATA)
+    else:
+        print("ERROR: RawDATA TABLE NOT EXIST")
+except:
+    print("ERROR: DATABASE NOT EXIST")
