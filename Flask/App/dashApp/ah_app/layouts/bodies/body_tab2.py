@@ -46,7 +46,23 @@ TAB_2_BODY = [
                     TAB2_BODY_CONTENT2
                 ],
                 className="w-100 h-100 px-4"
-            )
+            ),
+            dcc.Store(id='DATA_TABLE_WELL_STORE-TAB2_BODY_CONTENT2'),
+            html.Div(
+                children=[
+                    html.Button(
+                        children=[
+                            "دانلود",
+                            html.I(className="fa fa-download ml-2"),
+                        ],
+                        n_clicks=0,
+                        className="btn btn-outline-dark mt-3 float-right",
+                        id="DOWNLOAD_TABLE_BUTTON-TAB1_BODY_CONTENT2"
+                    ),
+                    dcc.Download(id="DOWNLOAD_TABLE_COMPONENT-TAB1_BODY_CONTENT2"),
+                ],
+                className="row justify-content-center"
+            ),
 
         ],
         className="row justify-content-center"

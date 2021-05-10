@@ -7,7 +7,7 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import plotly.graph_objects as go
 import plotly.express as px
-
+from dash.exceptions import PreventUpdate
 from server import app
 from callbacks.data_analysis import *
 
@@ -284,6 +284,7 @@ def FUNCTION_GRAPH_TAB2_BODY_CONTENT1(aquifers, wells, start, end):
 @app.callback(
     Output('IMG_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'src'),    
     Output('NAME_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
+    Output('ID_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
     Output('AQUIFER_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
     Output('LONG_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
     Output('LAT_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
@@ -301,7 +302,6 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
                 data = data[data["Well_Name"].isin(wells)]
                 data['Date_Gregorian'] = pd.to_datetime(data['Date_Gregorian'])
                 data.reset_index(inplace = True)
-                                
                 # Img OW
                 if aquifers[0] == "جوین":
                     Img_OW = base64.b64encode(
@@ -315,6 +315,7 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
                     Img_OW_SRC = 'data:image/png;base64,{}'.format(Img_OW.decode())
                     
                 # Para
+                ID = str(data['ID'].values[0])
                 LAT = str(data['X_UTM'].values[0])
                 LONG = str(data['Y_UTM'].values[0])
                 ELEV = str(data['Final_Elevation'].values[0])
@@ -325,6 +326,7 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
                 result = [
                     Img_OW_SRC,
                     wells[0],
+                    "شناسه: " + ID,
                     "آبخوان: " + aquifers[0],
                     "طول جغرافیایی: " + LAT,
                     "عرض جغرافیایی: " + LONG,
@@ -343,6 +345,7 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
                 result = [
                     'data:image/png;base64,{}'.format(Img_OW.decode()),
                     "نام چاه مشاهده‌ای",
+                    "شناسه چاه مشاهده‌ای",
                     "نام آبخوان",
                     "طول جغرافیایی",
                     "عرض جغرافیایی",
@@ -362,6 +365,7 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
         result = [
             'data:image/png;base64,{}'.format(Img_OW.decode()),
             "نام چاه مشاهده‌ای",
+            "شناسه چاه مشاهده‌ای",
             "نام آبخوان",
             "طول جغرافیایی",
             "عرض جغرافیایی",
@@ -383,12 +387,15 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
     Output('TABLE-TAB2_BODY_CONTENT2', 'data'),
     Output('TABLE-TAB2_BODY_CONTENT2', 'columns'),
     Output('TABLE_HEADER-TAB2_BODY_CONTENT2', 'children'),
+    Output('STATE_TABLE_DOWNLOAD_BUTTON-TAB1_SIDEBAR', 'children'),
+    Output('DATA_TABLE_WELL_STORE-TAB2_BODY_CONTENT2', 'data'),
     Input('SELECT_AQUIFER-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     Input('SELECT_WELL-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD2', 'value'),
     Input('SELECT_PARAMETER-TAB2_SIDEBAR_LEFT_CARD2', 'value'),
+    Input('STATISTICAL_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD2', 'value'),
 )
-def FUNCTION_TABLE_TAB2_BODY_CONTENT2(aquifers, wells, typeYear, para):
+def FUNCTION_TABLE_TAB2_BODY_CONTENT2(aquifers, wells, typeYear, para, statistical):
     if (aquifers is not None) and (len(aquifers) != 0) \
         and (wells is not None) and (len(wells) != 0):
             if (len(aquifers) == 1) and (len(wells) == 1):
@@ -412,8 +419,7 @@ def FUNCTION_TABLE_TAB2_BODY_CONTENT2(aquifers, wells, typeYear, para):
                     "WATER_TABLE_MONTLY" : "تراز ماهانه (روز پانزدهم) سطح آب زیرزمینی (متر)",
                     "WATER_TABLE_DIFF_MONTLY" : "تغییرات ماهانه (هر ماه نسبت به ماه قبل) تراز سطح آب زیرزمینی (متر)",
                     "WATER_TABLE_DIFF_MONTLY_YEARLY" : "تغییرات ماهانه (هر ماه در سال جاری نسبت به ماه متناظر در سال قبل) تراز سطح آب زیرزمینی (متر)",
-                }
-                
+                }                
 
                 if typeYear == "WATER_YEAR":
                     df_result = df_tmp.pivot_table(
@@ -430,17 +436,39 @@ def FUNCTION_TABLE_TAB2_BODY_CONTENT2(aquifers, wells, typeYear, para):
                     ).reset_index()
                     df_result.columns = ["سال آبی", "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"]
                 
-                    
+                df_result_statistical = df_result.copy()
                 
-                
-
-                
-                                
-
+                if statistical is not None:
+                    if para == "WATER_TABLE_MONTLY":
+                        df_result_statistical["مقدار حداکثر"] = df_result.iloc[:,1:].max(axis=1).round(2)
+                        df_result_statistical["مقدار حداقل"] = df_result.iloc[:,1:].min(axis=1).round(2)
+                        df_result_statistical["مقدار میانگین"] = df_result.iloc[:,1:].mean(axis=1).round(2)
+                        df_result = df_result_statistical.copy()
+                    elif para == "WATER_TABLE_DIFF_MONTLY":
+                        df_result_statistical["مقدار حداکثر"] = df_result.iloc[:,1:].max(axis=1).round(2)
+                        df_result_statistical["مقدار حداقل"] = df_result.iloc[:,1:].min(axis=1).round(2)
+                        df_result_statistical["مقدار میانگین سالانه"] = df_result.iloc[:,1:].mean(axis=1).round(2)
+                        df_result_statistical["مقدار تجمعی میانگین سالانه"] = df_result_statistical["مقدار میانگین سالانه"].cumsum(skipna=True).round(2) 
+                        df_result_statistical["مجموع ماهانه"] = df_result.iloc[:,1:].sum(axis=1).round(2)
+                        df_result_statistical["مقدار تجمعی مجموع ماهانه"] = df_result_statistical["مجموع ماهانه"].cumsum(skipna=True).round(2)
+                        df_result = df_result_statistical.copy()
+                    elif para == "WATER_TABLE_DIFF_MONTLY_YEARLY":
+                        df_result_statistical["مقدار حداکثر"] = df_result.iloc[:,1:].max(axis=1).round(2)
+                        df_result_statistical["مقدار حداقل"] = df_result.iloc[:,1:].min(axis=1).round(2)
+                        df_result_statistical["مقدار میانگین سالانه"] = df_result.iloc[:,1:].mean(axis=1).round(2)
+                        df_result_statistical["تغییرات مقدار میانگین سالانه"] = df_result_statistical["مقدار میانگین سالانه"] - df_result_statistical["مقدار میانگین سالانه"].shift(1)
+                        df_result_statistical["تغییرات مقدار میانگین سالانه"] = df_result_statistical["تغییرات مقدار میانگین سالانه"].round(2)
+                        df_result_statistical["مقدار تجمعی میانگین سالانه"] = df_result_statistical["مقدار میانگین سالانه"].cumsum(skipna=True).round(2)
+                        if typeYear == "WATER_YEAR":
+                            df_result_statistical["مقدار تجمعی (مهر تا مهر)"] = df_result["مهر"].cumsum(skipna=True).round(2)
+                        df_result = df_result_statistical.copy()
+                        
                 result = [
                     df_result.to_dict('records'),
                     [{"name": i, "id": i} for i in df_result.columns],
-                    title_dic[para] + " - چاه " + wells[0]
+                    title_dic[para] + " - چاه " + wells[0],
+                    True,
+                    df_result.to_dict('records')
                 ]
                 
                 return result
@@ -450,6 +478,8 @@ def FUNCTION_TABLE_TAB2_BODY_CONTENT2(aquifers, wells, typeYear, para):
                     [{}],
                     [{"name": i, "id": i} for i in zz],
                     "تراز ماهانه (روز پانزدهم) سطح آب زیرزمینی (متر)",
+                    False,
+                    None
                 ]                
                 return result 
     else:
@@ -458,6 +488,43 @@ def FUNCTION_TABLE_TAB2_BODY_CONTENT2(aquifers, wells, typeYear, para):
             [{}],
             [{"name": i, "id": i} for i in zz],
             "تراز ماهانه (روز پانزدهم) سطح آب زیرزمینی (متر)",
+            False,
+            None
         ]
         return result
 
+
+
+# -----------------------------------------------------------------------------
+# ACTIVE DOWNLOAD BUTTON - TAB2 BODY CONTENT2
+# -----------------------------------------------------------------------------
+@app.callback(
+    Output('DOWNLOAD_TABLE_BUTTON-TAB1_BODY_CONTENT2', 'disabled'),
+    Input('STATE_TABLE_DOWNLOAD_BUTTON-TAB1_SIDEBAR', 'children'),
+)
+def FUNCTION_ACTIVE_DOWNLOAD_TABLE_BUTTON_TAB1_BODY_CONTENT2(state_table):
+    if state_table:
+        return False
+    else:
+        return True
+
+
+# -----------------------------------------------------------------------------
+# TABLE DOWNLOAD - TAB2 BODY CONTENT2
+# -----------------------------------------------------------------------------
+@app.callback(
+    Output('DOWNLOAD_TABLE_COMPONENT-TAB1_BODY_CONTENT2', 'data'),
+    Output('DOWNLOAD_TABLE_BUTTON-TAB1_BODY_CONTENT2', 'n_clicks'),
+    Input('DOWNLOAD_TABLE_BUTTON-TAB1_BODY_CONTENT2', 'n_clicks'),
+    Input('DATA_TABLE_WELL_STORE-TAB2_BODY_CONTENT2', 'data'),
+    prevent_initial_call=True,
+)
+def FUNCTION_DOWNLOAD_TABLE_COMPONENT_TAB1_BODY_CONTENT2(n, data):
+    if n != 0 and data is not None:
+        result = [
+            dcc.send_data_frame(pd.DataFrame.from_dict(data).to_excel, "DataTable.xlsx", sheet_name="Sheet1", index=False),
+            1
+        ]
+        return result
+    else:
+        raise PreventUpdate

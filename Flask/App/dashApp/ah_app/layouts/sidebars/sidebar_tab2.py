@@ -98,11 +98,13 @@ LEFT_CARD_1 = html.Div(
                                     # persistence_type="memory",
                                     options=[
                                         {'label': '{}'.format(i), 'value': i} for i in range(1370, 1426)
-                                    ]
+                                    ],
+                                    value=1380
                                 ),
                                 dcc.Dropdown(
                                     id="SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
                                     placeholder="سال پایان",
+                                    value=1400
                                     # persistence=True,
                                     # persistence_type="memory",
 
@@ -196,6 +198,40 @@ LEFT_CARD_2 = html.Div(
             dir="rtl",
             className='card-body text-dark text-right'
         ),
+            html.Div(
+            children=[
+                html.H6(
+                    children=[
+                        "انتخاب تحلیل آماری:"
+                    ],
+                    dir="rtl",
+                    className="text-right"
+                ),
+                
+                dcc.Checklist(
+                    id="STATISTICAL_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD2",
+                    options=[
+                        {'label': 'نمایش تحلیل‌های آماری', 'value': 'STATISTICAL_ANALYSIS'},
+                    ],
+                    labelClassName ="d-block mr-3 text-right text-secondary font_size",
+                    inputClassName="ml-1"           
+                )
+
+            ],
+            dir="rtl",
+            className='card-body text-dark text-right'
+        ),
+        # Hidden Div For Store Data--------------------------------------------
+        html.Div(
+            children=[
+                html.Div(
+                    id="STATE_TABLE_DOWNLOAD_BUTTON-TAB1_SIDEBAR",
+                )
+            ],
+            style={
+                'display': 'none'
+            }
+        )
     ],
     className='card border-dark mt-3'
 )
@@ -284,6 +320,10 @@ RIGHT_CARD_1 = html.Div(
                     className='list-group list-group-flush', 
                     children=[
                         html.Li(
+                            id="ID_OW-TAB2_SIDEBAR_RIGHT_CARD1",
+                            className='list-group-item'
+                        ),                      
+                        html.Li(
                             id="AQUIFER_OW-TAB2_SIDEBAR_RIGHT_CARD1",
                             className='list-group-item',
                         ),
@@ -307,10 +347,6 @@ RIGHT_CARD_1 = html.Div(
                             id="END_DATE_OW-TAB2_SIDEBAR_RIGHT_CARD1",
                             className='list-group-item'
                         ),
-                        html.Li(
-                            children="sdsd",
-                            className='list-group-item'
-                        )                      
                     ]
                 )
                 

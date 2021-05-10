@@ -322,7 +322,7 @@ token = open(token_path).read()
 
 
 try:
-    db = sqlite3.connect(db_path)
+    db = sqlite3.connect(db_path, check_same_thread=False)
     table_name = pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", db)
     if table_name['name'].str.contains('RawDATA').any():
         RawDATA = pd.read_sql_query(sql="SELECT * FROM RawDATA", con=db)

@@ -33,15 +33,16 @@ TAB2_BODY_CONTENT2 = dash_table.DataTable(
         'font-size': '14px',
         'font_family': 'Tanha-FD',
         'text_align': 'center',
-        'minWidth': 40,
-        'maxWidth': 120,
-        'width': 80
+        'minWidth': 65,
+        'maxWidth': 200,
+        'width': 65
     },
     style_header={
         'backgroundColor': 'rgb(220, 220, 220)',
         'fontWeight': 'bold',
-        # 'whiteSpace': 'normal',
+        'whiteSpace': 'normal',
         'text_align': 'center',
+        'height': 'auto',
     },
     style_data_conditional=[
         {
