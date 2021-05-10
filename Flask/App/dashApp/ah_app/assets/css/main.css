@@ -46,6 +46,10 @@
   font-family: "Nunito";
 }
 
+.font_size {
+  font-size: 12px;
+}
+
 body {
   font-family: "Tanha-FD";
   /* direction: rtl; */

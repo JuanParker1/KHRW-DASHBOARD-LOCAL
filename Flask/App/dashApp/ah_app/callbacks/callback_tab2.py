@@ -212,7 +212,7 @@ def FUNCTION_MAP_TAB2_SIDEBAR_LEFT_CARD1(aquifers, wells):
 # CREATE GRAPH - TAB2 BODY CONTENT1
 # -----------------------------------------------------------------------------
 @app.callback(
-    Output('GRAPH-TAB2_BODY_CONTENT1', 'figure'),    
+    Output('GRAPH-TAB2_BODY_CONTENT1', 'figure'),   
     Input('SELECT_AQUIFER-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     Input('SELECT_WELL-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
@@ -288,7 +288,8 @@ def FUNCTION_GRAPH_TAB2_BODY_CONTENT1(aquifers, wells, start, end):
     Output('LONG_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
     Output('LAT_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
     Output('ELEV_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
-    Output('DATE_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
+    Output('START_DATE_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),
+    Output('END_DATE_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),
     Input('SELECT_AQUIFER-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     Input('SELECT_WELL-TAB2_SIDEBAR_LEFT_CARD1', 'value')
 )
@@ -300,17 +301,7 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
                 data = data[data["Well_Name"].isin(wells)]
                 data['Date_Gregorian'] = pd.to_datetime(data['Date_Gregorian'])
                 data.reset_index(inplace = True)
-                
-                df = data[["year_Date_Persian", "month_Date_Persian", "Well_Head"]]                
-                df = pd.pivot_table(df, values = 'Well_Head', index='year_Date_Persian', columns = 'month_Date_Persian').reset_index()
-                print(df)
-                print(df.columns)
-                
-                
-                column_order = ["year_Date_Persian", 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6]
-                
-                print(df[column_order])
-                
+                                
                 # Img OW
                 if aquifers[0] == "جوین":
                     Img_OW = base64.b64encode(
@@ -338,7 +329,8 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
                     "طول جغرافیایی: " + LAT,
                     "عرض جغرافیایی: " + LONG,
                     "ارتفاع: " + ELEV + " متر",
-                    "طول دوره آماری: " + START_DATE + " تا " + END_DATE,
+                    "سال شروع دوره آماری: " + START_DATE,
+                    "سال پایان دوره آماری: " + END_DATE,
                 ]
                 
                 return result
@@ -355,7 +347,8 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
                     "طول جغرافیایی",
                     "عرض جغرافیایی",
                     "ارتفاع",
-                    "طول دوره آماری"
+                    "سال شروع دوره آماری",
+                    "سال پایان دوره آماری",
                 ]
                 
                 return result
@@ -373,8 +366,98 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
             "طول جغرافیایی",
             "عرض جغرافیایی",
             "ارتفاع",
-            "طول دوره آماری"
-
+            "سال شروع دوره آماری",
+            "سال پایان دوره آماری",
         ]
         
         return result
+
+
+
+
+
+# -----------------------------------------------------------------------------
+# TABLE - TAB2 BODY CONTENT2
+# -----------------------------------------------------------------------------
+@app.callback(
+    Output('TABLE-TAB2_BODY_CONTENT2', 'data'),
+    Output('TABLE-TAB2_BODY_CONTENT2', 'columns'),
+    Output('TABLE_HEADER-TAB2_BODY_CONTENT2', 'children'),
+    Input('SELECT_AQUIFER-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    Input('SELECT_WELL-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD2', 'value'),
+    Input('SELECT_PARAMETER-TAB2_SIDEBAR_LEFT_CARD2', 'value'),
+)
+def FUNCTION_TABLE_TAB2_BODY_CONTENT2(aquifers, wells, typeYear, para):
+    if (aquifers is not None) and (len(aquifers) != 0) \
+        and (wells is not None) and (len(wells) != 0):
+            if (len(aquifers) == 1) and (len(wells) == 1):
+                data = RawDATA[RawDATA["Aquifer_Name"].isin(aquifers)]
+                data = data[data["Well_Name"].isin(wells)]
+                data.reset_index(inplace = True)
+                
+                df_tmp = data[["year_Date_Persian", "month_Date_Persian", "Well_Head"]]
+                df_tmp.columns = ["سال", "ماه", "پارامتر"]
+                df_tmp = resultTable(df_tmp)
+                df_tmp.columns = ["سال", "ماه", "تراز ماهانه سطح آب زیرزمینی", "سال آبی", "ماه آبی", "تغییرات هر ماه نسبت به ماه قبل", "تغییرات هر ماه نسبت به ماه سال قبل"]
+                
+                
+                para_dic = {
+                    "WATER_TABLE_MONTLY" : "تراز ماهانه سطح آب زیرزمینی",
+                    "WATER_TABLE_DIFF_MONTLY" : "تغییرات هر ماه نسبت به ماه قبل",
+                    "WATER_TABLE_DIFF_MONTLY_YEARLY" : "تغییرات هر ماه نسبت به ماه سال قبل",
+                }
+                
+                title_dic = {
+                    "WATER_TABLE_MONTLY" : "تراز ماهانه (روز پانزدهم) سطح آب زیرزمینی (متر)",
+                    "WATER_TABLE_DIFF_MONTLY" : "تغییرات ماهانه (هر ماه نسبت به ماه قبل) تراز سطح آب زیرزمینی (متر)",
+                    "WATER_TABLE_DIFF_MONTLY_YEARLY" : "تغییرات ماهانه (هر ماه در سال جاری نسبت به ماه متناظر در سال قبل) تراز سطح آب زیرزمینی (متر)",
+                }
+                
+
+                if typeYear == "WATER_YEAR":
+                    df_result = df_tmp.pivot_table(
+                        values=para_dic[para],
+                        index="سال آبی",
+                        columns="ماه آبی"
+                    ).reset_index()
+                    df_result.columns = ["سال آبی", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور"]
+                else:
+                    df_result = df_tmp.pivot_table(
+                        values=para_dic[para],
+                        index="سال",
+                        columns="ماه"
+                    ).reset_index()
+                    df_result.columns = ["سال آبی", "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"]
+                
+                    
+                
+                
+
+                
+                                
+
+                result = [
+                    df_result.to_dict('records'),
+                    [{"name": i, "id": i} for i in df_result.columns],
+                    title_dic[para] + " - چاه " + wells[0]
+                ]
+                
+                return result
+            else:  
+                zz = ["سال آبی", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور"]              
+                result = [
+                    [{}],
+                    [{"name": i, "id": i} for i in zz],
+                    "تراز ماهانه (روز پانزدهم) سطح آب زیرزمینی (متر)",
+                ]                
+                return result 
+    else:
+        zz = ["سال آبی", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور"]
+        result = [
+            [{}],
+            [{"name": i, "id": i} for i in zz],
+            "تراز ماهانه (روز پانزدهم) سطح آب زیرزمینی (متر)",
+        ]
+        return result
+

@@ -125,6 +125,82 @@ LEFT_CARD_1 = html.Div(
     className='card border-dark my-2'
 )
 
+"""
+---------------------------------------
+Left - Card 2: 
+---------------------------------------
+"""
+
+
+
+
+LEFT_CARD_2 = html.Div(
+    children=[
+        html.H6(
+            children=[
+                "تنظیمات جدول خروجی",
+                html.I(className="fa fa-table ml-2"),
+            ],
+            className='card-header text-right'
+        ),
+        html.Div(
+            children=[
+                
+                html.H6(
+                    children=[
+                        "انتخاب دوره آماری:"
+                    ],
+                    dir="rtl",
+                    className="text-right"
+                ),
+                
+                dcc.RadioItems(
+                    id="SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD2",
+                    options=[
+                        {'label': 'سال آبی', 'value': 'WATER_YEAR'},
+                        {'label': 'سال شمسی', 'value': 'PERSIAN_YEAR'},
+                    ],
+                    value='WATER_YEAR',
+                    labelClassName ="d-block mr-3 text-right text-secondary font_size"    ,
+                    inputClassName="ml-1"           
+                )
+
+            ],
+            dir="rtl",
+            className='card-body text-dark text-right'
+        ),
+        html.Div(
+            children=[
+                
+                html.H6(
+                    children=[
+                        "انتخاب پارامتر:"
+                    ],
+                    dir="rtl",
+                    className="text-right"
+                ),
+                
+                dcc.RadioItems(
+                    id="SELECT_PARAMETER-TAB2_SIDEBAR_LEFT_CARD2",
+                    options=[
+                        {'label': 'تراز سطح آب', 'value': 'WATER_TABLE_MONTLY'},
+                        {'label': 'تغییرات تراز سطح آب (نسبت به ماه قبل)', 'value': 'WATER_TABLE_DIFF_MONTLY'},
+                        {'label': 'تغییرات تراز سطح آب (نسبت به ماه سال قبل)', 'value': 'WATER_TABLE_DIFF_MONTLY_YEARLY'},
+                    ],
+                    value='WATER_TABLE_MONTLY',
+                    labelClassName ="d-block mr-3 text-right text-secondary font_size",
+                    inputClassName="ml-1"           
+                )
+
+            ],
+            dir="rtl",
+            className='card-body text-dark text-right'
+        ),
+    ],
+    className='card border-dark mt-3'
+)
+
+
 
 
 """
@@ -140,6 +216,7 @@ TAB_2_SIDEBAR_LEFT = html.Div(
                 html.Div(
                     children=[
                         LEFT_CARD_1,
+                        LEFT_CARD_2
                     ],
                     className='col px-0'
                 ),
@@ -223,9 +300,17 @@ RIGHT_CARD_1 = html.Div(
                             className='list-group-item', 
                         ),
                         html.Li(
-                            id="DATE_OW-TAB2_SIDEBAR_RIGHT_CARD1",
+                            id="START_DATE_OW-TAB2_SIDEBAR_RIGHT_CARD1",
                             className='list-group-item'
-                        )                        
+                        ),
+                        html.Li(
+                            id="END_DATE_OW-TAB2_SIDEBAR_RIGHT_CARD1",
+                            className='list-group-item'
+                        ),
+                        html.Li(
+                            children="sdsd",
+                            className='list-group-item'
+                        )                      
                     ]
                 )
                 

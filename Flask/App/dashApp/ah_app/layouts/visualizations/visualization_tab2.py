@@ -22,8 +22,8 @@ TAB2_BODY_CONTENT1 = dcc.Graph(
 TAB2_BODY_CONTENT2 = dash_table.DataTable(
     id='TABLE-TAB2_BODY_CONTENT2',
     filter_action="native",
-    sort_action="native",
-    sort_mode="multi",
+    # sort_action="native",
+    # sort_mode="multi",
     style_table={
         'overflowX': 'auto',
         'overflowY': 'auto',
@@ -61,7 +61,7 @@ TAB2_BODY_CONTENT2 = dash_table.DataTable(
         'selector': '.dash-table-tooltip',
         'rule': 'background-color: yellow;'
     }],
-    page_size=6
+    page_size=30
 )
 
 

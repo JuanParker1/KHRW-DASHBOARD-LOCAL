@@ -30,12 +30,16 @@ TAB_2_BODY = [
         ],
         className="row justify-content-center",
         style={
-            "height": "670px",
+            "height": "655px",
             # "margin-bottom": "10px"
         }
     ),
     html.Div(
         children=[
+            html.H6(
+                id="TABLE_HEADER-TAB2_BODY_CONTENT2",
+                className="text-center text-secondary my-2",
+            ),
             html.Div(
                 children=[
                     # Table
