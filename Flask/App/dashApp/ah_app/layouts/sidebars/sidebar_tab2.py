@@ -17,18 +17,18 @@ Left - Card 1:
 ---------------------------------------
 """
 
-LEFT_CARD_1_IMG = base64.b64encode(
+TAB2_SIDEBAR_LEFT_CARD_1_IMG = base64.b64encode(
    open('assets/images/well.png', 'rb').read()
 )  # EDITPATH
 
 
 
-LEFT_CARD_1 = html.Div(
+TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
     children=[
         html.H6(
             children=[
-                "   انتخاب چاه مشاهده‌ای",
-                html.Img(src='data:image/png;base64,{}'.format(LEFT_CARD_1_IMG.decode()), height=30),
+                "   چاه مشاهده‌ای",
+                html.Img(src='data:image/png;base64,{}'.format(TAB2_SIDEBAR_LEFT_CARD_1_IMG.decode()), height=30, className="ml-2"),
             ],
             className='card-header text-right'
         ),
@@ -136,7 +136,7 @@ Left - Card 2:
 
 
 
-LEFT_CARD_2 = html.Div(
+TAB2_SIDEBAR_LEFT_CARD_2 = html.Div(
     children=[
         html.H6(
             children=[
@@ -225,7 +225,7 @@ LEFT_CARD_2 = html.Div(
         html.Div(
             children=[
                 html.Div(
-                    id="STATE_TABLE_DOWNLOAD_BUTTON-TAB1_SIDEBAR",
+                    id="STATE_TABLE_DOWNLOAD_BUTTON-TAB2_SIDEBAR",
                 )
             ],
             style={
@@ -251,8 +251,8 @@ TAB_2_SIDEBAR_LEFT = html.Div(
             children=[
                 html.Div(
                     children=[
-                        LEFT_CARD_1,
-                        LEFT_CARD_2
+                        TAB2_SIDEBAR_LEFT_CARD_1,
+                        TAB2_SIDEBAR_LEFT_CARD_2
                     ],
                     className='col px-0'
                 ),
@@ -279,15 +279,15 @@ Right - Card 1
 ---------------------------------------
 """
 
-RIGHT_CARD_1_IMG_1 = base64.b64encode(
+TAB2_SIDEBAR_RIGHT_CARD_1_IMG_1 = base64.b64encode(
    open('assets/images/aquifer.jpg', 'rb').read()
 )  # EDITPATH
 
-RIGHT_CARD_1_IMG_2 = base64.b64encode(
+TAB2_SIDEBAR_RIGHT_CARD_1_IMG_2 = base64.b64encode(
    open('assets/images/well.png', 'rb').read()
 )  # EDITPATH
 
-RIGHT_CARD_1 = html.Div(
+TAB2_SIDEBAR_RIGHT_CARD_1 = html.Div(
     className='mt-2 text-right border border-secondary rounded',
     dir="rtl",
     children=[
@@ -369,7 +369,7 @@ TAB_2_SIDEBAR_RIGHT = html.Div(
             children=[
                 html.Div(
                     children=[
-                        RIGHT_CARD_1
+                        TAB2_SIDEBAR_RIGHT_CARD_1
                     ],
                     className='col px-0'
                 ),

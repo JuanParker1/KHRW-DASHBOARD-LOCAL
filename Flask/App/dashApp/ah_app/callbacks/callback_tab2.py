@@ -51,7 +51,7 @@ NO_MATCHING_DATA_FOUND = {
                 "xref": "paper",
                 "yref": "paper",
                 "showarrow": False,
-                "font": {"size": 24}
+                "font": {"size": 36}
             }
         ]
     }
@@ -387,7 +387,7 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
     Output('TABLE-TAB2_BODY_CONTENT2', 'data'),
     Output('TABLE-TAB2_BODY_CONTENT2', 'columns'),
     Output('TABLE_HEADER-TAB2_BODY_CONTENT2', 'children'),
-    Output('STATE_TABLE_DOWNLOAD_BUTTON-TAB1_SIDEBAR', 'children'),
+    Output('STATE_TABLE_DOWNLOAD_BUTTON-TAB2_SIDEBAR', 'children'),
     Output('DATA_TABLE_WELL_STORE-TAB2_BODY_CONTENT2', 'data'),
     Input('SELECT_AQUIFER-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     Input('SELECT_WELL-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
@@ -434,11 +434,11 @@ def FUNCTION_TABLE_TAB2_BODY_CONTENT2(aquifers, wells, typeYear, para, statistic
                         index="سال",
                         columns="ماه"
                     ).reset_index()
-                    df_result.columns = ["سال آبی", "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"]
+                    df_result.columns = ["سال شمسی", "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"]
                 
                 df_result_statistical = df_result.copy()
                 
-                if statistical is not None:
+                if statistical is not None and 'STATISTICAL_ANALYSIS' in statistical:
                     if para == "WATER_TABLE_MONTLY":
                         df_result_statistical["مقدار حداکثر"] = df_result.iloc[:,1:].max(axis=1).round(2)
                         df_result_statistical["مقدار حداقل"] = df_result.iloc[:,1:].min(axis=1).round(2)
@@ -499,8 +499,8 @@ def FUNCTION_TABLE_TAB2_BODY_CONTENT2(aquifers, wells, typeYear, para, statistic
 # ACTIVE DOWNLOAD BUTTON - TAB2 BODY CONTENT2
 # -----------------------------------------------------------------------------
 @app.callback(
-    Output('DOWNLOAD_TABLE_BUTTON-TAB1_BODY_CONTENT2', 'disabled'),
-    Input('STATE_TABLE_DOWNLOAD_BUTTON-TAB1_SIDEBAR', 'children'),
+    Output('DOWNLOAD_TABLE_BUTTON-TAB2_BODY_CONTENT2', 'disabled'),
+    Input('STATE_TABLE_DOWNLOAD_BUTTON-TAB2_SIDEBAR', 'children'),
 )
 def FUNCTION_ACTIVE_DOWNLOAD_TABLE_BUTTON_TAB1_BODY_CONTENT2(state_table):
     if state_table:
@@ -513,9 +513,9 @@ def FUNCTION_ACTIVE_DOWNLOAD_TABLE_BUTTON_TAB1_BODY_CONTENT2(state_table):
 # TABLE DOWNLOAD - TAB2 BODY CONTENT2
 # -----------------------------------------------------------------------------
 @app.callback(
-    Output('DOWNLOAD_TABLE_COMPONENT-TAB1_BODY_CONTENT2', 'data'),
-    Output('DOWNLOAD_TABLE_BUTTON-TAB1_BODY_CONTENT2', 'n_clicks'),
-    Input('DOWNLOAD_TABLE_BUTTON-TAB1_BODY_CONTENT2', 'n_clicks'),
+    Output('DOWNLOAD_TABLE_COMPONENT-TAB2_BODY_CONTENT2', 'data'),
+    Output('DOWNLOAD_TABLE_BUTTON-TAB2_BODY_CONTENT2', 'n_clicks'),
+    Input('DOWNLOAD_TABLE_BUTTON-TAB2_BODY_CONTENT2', 'n_clicks'),
     Input('DATA_TABLE_WELL_STORE-TAB2_BODY_CONTENT2', 'data'),
     prevent_initial_call=True,
 )

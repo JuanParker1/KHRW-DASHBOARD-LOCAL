@@ -53,7 +53,7 @@ TABLE_HEADER_NAME = {
     State('CHOOSE_SPREADSHEET-TAB1_SIDEBAR_CARD2', 'filename')
 )
 def FUNCTION_CONNECT_TO_SPREADSHEET_TAB1_SIDEBAR_CARD(n, content, filename):
-    if  n != 0 and content is None:
+    if n != 0 and content is None:
         result = [
             0,
             "فایلی انتخاب نشده است!",
@@ -65,7 +65,7 @@ def FUNCTION_CONNECT_TO_SPREADSHEET_TAB1_SIDEBAR_CARD(n, content, filename):
             "popup-notification-header-warning"            
         ]
         return result
-    elif n == 0 and content is not None :
+    elif n == 0 and content is not None:
         result = [
             0,
             "فایل انتخابی شما: " + filename,
@@ -77,9 +77,9 @@ def FUNCTION_CONNECT_TO_SPREADSHEET_TAB1_SIDEBAR_CARD(n, content, filename):
             None           
         ]
         return result
-    elif  n != 0 and content is not None:
+    elif n != 0 and content is not None:
         raw_data = read_spreadsheet(contents=content, filename=filename)
-        data = data_cleansing(
+        data, data_aquifer = data_cleansing(
             well_info_data_all=raw_data['Info'],
             dtw_data_all=raw_data['Depth_To_Water'],
             thiessen_data_all=raw_data['Thiessen'],
@@ -87,6 +87,7 @@ def FUNCTION_CONNECT_TO_SPREADSHEET_TAB1_SIDEBAR_CARD(n, content, filename):
         )
         db = sqlite3.connect(database="aquifer_hydrograph.sqlite")
         data.to_sql(name="RawDATA", con=db, if_exists="replace")
+        data_aquifer.to_sql(name="AquiferDATA", con=db, if_exists="replace")
         result = [
             1,
             "فایل انتخابی شما: " + filename,
@@ -178,11 +179,13 @@ def CONNECT_TO_EXIST_DATABASE_TAB1_SIDEBAR_CARD1(n):
         global table_name
         global RawDATA
         global GeoInfoData
+        global AquiferDATA
         db = sqlite3.connect(db_path)
         table_name = pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", db)
         try:
             RawDATA = pd.read_sql_query(sql="SELECT * FROM RawDATA", con=db)
             GeoInfoData = extract_geo_info_dataset(RawDATA)
+            AquiferDATA = pd.read_sql_query(sql="SELECT * FROM AquiferDATA", con=db)
             result = [
                 "OK",
                 True,
@@ -231,7 +234,7 @@ NO_DATABASE_CONNECTION = {
                 "xref": "paper",
                 "yref": "paper",
                 "showarrow": False,
-                "font": {"size": 24}
+                "font": {"size": 36}
             }
         ]
     }

@@ -19,13 +19,10 @@ TAB_PAN = html.Div(
                             <a class="nav-link" data-toggle="tab" href="#Tab_1">ورود داده‌ها</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#Tab_2">چاه‌های مشاهده‌ای</a>
+                            <a class="nav-link" data-toggle="tab" href="#Tab_2">چاه‌های مشاهده‌ای</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#Tab_3">هیدروگراف آبخوان</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#Tab_4">نتایج</a>
+                            <a class="nav-link active" data-toggle="tab" href="#Tab_3">هیدروگراف آبخوان</a>
                         </li>
                     </ul>
             """
@@ -46,23 +43,16 @@ TAB_PAN = html.Div(
                     children=[
                         TAB_2
                     ],
-                    className="tab-pane active",
+                    className="tab-pane fade",
                     id="Tab_2"
                 ),
                 html.Div(
                     children=[
                         TAB_3
                     ],
-                    className="tab-pane fade",
+                    className="tab-pane active",
                     id="Tab_3"
                 ),
-                html.Div(
-                    children=[
-                        TAB_4
-                    ],
-                    className="tab-pane fade",
-                    id="Tab_4"
-                )
             ],
             className="tab-content"
         )

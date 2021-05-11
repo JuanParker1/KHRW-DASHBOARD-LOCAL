@@ -46,8 +46,9 @@ def extract_geo_info_dataset(data):
 # DATA CLEANSING
 # -----------------------------------------------------------------------------
 # CASE-DEPENDENT
-def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_all):
+def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_all, threshold=0.5):
     result = pd.DataFrame()
+    result_aquifer = pd.DataFrame()
 
     for aquifer in well_info_data_all['Aquifer_Name'].unique():
         well_info_data = well_info_data_all[well_info_data_all['Aquifer_Name'] == aquifer]
@@ -267,6 +268,8 @@ def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_
         data = data.merge(right=df,
                           how='outer',
                           on=['Date_Gregorian', 'Date_Persian']).sort_values(['ID', 'Date_Gregorian'])
+        
+        
 
         # Add Name Well
         data = data.merge(right=Well_Info[
@@ -275,19 +278,79 @@ def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_
                           how='outer',
                           left_on=['ID'],
                           right_on=['ID']).sort_values(['ID', 'Date_Gregorian'])
-
-
+        
         result = result.append(data)
+        
+
+
+        # ADJUSMENT AQUIFER HEAD
+        data_aquifer = data.drop_duplicates(subset=['Date_Gregorian', 'Date_Persian'], keep='last').reset_index()
+        
+        data_aquifer = data_aquifer[[
+            "Date_Gregorian", "Date_Persian",
+            "Aquifer_Area", "Aquifer_Storage_Coefficient", "Aquifer_Head",
+            "Aquifer_Head_Arithmetic_Mean", "Aquifer_Head_Geometric_Mean", "Aquifer_Head_Harmonic_Mean",
+            "Mahdodeh_Name", 'Mahdodeh_Code', "Aquifer_Name"
+        ]]
+
+        data_aquifer.replace(0, np.nan, inplace=True)
+        data_aquifer['Delta'] = data_aquifer['Aquifer_Head'].diff().fillna(0)
+        data_aquifer['Index'] = abs(data_aquifer['Delta']).apply(lambda x: 1 if x >= threshold else 0)
+        data_aquifer['Adjusted_Aquifer_Head'] = data_aquifer['Aquifer_Head']
+        
+
+        n = data_aquifer.index[data_aquifer['Index'] == True].tolist()
+        
+        
+        if len(n) > 0:
+            while len(n) != 0:
+                delta = data_aquifer['Delta'][n[0]]
+                data_aquifer['Temp_Aquifer_Head'] = data_aquifer['Adjusted_Aquifer_Head']
+                for i in range(n[0]):
+                    data_aquifer['Temp_Aquifer_Head'][i] = data_aquifer['Adjusted_Aquifer_Head'][i] + delta
+                    data_aquifer['Adjusted_Aquifer_Head'] = data_aquifer['Temp_Aquifer_Head']
+                    data_aquifer['Delta'] = data_aquifer['Adjusted_Aquifer_Head'].diff().fillna(0)
+                    data_aquifer['Index'] = abs(data_aquifer['Delta']).apply(lambda x: 1 if x >= threshold else 0)
+                    n = data_aquifer.index[data_aquifer['Index'] == True].tolist()
+                    
+        
+        if 'Temp_Aquifer_Head' in data_aquifer.columns:
+            data_aquifer = data_aquifer.drop(['Temp_Aquifer_Head'], axis=1)
+
+        if 'Delta' in data_aquifer.columns:
+            data_aquifer = data_aquifer.drop(['Delta'], axis=1)
+
+        if 'Index' in data_aquifer.columns:
+            data_aquifer = data_aquifer.drop(['Index'], axis=1)
+
+                
+        result_aquifer = result_aquifer.append(data_aquifer)
+
+        
     result['Aquifer_Name'] = result['Aquifer_Name'].apply(lambda x: x.rstrip())
     result['Aquifer_Name'] = result['Aquifer_Name'].apply(lambda x: x.lstrip())
     result['Well_Name'] = result['Well_Name'].apply(lambda x: x.rstrip())
     result['Well_Name'] = result['Well_Name'].apply(lambda x: x.lstrip())
-    result[['year_Date_Persian','month_Date_Persian', 'day_Date_Persian']] = result.Date_Persian.str.split('-', expand=True)
+    result_aquifer['Aquifer_Name'] = result_aquifer['Aquifer_Name'].apply(lambda x: x.rstrip())
+    result_aquifer['Aquifer_Name'] = result_aquifer['Aquifer_Name'].apply(lambda x: x.lstrip())
+    
+    result[['year_Date_Persian', 'month_Date_Persian', 'day_Date_Persian']] = result.Date_Persian.str.split('-', expand=True)
     result['year_Date_Persian'] = result['year_Date_Persian'].astype(int)
     result['month_Date_Persian'] = result['month_Date_Persian'].astype(int)
-    result['day_Date_Persian'] =result['day_Date_Persian'].astype(int)
+    result['day_Date_Persian'] = result['day_Date_Persian'].astype(int)
     result['Date_Gregorian'] = pd.to_datetime(result['Date_Gregorian'])
-    return result
+    
+    result_aquifer[['year_Date_Persian', 'month_Date_Persian', 'day_Date_Persian']] = result_aquifer.Date_Persian.str.split('-', expand=True)
+    result_aquifer['year_Date_Persian'] = result_aquifer['year_Date_Persian'].astype(int)
+    result_aquifer['month_Date_Persian'] = result_aquifer['month_Date_Persian'].astype(int)
+    result_aquifer['day_Date_Persian'] = result_aquifer['day_Date_Persian'].astype(int)
+    result_aquifer['Date_Gregorian'] = pd.to_datetime(result_aquifer['Date_Gregorian'])
+    
+    
+    
+    
+    return result, result_aquifer
+
 
 
 # -----------------------------------------------------------------------------
@@ -320,15 +383,24 @@ token_path = "assets/.mapbox_token"
 
 token = open(token_path).read()
 
+db = sqlite3.connect(db_path)
+table_name = pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", db)
+
 
 try:
-    db = sqlite3.connect(db_path, check_same_thread=False)
-    table_name = pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", db)
     if table_name['name'].str.contains('RawDATA').any():
         RawDATA = pd.read_sql_query(sql="SELECT * FROM RawDATA", con=db)
         GeoInfoData = extract_geo_info_dataset(RawDATA)
     else:
         print("ERROR: RawDATA TABLE NOT EXIST")
+except:
+    print("ERROR: DATABASE NOT EXIST")
+
+try:
+    if table_name['name'].str.contains('AquiferDATA').any():
+        AquiferDATA = pd.read_sql_query(sql="SELECT * FROM AquiferDATA", con=db)
+    else:
+        print("ERROR: AquiferDATA TABLE NOT EXIST")
 except:
     print("ERROR: DATABASE NOT EXIST")
 
@@ -366,6 +438,27 @@ def resultTable(df):
     for m in range(1,13):
         d = df[df["ماه"] == m]
         d["اختلاف ماه سال"] = d["پارامتر"] - d["پارامتر"].shift(1)
+        result = pd.concat([result, d])
+    result = result.sort_values(['سال', 'ماه'])
+    result["اختلاف ماه سال"] = result["اختلاف ماه سال"].round(2)
+    
+    return result
+
+def resultTableAquifer(df):
+    df["هد"] = df["هد"].round(2)   
+    df["مساحت"] = df["مساحت"].round(2)   
+    df["ضریب"] = df["ضریب"].round(2)
+    df["WATER_YEAR"] = df.apply(waterYear, axis=1)
+    df[['سال آبی','ماه آبی']] = pd.DataFrame(df.WATER_YEAR.tolist(), index= df.index)
+    df.drop('WATER_YEAR', inplace=True, axis=1)
+    df["اختلاف ماه"] = df["هد"] - df["هد"].shift(1)
+    df["اختلاف ماه"] = df["اختلاف ماه"].round(2)
+    
+    df = df.sort_values(['ماه', 'سال'])
+    result = pd.DataFrame()
+    for m in range(1,13):
+        d = df[df["ماه"] == m]
+        d["اختلاف ماه سال"] = d["هد"] - d["هد"].shift(1)
         result = pd.concat([result, d])
     result = result.sort_values(['سال', 'ماه'])
     result["اختلاف ماه سال"] = result["اختلاف ماه سال"].round(2)

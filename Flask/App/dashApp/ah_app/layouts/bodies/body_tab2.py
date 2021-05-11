@@ -57,9 +57,9 @@ TAB_2_BODY = [
                         ],
                         n_clicks=0,
                         className="btn btn-outline-dark mt-3 float-right",
-                        id="DOWNLOAD_TABLE_BUTTON-TAB1_BODY_CONTENT2"
+                        id="DOWNLOAD_TABLE_BUTTON-TAB2_BODY_CONTENT2"
                     ),
-                    dcc.Download(id="DOWNLOAD_TABLE_COMPONENT-TAB1_BODY_CONTENT2"),
+                    dcc.Download(id="DOWNLOAD_TABLE_COMPONENT-TAB2_BODY_CONTENT2"),
                 ],
                 className="row justify-content-center"
             ),
