@@ -20,14 +20,24 @@
   /* background-color: rgb(220, 220, 220); */
 }
 
+.my-body {
+  width: calc(100% - 300px - 250px);
+  /* background-color: rebeccapurple; */
+}
+
 .right-sidebar {
   width: 250px;
   /* background-color: rgb(220, 220, 220); */
   /* background-color: #2ecc71; */
 }
 
-.my-body {
-  width: calc(100% - 300px - 250px);
+.tab2-right-sidebar-hidden {
+  width: 1px;
+  /* background-color: rgb(220, 220, 220); */
+}
+
+.tab2-right-sidebar-hidden-my-body {
+  width: calc(100% - 300px - 1px);
   /* background-color: rebeccapurple; */
 }
 

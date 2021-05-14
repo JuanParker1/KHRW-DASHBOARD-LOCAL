@@ -364,6 +364,8 @@ Sidebar Tab 2 - Right
 """
 
 TAB_2_SIDEBAR_RIGHT = html.Div(
+    id="SHOW_HIDE-TAB2_SIDEBAR_RIGHT",
+    hidden=False,
     children=[
         html.Div(
             children=[

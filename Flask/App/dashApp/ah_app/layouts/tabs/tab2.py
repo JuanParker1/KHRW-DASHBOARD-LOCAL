@@ -39,20 +39,23 @@ TAB_2 = html.Div(
                 ),
                 # Body ------------------------------------
                 html.Div(
+                    id="TAB_2_BODY",
                     children=[
                         html.Div(
                             children=TAB_2_BODY,
                             className="container-fluid"
                         )
                     ],
-                    className='my-body pt-2'
+                    className='tab2-right-sidebar-hidden-my-body pt-2'
                 ),
                 # Sidebar right ---------------------------
                 html.Div(
+                    id="TAB_2_SIDEBAR_RIGHT",
+                    hidden=True,
                     children=[
                         TAB_2_SIDEBAR_RIGHT
                     ],
-                    className='right-sidebar'
+                    className='tab2-right-sidebar-hidden'
                 ),
             ],
             className="row p-0 m-0 w-100"

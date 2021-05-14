@@ -291,6 +291,9 @@ def FUNCTION_GRAPH_TAB2_BODY_CONTENT1(aquifers, wells, start, end):
     Output('ELEV_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),    
     Output('START_DATE_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),
     Output('END_DATE_OW-TAB2_SIDEBAR_RIGHT_CARD1', 'children'),
+    Output('TAB_2_SIDEBAR_RIGHT', 'hidden'),
+    Output('TAB_2_SIDEBAR_RIGHT', 'className'),
+    Output('TAB_2_BODY', 'className'),
     Input('SELECT_AQUIFER-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     Input('SELECT_WELL-TAB2_SIDEBAR_LEFT_CARD1', 'value')
 )
@@ -333,6 +336,9 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
                     "ارتفاع: " + ELEV + " متر",
                     "سال شروع دوره آماری: " + START_DATE,
                     "سال پایان دوره آماری: " + END_DATE,
+                    False,
+                    "right-sidebar",
+                    'my-body pt-2'
                 ]
                 
                 return result
@@ -352,6 +358,9 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
                     "ارتفاع",
                     "سال شروع دوره آماری",
                     "سال پایان دوره آماری",
+                    True,
+                    "tab2-right-sidebar-hidden",
+                    'tab2-right-sidebar-hidden-my-body pt-2'
                 ]
                 
                 return result
@@ -372,6 +381,9 @@ def FUNCTION_WELL_INFORMATION_TAB2_SIDEBAR_RIGHT_CARD1(aquifers, wells):
             "ارتفاع",
             "سال شروع دوره آماری",
             "سال پایان دوره آماری",
+            True,
+            "tab2-right-sidebar-hidden",
+            'tab2-right-sidebar-hidden-my-body pt-2'
         ]
         
         return result
