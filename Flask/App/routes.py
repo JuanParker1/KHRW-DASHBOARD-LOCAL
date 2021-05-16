@@ -103,13 +103,19 @@ def user_management():
 
 
 
-@app.route('/isotope_analysis')
+# @app.route('/isotope_analysis')
+# @login_required
+# def isotope_analysis_route():
+#     return app.index()
+
+
+@app.route('/hydrograph')
 @login_required
-def isotope_analysis_route():
+def hydrograph_route():
     return app.index()
 
 
-@app.route('/aquifer_hydrograph')
+@app.route('/chemograph')
 @login_required
-def aquifer_hydrograph_route():
+def chemograph_route():
     return app.index()
