@@ -1,8 +1,11 @@
+import itertools
+import pandas as pd
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField
+from wtforms import StringField, PasswordField, BooleanField, IntegerField, FloatField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
-from App.models import User
+from App.models import User, Station
 from flask_login import current_user
+
 
 
 class RegistrationForm(FlaskForm):
@@ -70,3 +73,171 @@ class UserManagementForm(FlaskForm):
                            validators=[DataRequired(message="وارد کردن نام کاربری ضروری میباشد."), Length(min=4, max=30, message="طول نام کاربری باید بین 8 تا 30 کارکتر باشد.")])
     email = StringField(label='Email',
                         validators=[DataRequired(message="وارد کردن ایمیل ضروری میباشد."), Email(message="ایمیل وارد شده صحیح نمیباشد.")])
+
+
+
+
+info = pd.read_csv("App/dashApp/precipitation/assets/database/Info.csv")
+info_khorasan_razavi = info[info["OstanMotevali"] == "خراسان رضوی"]
+
+Hoze6Name = list(info_khorasan_razavi["Hoze6Name"].unique())
+Hoze6Name.append(" ")
+
+Hoze30Name = list(info_khorasan_razavi["Hoze30Name"].unique())
+Hoze30Name.append(" ")
+
+MahdodehName = list(info_khorasan_razavi["MahdodehName"].unique())
+MahdodehName.append(" ")
+
+Shahrestan = [
+    'باخرز',
+    'بجستان',
+    'بردسکن',
+    'بینالود',
+    'تایباد',
+    'تربت جام',
+    'تربت حیدریه',
+    'جغتای',
+    'جوین',
+    'چناران',
+    'خلیل آباد',
+    'خواف',
+    'خوشاب',
+    'داورزن',
+    'درگز',
+    'رشتخوار',
+    'زاوه',
+    'زبرخان',
+    'سبزوار',
+    'سرخس',
+    'ششتمد',
+    'صالح  آباد',
+    'فریمان',
+    'فیروزه',
+    'قوچان',
+    'کاشمر',
+    'کلات',
+    'کوهسرخ',
+    'گلبهار',
+    'گناباد',
+    'مشهد',
+    'مه ولات',
+    'نیشابور'
+]
+Shahrestan.append(" ")
+
+startYear = [str(y) for y in list(range(1330, 1426))]
+startYear.append(" ")
+
+
+class StationForm(FlaskForm):
+    
+    stationName = StringField(
+        label="نام ایستگاه",
+        validators=[
+            DataRequired(message="وارد کردن نام ایستگاه ضروری میباشد."),
+            Length(min=2, max=50, message="طول نام ایستگاه باید بین 2 تا 50 کارکتر باشد.")
+        ]
+    )
+    
+    stationCode = IntegerField(
+        label="کد ایستگاه",
+        validators=[
+            DataRequired(message="وارد کردن کد ایستگاه ضروری میباشد.")
+        ]
+    )
+    
+    stationOldCode = StringField(
+        label="کد قدیمی ایستگاه"
+    )
+    
+    drainageArea6 = SelectField(
+        label="حوضه آبریز شش‌گانه (درجه 1)",
+        choices=sorted(Hoze6Name),
+    )
+    
+    drainageArea30 = SelectField(
+        label="حوضه آبریز سی‌گانه (درجه 2)",
+        choices=sorted(Hoze30Name),
+    )
+    
+    areaStudyName = SelectField(
+        label="محدوده مطالعاتی",
+        choices=sorted(MahdodehName),
+    )
+    
+    omor = StringField(
+        label="امور",
+        validators=[
+            DataRequired(message="وارد کردن امور ضروری میباشد.")
+        ]
+    )
+    
+    county = SelectField(
+        label="شهرستان",
+        choices=sorted(Shahrestan),
+    )
+    
+    startYear = SelectField(
+        label="سال تاسیس",
+        choices=sorted(startYear),
+    )
+    
+    longDecimalDegrees = FloatField(
+        label="طول جغرافیایی (بر حسب صدم اعشار)",
+        validators=[
+            DataRequired(message="وارد کردن طول جغرافیای بر حسب صدم اعشار ضروری میباشد."),
+        ]
+    )
+    
+    latDecimalDegrees = FloatField(
+        label="عرض جغرافیایی (بر حسب صدم اعشار)",
+        validators=[
+            DataRequired(message="وارد کردن عرض جغرافیای بر حسب صدم ضروری میباشد."),
+        ]
+    )
+    
+    elevation = FloatField(
+        label="ارتفاع (بر حسب متر)",
+        validators=[
+            DataRequired(message="وارد کردن ارتفاع ضروری میباشد."),
+        ]
+    )
+    
+    submit = SubmitField(label='ثبت ایستگاه جدید')
+    
+    def __repr__(self):
+        return f"Station({self.stationCode}, {self.stationName}, {self.areaStudyName})"
+    
+    def validate_drainageArea6(self, drainageArea6):
+        if drainageArea6.data == " ":
+            raise ValidationError(message="انتخاب حوضه آبریز شش‌گانه الزامی می‌باشد.")
+        
+    def validate_drainageArea30(self, drainageArea30):
+        if drainageArea30.data == " ":
+            raise ValidationError(message="انتخاب حوضه آبریز سی‌گانه الزامی می‌باشد.")
+        
+    def validate_areaStudyName(self, areaStudyName):
+        if areaStudyName.data == " ":
+            raise ValidationError(message="انتخاب محدوده مطالعاتی الزامی می‌باشد.")
+        
+    def validate_county(self, county):
+        if county.data == " ":
+            raise ValidationError(message="انتخاب شهرستان الزامی می‌باشد.")
+        
+    def validate_startYear(self, startYear):
+        if startYear.data == " ":
+            raise ValidationError(message="انتخاب سال تاسیس الزامی می‌باشد.")
+        
+    def validate_longDecimalDegrees(self, longDecimalDegrees):
+        if longDecimalDegrees.data > 64.00 or longDecimalDegrees.data < 44.00:
+            raise ValidationError(message="طول جغرافیای باید بین 44 تا 64 درجه عرض شمالی باشد.")
+        
+    def validate_latDecimalDegrees(self, latDecimalDegrees):
+        if latDecimalDegrees.data > 40.00 or latDecimalDegrees.data < 25.00:
+            raise ValidationError(message="عرض جغرافیای باید بین 25 تا 40 درجه طول شرقی باشد.")
+ 
+    def validate_stationCode(self, stationCode):
+        stCode = Station.query.filter_by(stationCode=stationCode.data).first()
+        if stCode:
+            raise ValidationError(message="این کد ایستگاه موجود میباشد.")

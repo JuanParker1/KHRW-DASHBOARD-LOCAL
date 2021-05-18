@@ -17,3 +17,22 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.id}, {self.username}, {self.email})"
+
+
+class Station(db.Model):
+    __bind_key__ = 'precipitation'
+    stationName = db.Column(db.String(30), nullable=False)
+    stationCode = db.Column(db.Integer, nullable=False, primary_key=True)
+    stationOldCode = db.Column(db.String(30), nullable=False)
+    drainageArea6 = db.Column(db.String(30), nullable=False)
+    drainageArea30 = db.Column(db.String(30), nullable=False)
+    areaStudyName = db.Column(db.String(30), nullable=False)
+    omor = db.Column(db.String(30), nullable=False)
+    county = db.Column(db.String(30), nullable=False)
+    startYear = db.Column(db.String(4), nullable=False)
+    longDecimalDegrees = db.Column(db.Float, nullable=False)
+    latDecimalDegrees = db.Column(db.Float, nullable=False)
+    elevation = db.Column(db.Float, nullable=False)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.stationCode}, {self.stationName}, {self.areaStudyName})"

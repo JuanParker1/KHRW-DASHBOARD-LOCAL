@@ -1,6 +1,6 @@
-{% with messages = get_flashed_messages(with_categories=True) %} {% if messages
-%} {% for cat, msg in messages %}
-
-<p class="alert alert-{{ cat }}">{{ msg }}</p>
+{% with messages = get_flashed_messages(with_categories=True) %} {% if messages %} {% for cat, msg in messages %}
+<div style="direction: rtl !important">
+  <p class="alert alert-{{ cat }}">{{ msg }}</p>
+</div>
 
 {% endfor %} {% endif %} {% endwith %}

@@ -1,8 +1,12 @@
+import os
+import pandas as pd
+
 from flask import render_template, redirect, url_for, flash, request
 from App import app, db, bcrypt
 
-from App.forms import RegistrationForm, LoginForm, UpdateProfileForm, UserManagementForm
-from App.models import User
+
+from App.forms import RegistrationForm, LoginForm, UpdateProfileForm, UserManagementForm, StationForm
+from App.models import User, Station
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -92,6 +96,8 @@ def delete(id):
         return redirect(location=url_for(endpoint='user_management'))
     except:
         return "اوپسس ..."
+    
+
 
 
 
@@ -102,12 +108,88 @@ def user_management():
     return render_template(template_name_or_list='user_management.html', users=users)
 
 
+@app.route('/precipitation')
+@login_required
+def precipitation():
+    return render_template(template_name_or_list='precipitation_flask/precipitation.html')
+
+@app.route('/precipitation/dashboard')
+@login_required
+def precipitation_dashboard():
+    return render_template(template_name_or_list='precipitation_flask/base.html')
+
+
+
+@app.route('/precipitation/dashboard/station_managment')
+@login_required
+def precipitation_dashboard_station_management():  
+    stations = Station.query.all()
+    return render_template(template_name_or_list='precipitation_flask/station_managment.html', stations=stations)
+
+
+
+@app.route('/precipitation/dashboard/add_station', methods=["GET", "POST"])
+@login_required
+def precipitation_dashboard_add_station():
+    form = StationForm()
+    if form.validate_on_submit():
+        station = Station(
+            stationName = form.stationName.data,
+            stationCode = form.stationCode.data,
+            stationOldCode = form.stationOldCode.data,
+            drainageArea6 = form.drainageArea6.data,
+            drainageArea30 = form.drainageArea30.data,
+            areaStudyName = form.areaStudyName.data,
+            omor = form.omor.data,
+            county = form.county.data,
+            startYear = form.startYear.data,
+            longDecimalDegrees = form.longDecimalDegrees.data,
+            latDecimalDegrees = form.latDecimalDegrees.data,
+            elevation = form.elevation.data,
+        )
+               
+        db.session.add(station)
+        db.session.commit()
+        flash(message=f"ایستگاه جدید با نام {form.stationName.data} و کد {form.stationCode.data} به دیتابیس اضافه گردید!", category='success')
+        return redirect(url_for('precipitation_dashboard_add_station'))
+    return render_template(
+        template_name_or_list='precipitation_flask/add_station.html', 
+        form=form
+    )
+    
+    
+@app.route('/precipitation/dashboard/add_station_csv', methods=['POST', 'GET'])
+@login_required
+def precipitation_dashboard_add_station_csv():
+    if request.method == "POST":
+        file = request.files['file']
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(file_path)
+        return render_template(
+            template_name_or_list='precipitation_flask/add_station_csv.html'
+        )
+    return render_template(
+        template_name_or_list='precipitation_flask/add_station_csv.html'
+    )
+
+
+@app.route('/delete_station/<int:stationCode>')
+@login_required
+def deleteStation(stationCode):
+    station_to_delete = Station.query.get_or_404(stationCode)    
+    try:
+        db.session.delete(station_to_delete)
+        db.session.commit()
+        return redirect(location=url_for(endpoint='precipitation_dashboard_station_management'))
+    except:
+        return "اوپسس ..."
+    
+
 
 # @app.route('/isotope_analysis')
 # @login_required
 # def isotope_analysis_route():
 #     return app.index()
-
 
 @app.route('/hydrograph')
 @login_required

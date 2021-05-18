@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import geopandas as gpd
 from itertools import compress
-from srtm import Srtm1HeightMapCollection
+# from srtm import Srtm1HeightMapCollection
 import statistics
 import App.dashApp.hydrograph.assets.jalali as jalali
 import json

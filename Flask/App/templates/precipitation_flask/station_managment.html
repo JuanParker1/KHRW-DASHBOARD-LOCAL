@@ -1,0 +1,63 @@
+{% extends 'precipitation_flask/base.html' %} {% block content %}
+
+<div class="container pt-5" style="direction: rtl">
+  <table class="table table-hover text-center">
+    <thead class="bg-light">
+      <tr>
+        <th scope="col">کد ایستگاه</th>
+        <th scope="col">نام ایستگاه</th>
+        <th scope="col">محدوده مطالعاتی</th>
+        <th scope="col">طول جغرافیایی</th>
+        <th scope="col">عرض جغرافیایی</th>
+        <th scope="col">ارتفاع</th>
+        <th scope="col">مدیریت</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for station in stations %}
+      <tr>
+        <th scope="row">{{ station.stationCode }}</th>
+        <td>{{ station.stationName }}</td>
+        <td>{{ station.areaStudyName }}</td>
+        <td>{{ station.longDecimalDegrees }}</td>
+        <td>{{ station.latDecimalDegrees }}</td>
+        <td>{{ station.latDecimalDegrees }}</td>
+        <td>
+          <!-- <a href="/delete_station/{{ station.stationCode }}" class="btn btn-danger btn-sm">حذف</a> -->
+          <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#deleteStationModal">حذف</a>
+          <a href="#" class="btn btn-info btn-sm">ویرایش</a>
+        </td>
+      </tr>
+      <!-- Delete Station Modal-->
+      <div
+        class="modal fade"
+        id="deleteStationModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        style="direction: rtl"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">شما می‌خواهید این ایستگاه را حذف کنید؟</h5>
+            </div>
+            <div class="modal-body">
+              اگر شما میخواهید ایستگاه <span class="text-danger">{{station.stationName}}</span> با کد
+              <span class="text-danger">{{station.stationCode}}</span> را حذف کنید بر روی
+              <span class="text-info">حذف کن</span> کلیک کنید.
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">نه بیخیال</button>
+              <a class="btn btn-danger" href="/delete_station/{{ station.stationCode }}">حذف کن</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock content %}

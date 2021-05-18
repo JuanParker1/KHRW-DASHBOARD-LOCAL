@@ -1,0 +1,11 @@
+{% extends "precipitation_flask/base.html" %}
+
+<!-- START BLOCK SECTION -->
+{% block content %}
+
+<form method="POST" enctype="multipart/form-data">
+  <input type="file" name="file" class="form-control-file border" />
+  <input type="submit" value="ثبت ایستگاه جدید" class="btn btn-outline-dark mt-3" />
+</form>
+
+{% endblock content %}
