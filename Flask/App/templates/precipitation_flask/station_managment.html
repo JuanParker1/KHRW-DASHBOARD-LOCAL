@@ -23,9 +23,12 @@
         <td>{{ station.latDecimalDegrees }}</td>
         <td>{{ station.latDecimalDegrees }}</td>
         <td>
-          <!-- <a href="/delete_station/{{ station.stationCode }}" class="btn btn-danger btn-sm">حذف</a> -->
           <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#deleteStationModal">حذف</a>
-          <a href="#" class="btn btn-info btn-sm">ویرایش</a>
+          <a
+            href="{{ url_for('precipitation_dashboard_station_managment_update', stationCode=station.stationCode) }}"
+            class="btn btn-info btn-sm"
+            >ویرایش</a
+          >
         </td>
       </tr>
       <!-- Delete Station Modal-->
@@ -50,7 +53,11 @@
             </div>
             <div class="modal-footer">
               <button class="btn btn-secondary" type="button" data-dismiss="modal">نه بیخیال</button>
-              <a class="btn btn-danger" href="/delete_station/{{ station.stationCode }}">حذف کن</a>
+              <a
+                class="btn btn-danger"
+                href="{{ url_for('precipitation_dashboard_station_managment_delete', stationCode=station.stationCode) }}"
+                >حذف کن</a
+              >
             </div>
           </div>
         </div>

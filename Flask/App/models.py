@@ -21,14 +21,14 @@ class User(db.Model, UserMixin):
 
 class Station(db.Model):
     __bind_key__ = 'precipitation'
-    stationName = db.Column(db.String(30), nullable=False)
+    stationName = db.Column(db.String(50), nullable=False)
     stationCode = db.Column(db.Integer, nullable=False, primary_key=True)
-    stationOldCode = db.Column(db.String(30), nullable=False)
-    drainageArea6 = db.Column(db.String(30), nullable=False)
-    drainageArea30 = db.Column(db.String(30), nullable=False)
-    areaStudyName = db.Column(db.String(30), nullable=False)
-    omor = db.Column(db.String(30), nullable=False)
-    county = db.Column(db.String(30), nullable=False)
+    stationOldCode = db.Column(db.String(50), nullable=False)
+    drainageArea6 = db.Column(db.String(50), nullable=False)
+    drainageArea30 = db.Column(db.String(50), nullable=False)
+    areaStudyName = db.Column(db.String(50), nullable=False)
+    omor = db.Column(db.String(50), nullable=False)
+    county = db.Column(db.String(50), nullable=False)
     startYear = db.Column(db.String(4), nullable=False)
     longDecimalDegrees = db.Column(db.Float, nullable=False)
     latDecimalDegrees = db.Column(db.Float, nullable=False)
