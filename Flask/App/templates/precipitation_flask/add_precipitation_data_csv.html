@@ -1,0 +1,18 @@
+{% extends "precipitation_flask/base.html" %}
+
+<!-- START BLOCK SECTION -->
+{% block content %}
+<fieldset class="form-group text-center">
+  <legend class="mb-4">اضافه کردن داده‌های بارندگی از طریق فایل</legend>
+  <form method="POST" enctype="multipart/form-data" class="container w-50">
+    <input type="file" name="file" class="form-control-file border" />
+    <div class="text-right">
+      <a href="{{ url_for('precipitation_dashboard_station_management') }}" class="btn btn-outline-dark mt-3">
+        نه بیخیال
+      </a>
+      <input type="submit" value="اضافه کردن داده‌های بارندگی" class="btn btn-outline-success mt-3" />
+    </div>
+  </form>
+</fieldset>
+
+{% endblock content %}

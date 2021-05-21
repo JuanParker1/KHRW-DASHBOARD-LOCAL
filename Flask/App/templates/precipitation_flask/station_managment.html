@@ -1,9 +1,19 @@
 {% extends 'precipitation_flask/base.html' %} {% block content %}
 
 <div class="container pt-5" style="direction: rtl">
-  <table class="table table-hover text-center">
+  <form action="" method="post" autocomplete="off">
+    <div class="row justify-content-center align-content-center">
+      <div class="col-md-9">
+        <input type="text" name="tag" id="tag" placeholder="جستجو برای ..." />
+      </div>
+      <div class="col-md-3">
+        <input type="submit" value="جستجو" class="form-control btn btn-outline-primary btn-lg" name="" />
+      </div>
+    </div>
+  </form>
+  <table class="table table-hover text-center" id="myTable">
     <thead class="bg-light">
-      <tr>
+      <tr class="header">
         <th scope="col">کد ایستگاه</th>
         <th scope="col">نام ایستگاه</th>
         <th scope="col">محدوده مطالعاتی</th>
@@ -14,19 +24,21 @@
       </tr>
     </thead>
     <tbody>
-      {% for station in stations %}
+      {% for station in stations.items %}
       <tr>
         <th scope="row">{{ station.stationCode }}</th>
         <td>{{ station.stationName }}</td>
         <td>{{ station.areaStudyName }}</td>
         <td>{{ station.longDecimalDegrees }}</td>
         <td>{{ station.latDecimalDegrees }}</td>
-        <td>{{ station.latDecimalDegrees }}</td>
+        <td>{{ station.elevation }}</td>
         <td>
-          <a class="btn btn-danger btn-sm" href="#" data-toggle="modal" data-target="#deleteStationModal">حذف</a>
+          <a class="btn btn-danger btn-sm managementBTN" href="#" data-toggle="modal" data-target="#deleteStationModal"
+            >حذف</a
+          >
           <a
             href="{{ url_for('precipitation_dashboard_station_managment_update', stationCode=station.stationCode) }}"
-            class="btn btn-info btn-sm"
+            class="btn btn-info btn-sm managementBTN"
             >ویرایش</a
           >
         </td>
@@ -65,6 +77,39 @@
       {% endfor %}
     </tbody>
   </table>
+
+  <!-- Pagination Links -->
+  <div class="text-right">
+    <!-- Prev. Arrow -->
+    <a
+      href="{{ url_for('precipitation_dashboard_station_management', page=stations.prev_num) }}"
+      class="btn btn-outline-dark {% if stations.page == 1 %} disabled {% endif %}"
+    >
+      &laquo;
+    </a>
+    <!-- Loop through the number of pages to display a link for each-->
+    {% for page_num in stations.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %} {% if page_num
+    %}
+    <!-- Check for the active page and set the link to "Active"-->
+    {% if stations.page == page_num %}
+    <a href="{{ url_for('precipitation_dashboard_station_management', page=page_num) }}" class="btn btn-dark">
+      {{ page_num }}
+    </a>
+    {% else %}
+    <a href="{{ url_for('precipitation_dashboard_station_management', page=page_num) }}" class="btn btn-outline-dark">
+      {{ page_num }}
+    </a>
+    {% endif %} {% else %} ... {% endif %} {% endfor %}
+
+    <!-- NEXT ARROW -->
+    <a
+      href="{{ url_for('precipitation_dashboard_station_management', page=stations.next_num) }}"
+      class="btn btn-outline-dark {% if stations.page == stations.pages %} disabled {% endif %}"
+    >
+      &raquo;
+    </a>
+  </div>
+  <!-- <p class="text-right mt-3">Showing page {{ stations.page }} of {{ stations.pages }}</p> -->
 </div>
 
 {% endblock content %}

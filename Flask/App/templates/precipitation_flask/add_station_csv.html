@@ -2,10 +2,17 @@
 
 <!-- START BLOCK SECTION -->
 {% block content %}
-
-<form method="POST" enctype="multipart/form-data">
-  <input type="file" name="file" class="form-control-file border" />
-  <input type="submit" value="ثبت ایستگاه جدید" class="btn btn-outline-dark mt-3" />
-</form>
+<fieldset class="form-group">
+  <legend class="mb-4 text-center">اضافه کردن ایستگاه جدید از طریق فایل</legend>
+  <form method="POST" enctype="multipart/form-data" class="container w-50">
+    <input type="file" name="file" class="form-control-file border" />
+    <div class="text-right">
+      <a href="{{ url_for('precipitation_dashboard_station_management') }}" class="btn btn-outline-dark mt-3">
+        نه بیخیال
+      </a>
+      <input type="submit" value="ثبت ایستگاه جدید" class="btn btn-outline-success mt-3" />
+    </div>
+  </form>
+</fieldset>
 
 {% endblock content %}

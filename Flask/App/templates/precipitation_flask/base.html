@@ -5,21 +5,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <link href="{{ url_for('static', filename='precipitation_flask/css/min.css') }}" rel="stylesheet" />
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" sizes="32x32" type="image/svg+xml" />
-
+    
     <title>داشبورد مدیریتی منابع آب</title>
-
+    
     <!-- Custom fonts for this template-->
     
     <link href="{{ url_for('static', filename='precipitation_flask/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css" />
     <link
-      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-      rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet"
     />
-
+    
     <!-- Custom styles for this template-->
+    <link href="{{ url_for('static', filename='precipitation_flask/css/main.css') }}" rel="stylesheet" />
     <link href="{{ url_for('static', filename='precipitation_flask/css/sb-admin-2.min.css') }}" rel="stylesheet" />
+
+    {% block css %}
+      
+    {% endblock css %}
+
+
   </head>
 
   <body id="page-top">
@@ -64,8 +70,9 @@
           </a>
           <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="tables.html">ورود به صورت دستی</a>
-              <a class="collapse-item" href="register.html">ورود از طریق فایل</a>
+              <a class="collapse-item" href="{{ url_for('precipitation_dashboard_precipitation_data_management') }}">مشاهده داده‌های بارندگی</a>
+              <a class="collapse-item" href="{{ url_for('precipitation_dashboard_add_precipitation_data') }}">ورود به صورت دستی</a>
+              <a class="collapse-item" href="{{ url_for('precipitation_dashboard_add_precipitation_data_csv') }}">ورود از طریق فایل</a>
             </div>
           </div>
         </li>
@@ -170,7 +177,7 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                  <span class="mr-2 d-none d-lg-inline text-gray-600 small">پویا شیرازی</span>
                   <img class="img-profile rounded-circle" src="{{ url_for('static', filename='precipitation_flask/img/undraw_profile.svg') }}" />
                 </a>
                 <!-- Dropdown - User Information -->
@@ -250,8 +257,8 @@
           </div>
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
           <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">نه بیخیال</button>
+            <a class="btn btn-primary" href="{{ url_for('logout') }}">خروج</a>
           </div>
         </div>
       </div>
@@ -263,11 +270,20 @@
 
     <script src={{ url_for('static', filename='precipitation_flask/vendor/jquery/jquery.min.js') }}></script>
     <script src={{ url_for('static', filename='precipitation_flask/vendor/bootstrap/js/bootstrap.bundle.min.js') }}></script>
+    <script src={{ url_for('static', filename='precipitation_flask/js/main.js') }}></script>
 
+    
     <!-- Core plugin JavaScript-->
     <script src={{ url_for('static', filename='precipitation_flask/vendor/jquery-easing/jquery.easing.min.js') }}></script>
-
+    
     <!-- Custom scripts for all pages-->
     <script src={{ url_for('static', filename='precipitation_flask/js/sb-admin-2.min.js') }}></script>
+
+
+    {% block script %}
+      
+    {% endblock script %}
+
+    
   </body>
 </html>

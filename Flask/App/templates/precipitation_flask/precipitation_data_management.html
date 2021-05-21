@@ -1,0 +1,75 @@
+{% extends 'precipitation_flask/base.html' %} {% block content %}
+
+<div class="container pt-5" style="direction: rtl">
+  <form action="" method="post" autocomplete="off">
+    <div class="row justify-content-center align-content-center">
+      <div class="col-md-9">
+        <input type="text" name="tag" id="tag" placeholder="جستجو برای ..." />
+      </div>
+      <div class="col-md-3">
+        <input type="submit" value="جستجو" class="form-control btn btn-outline-primary btn-lg" name="" />
+      </div>
+    </div>
+  </form>
+  <table class="table table-hover text-center" id="myTable">
+    <thead class="bg-light">
+      <tr class="header">
+        <th scope="col">کد ایستگاه</th>
+        <th scope="col">تاریخ</th>
+        <th scope="col">زمان</th>
+        <th scope="col">مقدار برف (میلیمتر)</th>
+        <th scope="col">مقدار باران (میلیمتر)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for dp in data.items %}
+      <tr>
+        <th scope="row">{{ dp.stationCode }}</th>
+        <td>{{ dp.YEAR|string + "/" + dp.MONTH|string + "/" + dp.DAY|string }}</td>
+        <td>{{ dp.HOURE|string + ":" + dp.MINUTE|string + ":" + dp.SECOND|string }}</td>
+        <td>{{ dp.BARF }}</td>
+        <td>{{ dp.JAM_BARAN }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Pagination Links -->
+  <div class="text-right">
+    <!-- Prev. Arrow -->
+    <a
+      href="{{ url_for('precipitation_dashboard_precipitation_data_management', page=data.prev_num) }}"
+      class="btn btn-outline-dark {% if data.page == 1 %} disabled {% endif %}"
+    >
+      &laquo;
+    </a>
+    <!-- Loop through the number of pages to display a link for each-->
+    {% for page_num in data.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %} {% if page_num %}
+    <!-- Check for the active page and set the link to "Active"-->
+    {% if data.page == page_num %}
+    <a
+      href="{{ url_for('precipitation_dashboard_precipitation_data_management', page=page_num) }}"
+      class="btn btn-dark"
+    >
+      {{ page_num }}
+    </a>
+    {% else %}
+    <a
+      href="{{ url_for('precipitation_dashboard_precipitation_data_management', page=page_num) }}"
+      class="btn btn-outline-dark"
+    >
+      {{ page_num }}
+    </a>
+    {% endif %} {% else %} ... {% endif %} {% endfor %}
+
+    <!-- NEXT ARROW -->
+    <a
+      href="{{ url_for('precipitation_dashboard_precipitation_data_management', page=data.next_num) }}"
+      class="btn btn-outline-dark {% if data.page == data.pages %} disabled {% endif %}"
+    >
+      &raquo;
+    </a>
+  </div>
+</div>
+
+{% endblock content %}

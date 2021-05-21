@@ -1,7 +1,7 @@
 import itertools
 import pandas as pd
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, IntegerField, FloatField, SelectField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, IntegerField, FloatField, SelectField, SubmitField, FormField, FieldList, DateTimeField, DateField
 from wtforms.validators import DataRequired, Length, Email, ValidationError
 from App.models import User, Station
 from flask_login import current_user
@@ -352,3 +352,31 @@ class UpdateStationForm(FlaskForm):
         stCode = Station.query.filter_by(stationCode=stationCode.data).first()
         if stCode:
             raise ValidationError(message="این کد ایستگاه موجود میباشد.")
+        
+
+
+
+class AddPrecipitationDataForm(FlaskForm):
+    st_name = Station.query.order_by(Station.stationName).with_entities(Station.stationName).all()
+    
+    stationName = SelectField(
+        label="نام ایستگاه",
+        choices=sorted([" "] + [st[0] for st in st_name]),
+    )
+    
+    baran = FloatField(
+        label="باران (میلیمتر)",
+    )
+
+    barf = FloatField(
+        label="برف (میلیمتر)",
+    )
+    
+    ab_barf = FloatField(
+        label="آب برف (میلیمتر)",
+    )
+class PrecipitationDataForm(FlaskForm):
+    date = StringField(label="تاریخ")
+    time = SelectField(label="زمان", choices=[" ", "06:30:00", "18:30:00"])
+    addPrecipData = FieldList(FormField(AddPrecipitationDataForm), min_entries=3)
+    submit = SubmitField(label='اضافه کردن داده‌های بارندگی')

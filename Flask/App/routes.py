@@ -7,8 +7,8 @@ from flask import render_template, redirect, url_for, flash, request
 from App import app, db, bcrypt
 
 
-from App.forms import RegistrationForm, LoginForm, UpdateProfileForm, UserManagementForm, StationForm, UpdateStationForm
-from App.models import User, Station
+from App.forms import RegistrationForm, LoginForm, UpdateProfileForm, UserManagementForm, StationForm, UpdateStationForm, PrecipitationDataForm
+from App.models import User, Station, Precipitation
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -121,11 +121,19 @@ def precipitation_dashboard():
     return render_template(template_name_or_list='precipitation_flask/base.html')
 
 
-
-@app.route('/precipitation/dashboard/station_managment')
+@app.route('/precipitation/dashboard/station_managment', methods=['GET', 'POST'], defaults={"page": 1})
+@app.route('/precipitation/dashboard/station_managment/<int:page>', methods=['GET', 'POST'])
 @login_required
-def precipitation_dashboard_station_management():  
-    stations = Station.query.all()
+def precipitation_dashboard_station_management(page):
+    page = page
+    pages = 10
+    stations = Station.query.order_by(Station.stationCode.asc()).paginate(page, pages, error_out=False)
+    if request.method == 'POST' and 'tag' in request.form and request.form["tag"] != "":
+        pages = 100
+        tag = request.form["tag"]
+        search = "%{}%".format(tag)
+        stations = Station.query.filter(Station.stationName.like(search) | Station.stationCode.like(search) | Station.areaStudyName.like(search)).paginate(per_page=pages, error_out=False)  
+        return render_template('precipitation_flask/station_managment.html', stations=stations, tag=tag)       
     return render_template(template_name_or_list='precipitation_flask/station_managment.html', stations=stations)
 
 
@@ -291,10 +299,6 @@ def precipitation_dashboard_add_station_csv():
     )
 
 
-
-
-
-
 # -----------------------------------------------------------------------------
 # DELETE STATION
 # -----------------------------------------------------------------------------
@@ -311,10 +315,123 @@ def precipitation_dashboard_station_managment_delete(stationCode):
     
 
 
+
+# -----------------------------------------------------------------------------
+# ADD PRECIPITATION DATA - IMPORT CSV
+# -----------------------------------------------------------------------------
+@app.route('/precipitation/dashboard/add_precipitation_data_csv', methods=['POST', 'GET'])
+@login_required
+def precipitation_dashboard_add_precipitation_data_csv():
+    if request.method == "POST":
+        # SAVE FILE
+        try:
+            file = request.files['file']
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            file.save(file_path)
+        except:
+            flash(message=f"یک فایل انتخاب کنید", category='danger')
+            return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
+
+
+        # CONECT TO DATABASE
+        try:
+            db_path = 'App/dashApp/precipitation/precipitation.sqlite'
+            db_new = sqlite3.connect(db_path, check_same_thread=False)
+            exist_precipitation_data = pd.read_sql_query(sql="SELECT * FROM precipitation", con=db_new)
+            exist_precipitation_data_columns = list(exist_precipitation_data.columns)
+            exist_precipitation_data['DATE'] = exist_precipitation_data['YEAR'].astype(str) + "-" + exist_precipitation_data['MONTH'].astype(str).str.zfill(2) + "-" + exist_precipitation_data['DAY'].astype(str).str.zfill(2) + " " + exist_precipitation_data['HOURE'].astype(str).str.zfill(2) + ":" + exist_precipitation_data['MINUTE'].astype(str).str.zfill(2) + ":" + exist_precipitation_data['SECOND'].astype(str).str.zfill(2)
+            exist_precipitation_data["uniqueCode"] = exist_precipitation_data["stationCode"].astype(str) + "-" + exist_precipitation_data["DATE"]
+        except:
+            flash(message=f"مشکل در بارگذاری دیتابیس", category='danger')
+            return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
+
+        
+        # READ CSV FILE
+        try:
+            import_precipitation_data = pd.read_csv(file_path)
+            import_precipitation_data_columns = list(import_precipitation_data.columns)
+            import_precipitation_data['DATE'] = import_precipitation_data['YEAR'].astype(str) + "-" + import_precipitation_data['MONTH'].astype(str).str.zfill(2) + "-" + import_precipitation_data['DAY'].astype(str).str.zfill(2) + " " + import_precipitation_data['HOURE'].astype(str).str.zfill(2) + ":" + import_precipitation_data['MINUTE'].astype(str).str.zfill(2) + ":" + import_precipitation_data['SECOND'].astype(str).str.zfill(2)
+            import_precipitation_data["uniqueCode"] = import_precipitation_data["stationCode"].astype(str) + "-" + import_precipitation_data["DATE"]
+            import_precipitation_data.drop_duplicates(inplace=True)
+            import_precipitation_data.reset_index(inplace=True, drop=True)
+        except:
+            flash(message=f"فرمت فایل وارد شده صحیح نمی‌باشد، فرمت مجاز csv می‌باشد", category='danger')
+            return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
+
+
+        # CHECK COLUMNS
+        if not (exist_precipitation_data_columns[1:] == import_precipitation_data_columns):
+            flash(message=f"ستون‌های فایل ورودی با ستون‌های دیتابیس مطابقت ندارد!", category='danger')
+            return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
+
+
+        # CHECK EMPTY CSV
+        if len(import_precipitation_data) == 0:
+            flash(message=f"فایل ورودی خالی می‌باشد!", category='danger')
+            return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
+        
+
+        # CHECK NONE VALUE IN CSV
+        if import_precipitation_data.iloc[:, 0:8].isna().any().any():
+            flash(message=f"فایل ورودی چک گردد. فایل دارای سلول‌های خالی می‌باشد!", category='danger')
+            return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
+        
+
+        # CHECK DUPLICATE DATE IN CSV
+        for st in import_precipitation_data.stationCode.unique():
+            df = import_precipitation_data[import_precipitation_data['stationCode'] == st] 
+            if df.DATE.duplicated().any():
+                flash(message=f"در فایل ورودی تاریخ تکراری وجود دارد!", category='danger')
+                return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
+
+        
+        # CHECK DUPLICATE STATIONCODE IN DATABASE AND CSV
+        if len(list(set(exist_precipitation_data['uniqueCode'].tolist()).intersection(import_precipitation_data['uniqueCode'].tolist()))) == 0:
+            import_precipitation_data = import_precipitation_data.drop('uniqueCode', axis=1)
+            import_precipitation_data = import_precipitation_data.drop('DATE', axis=1)
+            import_precipitation_data.to_sql(name="precipitation", con=db_new, if_exists="append", index=False)
+            flash(message=f"داده‌های بارندگی با موفقیت به دیتابیس اضافه گردید.", category='success')
+            return redirect(url_for('precipitation_dashboard_precipitation_data_management'))
+        else:
+            data_duplicate = list(set(exist_precipitation_data['uniqueCode'].tolist()).intersection(import_precipitation_data['uniqueCode'].tolist()))
+            import_precipitation_data = import_precipitation_data[import_precipitation_data['uniqueCode'].isin(data_duplicate) == False]
+            if len(import_precipitation_data) != 0:
+                import_precipitation_data = import_precipitation_data.drop('uniqueCode', axis=1)
+                import_precipitation_data = import_precipitation_data.drop('DATE', axis=1)
+                import_precipitation_data.to_sql(name="precipitation", con=db_new, if_exists="append", index=False)
+                flash(message=f"داده‌های بارندگی با موفقیت به دیتابیس اضافه گردید و ورودی‌های با کد { data_duplicate } به دلیل موجود بودن در دیتابس از فایل ورودی حذف گردید.", category='success')
+                return redirect(url_for('precipitation_dashboard_precipitation_data_management'))
+            else:
+                flash(message=f"همه داده‌های بارندگی ورودی در دیتابیس موجود می‌باشند!", category='info')
+                return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
+             
+    return render_template(
+        template_name_or_list='precipitation_flask/add_precipitation_data_csv.html'
+    )
+
+
+@app.route('/precipitation/dashboard/precipitation_data_managment', methods=['GET', 'POST'], defaults={"page": 1})
+@app.route('/precipitation/dashboard/precipitation_data_managment/<int:page>', methods=['GET', 'POST'])
+@login_required
+def precipitation_dashboard_precipitation_data_management(page):
+    page = page
+    pages = 25
+    data = Precipitation.query.order_by(Precipitation.stationCode.asc()).paginate(page, pages, error_out=False)
+    if request.method == 'POST' and 'tag' in request.form and request.form["tag"] != "":
+        pages = 100
+        tag = request.form["tag"]
+        search = "%{}%".format(tag)
+        data = Precipitation.query.filter(Precipitation.stationCode.like(search)).paginate(per_page=pages, error_out=False)  
+        return render_template('precipitation_flask/precipitation_data_management.html', data=data, tag=tag)       
+    return render_template(template_name_or_list='precipitation_flask/precipitation_data_management.html', data=data)
+
+
+
 # @app.route('/isotope_analysis')
 # @login_required
 # def isotope_analysis_route():
 #     return app.index()
+
 
 @app.route('/hydrograph')
 @login_required
@@ -326,3 +443,41 @@ def hydrograph_route():
 @login_required
 def chemograph_route():
     return app.index()
+
+
+
+
+@app.route('/precipitation/dashboard/add_precipitation_data', methods=['GET', 'POST'])
+@login_required
+def precipitation_dashboard_add_precipitation_data():
+    form = PrecipitationDataForm()
+    
+    if request.method == "POST":
+    # if form.validate_on_submit():
+        # station = Station(
+        #     stationName = form.stationName.data,
+        #     stationCode = form.stationCode.data,
+        #     stationOldCode = form.stationOldCode.data,
+        #     drainageArea6 = form.drainageArea6.data,
+        #     drainageArea30 = form.drainageArea30.data,
+        #     areaStudyName = form.areaStudyName.data,
+        #     omor = form.omor.data,
+        #     county = form.county.data,
+        #     startYear = int(form.startYear.data),
+        #     longDecimalDegrees = form.longDecimalDegrees.data,
+        #     latDecimalDegrees = form.latDecimalDegrees.data,
+        #     elevation = form.elevation.data,
+        # )
+        print(form.date.data)
+        print(form.time.data)
+        print(form.addPrecipData.data)
+            
+        # db.session.add(station)
+        # db.session.commit()
+        flash(message=f"ایستگاه جدید با نام بع دیتابیس اضافه گردید!", category='success')
+        return redirect(url_for('precipitation_dashboard_precipitation_data_management'))
+
+    return render_template(
+        template_name_or_list='precipitation_flask/add_precipitation_data.html',
+        form=form
+    )

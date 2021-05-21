@@ -266,7 +266,12 @@
               </div>
             </div>
 
-            <div class="form-group mt-3 text-center">{{ form.submit(class="btn btn-outline-dark") }}</div>
+            <div class="form-group mt-3 text-center">
+              {{ form.submit(class="btn btn-outline-success") }}
+              <a href="{{ url_for('precipitation_dashboard_station_management') }}" class="btn btn-outline-dark">
+                نه بیخیال
+              </a>
+            </div>
           </fieldset>
         </form>
       </div>

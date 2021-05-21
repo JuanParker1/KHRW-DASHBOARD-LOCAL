@@ -16,5 +16,6 @@ dash-bootstrap-components
 dash_dangerously_set_inner_html
 dash_daq
 pyarrow
-
+flask_bootstrap
+Flask-Datepicker
 

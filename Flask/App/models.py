@@ -36,3 +36,24 @@ class Station(db.Model):
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.stationCode}, {self.stationName}, {self.areaStudyName})"
+
+
+class Precipitation(db.Model):
+    __bind_key__ = 'precipitation'
+    id = db.Column(db.Integer, primary_key=True)
+    stationCode = db.Column(db.Integer, nullable=False)
+    YEAR = db.Column(db.Integer, nullable=False)
+    MONTH = db.Column(db.Integer, nullable=False)
+    DAY = db.Column(db.Integer, nullable=False)
+    HOURE = db.Column(db.Integer, nullable=False)
+    MINUTE = db.Column(db.Integer, nullable=False)
+    SECOND = db.Column(db.Integer, nullable=False)
+    BARAN = db.Column(db.Float, nullable=True)
+    BARF = db.Column(db.Float, nullable=True)
+    AB_BARF = db.Column(db.Float, nullable=True)
+    JAM_BARAN = db.Column(db.Float, nullable=True)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.stationCode}, {self.YEAR}, {self.MONTH}, {self.DAY})"
+    
+    
