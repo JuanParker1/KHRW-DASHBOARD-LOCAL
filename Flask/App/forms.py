@@ -111,7 +111,7 @@ Shahrestan = [
     'سبزوار',
     'سرخس',
     'ششتمد',
-    'صالح  آباد',
+    'صالح آباد',
     'فریمان',
     'فیروزه',
     'قوچان',
@@ -163,6 +163,13 @@ class StationForm(FlaskForm):
     areaStudyName = SelectField(
         label="محدوده مطالعاتی",
         choices=sorted(MahdodehName),
+    )
+    
+    areaStudyCode = IntegerField(
+        label="کد محدوده مطالعاتی",
+        validators=[
+            DataRequired(message="وارد کردن کد محدوده مطالعلتی ضروری میباشد.")
+        ]
     )
     
     omor = StringField(
@@ -272,6 +279,13 @@ class UpdateStationForm(FlaskForm):
     areaStudyName = SelectField(
         label="محدوده مطالعاتی",
         choices=sorted(MahdodehName),
+    )
+    
+    areaStudyCode = IntegerField(
+        label="کد محدوده مطالعاتی",
+        validators=[
+            DataRequired(message="وارد کردن کد محدوده مطالعلتی ضروری میباشد.")
+        ]
     )
     
     omor = StringField(
@@ -398,7 +412,7 @@ class PrecipitationDataForm(FlaskForm):
 
     addPrecipData = FieldList(
         FormField(AddPrecipitationDataForm),
-        min_entries=3,
+        min_entries=15,
         validators=[
             DataRequired()
         ]

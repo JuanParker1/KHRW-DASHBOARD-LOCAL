@@ -18,4 +18,9 @@ dash_daq
 pyarrow
 flask_bootstrap
 Flask-Datepicker
+flask-googlemaps
+folium
+altair
+
+
 

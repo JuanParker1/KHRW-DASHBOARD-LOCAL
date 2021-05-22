@@ -2,276 +2,298 @@
 
 <!-- START BLOCK SECTION -->
 {% block content %}
-<div class="card-body p-0">
-  <!-- Nested Row within Card Body -->
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="p-2" style="direction: rtl">
-        <form action="" method="post" novalidate>
-          {{ form.hidden_tag() }}
-          <fieldset class="form-group">
-            <legend class="mb-4">اضافه کردن ایستگاه جدید</legend>
-            <!-- ROW 1 -->
-            <div class="row">
-              <!-- SATAION NAME -->
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <!-- LABEL -->
-                  {{ form.stationName.label(class="form-control-label") }} <span class="text-danger">*</span>
-                  <!-- VALIDATION -->
-                  {% if form.stationName.errors %}
-                  <!-- FORM -->
-                  {{ form.stationName(class="form-control is-invalid") }}
-                  <!-- SHOW ERRORS -->
-                  <div class="invalid-feedback">
-                    {% for error in form.stationName.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
+<div class="container">
+  <div class="card-body p-0">
+    <!-- Nested Row within Card Body -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="p-2" style="direction: rtl">
+          <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+              <legend class="mb-4">اضافه کردن ایستگاه جدید</legend>
+              <!-- ROW 1 -->
+              <div class="row">
+                <!-- SATAION NAME -->
+                <div class="col-md-4">
+                  <div class="form-group mt-2">
+                    <!-- LABEL -->
+                    {{ form.stationName.label(class="form-control-label") }} <span class="text-danger">*</span>
+                    <!-- VALIDATION -->
+                    {% if form.stationName.errors %}
+                    <!-- FORM -->
+                    {{ form.stationName(class="form-control is-invalid") }}
+                    <!-- SHOW ERRORS -->
+                    <div class="invalid-feedback">
+                      {% for error in form.stationName.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- FORM -->
+                    {{ form.stationName(class="form-control") }} {% endif %}
                   </div>
-                  {% else %}
-                  <!-- FORM -->
-                  {{ form.stationName(class="form-control") }} {% endif %}
+                </div>
+                <!-- SATAION CODE -->
+                <div class="col-md-4">
+                  <div class="form-group mt-2">
+                    <!-- LABEL -->
+                    {{ form.stationCode.label(class="form-control-label") }} <span class="text-danger">*</span>
+                    <!-- VALIDATION -->
+                    {% if form.stationCode.errors %}
+                    <!-- FORM -->
+                    {{ form.stationCode(class="form-control is-invalid") }}
+                    <!-- SHOW ERRORS -->
+                    <div class="invalid-feedback">
+                      {% for error in form.stationCode.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- FORM -->
+                    {{ form.stationCode(class="form-control") }} {% endif %}
+                  </div>
+                </div>
+                <!-- SATAION OLD CODE -->
+                <div class="col-md-4">
+                  <div class="form-group mt-2">
+                    <!-- LABEL -->
+                    {{ form.stationOldCode.label(class="form-control-label") }}
+                    <!-- VALIDATION -->
+                    {% if form.stationOldCode.errors %}
+                    <!-- FORM -->
+                    {{ form.stationOldCode(class="form-control is-invalid") }}
+                    <!-- SHOW ERRORS -->
+                    <div class="invalid-feedback">
+                      {% for error in form.stationOldCode.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- FORM -->
+                    {{ form.stationOldCode(class="form-control") }} {% endif %}
+                  </div>
                 </div>
               </div>
-              <!-- SATAION CODE -->
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <!-- LABEL -->
-                  {{ form.stationCode.label(class="form-control-label") }} <span class="text-danger">*</span>
-                  <!-- VALIDATION -->
-                  {% if form.stationCode.errors %}
-                  <!-- FORM -->
-                  {{ form.stationCode(class="form-control is-invalid") }}
-                  <!-- SHOW ERRORS -->
-                  <div class="invalid-feedback">
-                    {% for error in form.stationCode.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
+              <!-- ROW 2 -->
+              <div class="row">
+                <!-- DRAINAGE AREA 6 -->
+                <div class="col-md-3">
+                  <div class="form-group mt-2">
+                    <!-- LABEL -->
+                    {{ form.drainageArea6.label(class="form-control-label") }} <span class="text-danger">*</span>
+                    <!-- VALIDATION -->
+                    {% if form.drainageArea6.errors %}
+                    <!-- FORM -->
+                    {{ form.drainageArea6(class="form-control is-invalid") }}
+                    <!-- SHOW ERRORS -->
+                    <div class="invalid-feedback">
+                      {% for error in form.drainageArea6.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- FORM -->
+                    {{ form.drainageArea6(class="form-control") }} {% endif %}
                   </div>
-                  {% else %}
-                  <!-- FORM -->
-                  {{ form.stationCode(class="form-control") }} {% endif %}
+                </div>
+                <!-- DRAINAGE AREA 30 -->
+                <div class="col-md-3">
+                  <div class="form-group mt-2">
+                    <!-- LABEL -->
+                    {{ form.drainageArea30.label(class="form-control-label") }} <span class="text-danger">*</span>
+                    <!-- VALIDATION -->
+                    {% if form.drainageArea30.errors %}
+                    <!-- FORM -->
+                    {{ form.drainageArea30(class="form-control is-invalid") }}
+                    <!-- SHOW ERRORS -->
+                    <div class="invalid-feedback">
+                      {% for error in form.drainageArea30.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- FORM -->
+                    {{ form.drainageArea30(class="form-control") }} {% endif %}
+                  </div>
+                </div>
+                <!-- AREA STUDY NAME -->
+                <div class="col-md-3">
+                  <div class="form-group mt-2">
+                    <!-- LABEL -->
+                    {{ form.areaStudyName.label(class="form-control-label") }} <span class="text-danger">*</span>
+                    <!-- VALIDATION -->
+                    {% if form.areaStudyName.errors %}
+                    <!-- FORM -->
+                    {{ form.areaStudyName(class="form-control is-invalid") }}
+                    <!-- SHOW ERRORS -->
+                    <div class="invalid-feedback">
+                      {% for error in form.areaStudyName.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- FORM -->
+                    {{ form.areaStudyName(class="form-control") }} {% endif %}
+                  </div>
+                </div>
+                <!-- AREA STUDY Code -->
+                <div class="col-md-3">
+                  <div class="form-group mt-2">
+                    <!-- LABEL -->
+                    {{ form.areaStudyCode.label(class="form-control-label") }} <span class="text-danger">*</span>
+                    <!-- VALIDATION -->
+                    {% if form.areaStudyCode.errors %}
+                    <!-- FORM -->
+                    {{ form.areaStudyCode(class="form-control is-invalid") }}
+                    <!-- SHOW ERRORS -->
+                    <div class="invalid-feedback">
+                      {% for error in form.areaStudyCode.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- FORM -->
+                    {{ form.areaStudyCode(class="form-control") }} {% endif %}
+                  </div>
                 </div>
               </div>
-              <!-- SATAION OLD CODE -->
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <!-- LABEL -->
-                  {{ form.stationOldCode.label(class="form-control-label") }}
-                  <!-- VALIDATION -->
-                  {% if form.stationOldCode.errors %}
-                  <!-- FORM -->
-                  {{ form.stationOldCode(class="form-control is-invalid") }}
-                  <!-- SHOW ERRORS -->
-                  <div class="invalid-feedback">
-                    {% for error in form.stationOldCode.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
+              <!-- ROW 3 -->
+              <div class="row">
+                <!-- OMOR -->
+                <div class="col-md-4">
+                  <div class="form-group mt-2">
+                    <!-- LABEL -->
+                    {{ form.omor.label(class="form-control-label") }} <span class="text-danger">*</span>
+                    <!-- VALIDATION -->
+                    {% if form.omor.errors %}
+                    <!-- FORM -->
+                    {{ form.omor(class="form-control is-invalid") }}
+                    <!-- SHOW ERRORS -->
+                    <div class="invalid-feedback">
+                      {% for error in form.omor.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- FORM -->
+                    {{ form.omor(class="form-control") }} {% endif %}
                   </div>
-                  {% else %}
-                  <!-- FORM -->
-                  {{ form.stationOldCode(class="form-control") }} {% endif %}
+                </div>
+                <!-- COUNTY -->
+                <div class="col-md-4">
+                  <div class="form-group mt-2">
+                    <!-- LABEL -->
+                    {{ form.county.label(class="form-control-label") }} <span class="text-danger">*</span>
+                    <!-- VALIDATION -->
+                    {% if form.county.errors %}
+                    <!-- FORM -->
+                    {{ form.county(class="form-control is-invalid") }}
+                    <!-- SHOW ERRORS -->
+                    <div class="invalid-feedback">
+                      {% for error in form.county.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- FORM -->
+                    {{ form.county(class="form-control") }} {% endif %}
+                  </div>
+                </div>
+                <!-- START YEAR -->
+                <div class="col-md-4">
+                  <div class="form-group mt-2">
+                    <!-- LABEL -->
+                    {{ form.startYear.label(class="form-control-label") }} <span class="text-danger">*</span>
+                    <!-- VALIDATION -->
+                    {% if form.startYear.errors %}
+                    <!-- FORM -->
+                    {{ form.startYear(class="form-control is-invalid") }}
+                    <!-- SHOW ERRORS -->
+                    <div class="invalid-feedback">
+                      {% for error in form.startYear.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- FORM -->
+                    {{ form.startYear(class="form-control") }} {% endif %}
+                  </div>
                 </div>
               </div>
-            </div>
-            <!-- ROW 2 -->
-            <div class="row">
-              <!-- DRAINAGE AREA 6 -->
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <!-- LABEL -->
-                  {{ form.drainageArea6.label(class="form-control-label") }} <span class="text-danger">*</span>
-                  <!-- VALIDATION -->
-                  {% if form.drainageArea6.errors %}
-                  <!-- FORM -->
-                  {{ form.drainageArea6(class="form-control is-invalid") }}
-                  <!-- SHOW ERRORS -->
-                  <div class="invalid-feedback">
-                    {% for error in form.drainageArea6.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
+              <!-- ROW 4 -->
+              <div class="row">
+                <!-- LONG Decimal Degrees -->
+                <div class="col-md-4">
+                  <div class="form-group mt-2">
+                    <!-- LABEL -->
+                    {{ form.longDecimalDegrees.label(class="form-control-label") }} <span class="text-danger">*</span>
+                    <!-- VALIDATION -->
+                    {% if form.longDecimalDegrees.errors %}
+                    <!-- FORM -->
+                    {{ form.longDecimalDegrees(class="form-control is-invalid") }}
+                    <!-- SHOW ERRORS -->
+                    <div class="invalid-feedback">
+                      {% for error in form.longDecimalDegrees.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- FORM -->
+                    {{ form.longDecimalDegrees(class="form-control") }} {% endif %}
                   </div>
-                  {% else %}
-                  <!-- FORM -->
-                  {{ form.drainageArea6(class="form-control") }} {% endif %}
+                </div>
+                <!-- LAT Decimal Degrees -->
+                <div class="col-md-4">
+                  <div class="form-group mt-2">
+                    <!-- LABEL -->
+                    {{ form.latDecimalDegrees.label(class="form-control-label") }} <span class="text-danger">*</span>
+                    <!-- VALIDATION -->
+                    {% if form.latDecimalDegrees.errors %}
+                    <!-- FORM -->
+                    {{ form.latDecimalDegrees(class="form-control is-invalid") }}
+                    <!-- SHOW ERRORS -->
+                    <div class="invalid-feedback">
+                      {% for error in form.latDecimalDegrees.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- FORM -->
+                    {{ form.latDecimalDegrees(class="form-control") }} {% endif %}
+                  </div>
+                </div>
+                <!-- ELEVATION -->
+                <div class="col-md-4">
+                  <div class="form-group mt-2">
+                    <!-- LABEL -->
+                    {{ form.elevation.label(class="form-control-label") }} <span class="text-danger">*</span>
+                    <!-- VALIDATION -->
+                    {% if form.elevation.errors %}
+                    <!-- FORM -->
+                    {{ form.elevation(class="form-control is-invalid") }}
+                    <!-- SHOW ERRORS -->
+                    <div class="invalid-feedback">
+                      {% for error in form.elevation.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <!-- FORM -->
+                    {{ form.elevation(class="form-control") }} {% endif %}
+                  </div>
                 </div>
               </div>
-              <!-- DRAINAGE AREA 30 -->
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <!-- LABEL -->
-                  {{ form.drainageArea30.label(class="form-control-label") }} <span class="text-danger">*</span>
-                  <!-- VALIDATION -->
-                  {% if form.drainageArea30.errors %}
-                  <!-- FORM -->
-                  {{ form.drainageArea30(class="form-control is-invalid") }}
-                  <!-- SHOW ERRORS -->
-                  <div class="invalid-feedback">
-                    {% for error in form.drainageArea30.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                  </div>
-                  {% else %}
-                  <!-- FORM -->
-                  {{ form.drainageArea30(class="form-control") }} {% endif %}
-                </div>
-              </div>
-              <!-- AREA STUDY NAME -->
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <!-- LABEL -->
-                  {{ form.areaStudyName.label(class="form-control-label") }} <span class="text-danger">*</span>
-                  <!-- VALIDATION -->
-                  {% if form.areaStudyName.errors %}
-                  <!-- FORM -->
-                  {{ form.areaStudyName(class="form-control is-invalid") }}
-                  <!-- SHOW ERRORS -->
-                  <div class="invalid-feedback">
-                    {% for error in form.areaStudyName.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                  </div>
-                  {% else %}
-                  <!-- FORM -->
-                  {{ form.areaStudyName(class="form-control") }} {% endif %}
-                </div>
-              </div>
-            </div>
-            <!-- ROW 3 -->
-            <div class="row">
-              <!-- OMOR -->
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <!-- LABEL -->
-                  {{ form.omor.label(class="form-control-label") }} <span class="text-danger">*</span>
-                  <!-- VALIDATION -->
-                  {% if form.omor.errors %}
-                  <!-- FORM -->
-                  {{ form.omor(class="form-control is-invalid") }}
-                  <!-- SHOW ERRORS -->
-                  <div class="invalid-feedback">
-                    {% for error in form.omor.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                  </div>
-                  {% else %}
-                  <!-- FORM -->
-                  {{ form.omor(class="form-control") }} {% endif %}
-                </div>
-              </div>
-              <!-- COUNTY -->
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <!-- LABEL -->
-                  {{ form.county.label(class="form-control-label") }} <span class="text-danger">*</span>
-                  <!-- VALIDATION -->
-                  {% if form.county.errors %}
-                  <!-- FORM -->
-                  {{ form.county(class="form-control is-invalid") }}
-                  <!-- SHOW ERRORS -->
-                  <div class="invalid-feedback">
-                    {% for error in form.county.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                  </div>
-                  {% else %}
-                  <!-- FORM -->
-                  {{ form.county(class="form-control") }} {% endif %}
-                </div>
-              </div>
-              <!-- START YEAR -->
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <!-- LABEL -->
-                  {{ form.startYear.label(class="form-control-label") }} <span class="text-danger">*</span>
-                  <!-- VALIDATION -->
-                  {% if form.startYear.errors %}
-                  <!-- FORM -->
-                  {{ form.startYear(class="form-control is-invalid") }}
-                  <!-- SHOW ERRORS -->
-                  <div class="invalid-feedback">
-                    {% for error in form.startYear.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                  </div>
-                  {% else %}
-                  <!-- FORM -->
-                  {{ form.startYear(class="form-control") }} {% endif %}
-                </div>
-              </div>
-            </div>
-            <!-- ROW 4 -->
-            <div class="row">
-              <!-- LONG Decimal Degrees -->
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <!-- LABEL -->
-                  {{ form.longDecimalDegrees.label(class="form-control-label") }} <span class="text-danger">*</span>
-                  <!-- VALIDATION -->
-                  {% if form.longDecimalDegrees.errors %}
-                  <!-- FORM -->
-                  {{ form.longDecimalDegrees(class="form-control is-invalid") }}
-                  <!-- SHOW ERRORS -->
-                  <div class="invalid-feedback">
-                    {% for error in form.longDecimalDegrees.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                  </div>
-                  {% else %}
-                  <!-- FORM -->
-                  {{ form.longDecimalDegrees(class="form-control") }} {% endif %}
-                </div>
-              </div>
-              <!-- LAT Decimal Degrees -->
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <!-- LABEL -->
-                  {{ form.latDecimalDegrees.label(class="form-control-label") }} <span class="text-danger">*</span>
-                  <!-- VALIDATION -->
-                  {% if form.latDecimalDegrees.errors %}
-                  <!-- FORM -->
-                  {{ form.latDecimalDegrees(class="form-control is-invalid") }}
-                  <!-- SHOW ERRORS -->
-                  <div class="invalid-feedback">
-                    {% for error in form.latDecimalDegrees.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                  </div>
-                  {% else %}
-                  <!-- FORM -->
-                  {{ form.latDecimalDegrees(class="form-control") }} {% endif %}
-                </div>
-              </div>
-              <!-- ELEVATION -->
-              <div class="col-md-4">
-                <div class="form-group mt-2">
-                  <!-- LABEL -->
-                  {{ form.elevation.label(class="form-control-label") }} <span class="text-danger">*</span>
-                  <!-- VALIDATION -->
-                  {% if form.elevation.errors %}
-                  <!-- FORM -->
-                  {{ form.elevation(class="form-control is-invalid") }}
-                  <!-- SHOW ERRORS -->
-                  <div class="invalid-feedback">
-                    {% for error in form.elevation.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                  </div>
-                  {% else %}
-                  <!-- FORM -->
-                  {{ form.elevation(class="form-control") }} {% endif %}
-                </div>
-              </div>
-            </div>
 
-            <div class="form-group mt-3 text-center">
-              {{ form.submit(class="btn btn-outline-success") }}
-              <a href="{{ url_for('precipitation_dashboard_station_management') }}" class="btn btn-outline-secondary">
-                نه بیخیال
-              </a>
-            </div>
-          </fieldset>
-        </form>
+              <div class="form-group mt-3 text-center">
+                {{ form.submit(class="btn btn-outline-success") }}
+                <a href="{{ url_for('precipitation_dashboard_station_management') }}" class="btn btn-outline-secondary">
+                  نه بیخیال
+                </a>
+              </div>
+            </fieldset>
+          </form>
+        </div>
       </div>
     </div>
   </div>

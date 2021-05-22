@@ -79,7 +79,7 @@
             <!-- ROW 2 -->
             <div class="row">
               <!-- DRAINAGE AREA 6 -->
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group mt-2">
                   <!-- LABEL -->
                   {{ form.drainageArea6.label(class="form-control-label") }} <span class="text-danger">*</span>
@@ -99,7 +99,7 @@
                 </div>
               </div>
               <!-- DRAINAGE AREA 30 -->
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group mt-2">
                   <!-- LABEL -->
                   {{ form.drainageArea30.label(class="form-control-label") }} <span class="text-danger">*</span>
@@ -119,7 +119,7 @@
                 </div>
               </div>
               <!-- AREA STUDY NAME -->
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group mt-2">
                   <!-- LABEL -->
                   {{ form.areaStudyName.label(class="form-control-label") }} <span class="text-danger">*</span>
@@ -136,6 +136,26 @@
                   {% else %}
                   <!-- FORM -->
                   {{ form.areaStudyName(class="form-control") }} {% endif %}
+                </div>
+              </div>
+              <!-- AREA STUDY NAME -->
+              <div class="col-md-3">
+                <div class="form-group mt-2">
+                  <!-- LABEL -->
+                  {{ form.areaStudyCode.label(class="form-control-label") }} <span class="text-danger">*</span>
+                  <!-- VALIDATION -->
+                  {% if form.areaStudyCode.errors %}
+                  <!-- FORM -->
+                  {{ form.areaStudyCode(class="form-control is-invalid") }}
+                  <!-- SHOW ERRORS -->
+                  <div class="invalid-feedback">
+                    {% for error in form.areaStudyCode.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  <!-- FORM -->
+                  {{ form.areaStudyCode(class="form-control") }} {% endif %}
                 </div>
               </div>
             </div>

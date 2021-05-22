@@ -13,6 +13,7 @@
 
 <!-- START BLOCK SECTION -->
 {% block content %}
+<div class=" container">
 <div class="card-body p-0">
   <!-- Nested Row within Card Body -->
   <div class="row">
@@ -29,7 +30,7 @@
 
               </div>
               <div class="col-md-2">
-                {{ render_field(form.time, class="form-control text-center w-100") }}
+                {{ render_field(form.time, class="form-control text-center w-100", id="time") }}
               </div>
             </div>
 
@@ -51,7 +52,7 @@
               </div>
             </div>
             <div class="justify-content-center align-content-center">
-              <hr class="class-1 my-4" />
+              <hr class=" w-75 class-1 my-4" />
             </div>
 
             <!--  -->
@@ -68,6 +69,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 {% endblock content %} 
 

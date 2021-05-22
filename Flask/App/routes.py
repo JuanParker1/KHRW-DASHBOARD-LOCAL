@@ -1,3 +1,4 @@
+from itertools import zip_longest
 import os
 import pandas as pd
 import sqlite3
@@ -5,6 +6,12 @@ from werkzeug.utils import secure_filename
 
 from flask import render_template, redirect, url_for, flash, request
 from App import app, db, bcrypt
+
+# from flask_googlemaps import GoogleMaps
+# from flask_googlemaps import Map
+import folium 
+import altair as alt
+
 
 
 from App.forms import RegistrationForm, LoginForm, UpdateProfileForm, UserManagementForm, StationForm, UpdateStationForm, PrecipitationDataForm, AddPrecipitationDataForm
@@ -118,10 +125,7 @@ def user_management():
 def precipitation():
     return render_template(template_name_or_list='precipitation_flask/precipitation.html')
 
-@app.route('/precipitation/dashboard')
-@login_required
-def precipitation_dashboard():
-    return render_template(template_name_or_list='precipitation_flask/base.html')
+
 
 
 @app.route('/precipitation/dashboard/station_managment', methods=['GET', 'POST'], defaults={"page": 1})
@@ -155,6 +159,7 @@ def precipitation_dashboard_add_station():
             drainageArea6 = form.drainageArea6.data,
             drainageArea30 = form.drainageArea30.data,
             areaStudyName = form.areaStudyName.data,
+            areaStudyCode = form.areaStudyCode.data,
             omor = form.omor.data,
             county = form.county.data,
             startYear = int(form.startYear.data),
@@ -188,6 +193,7 @@ def precipitation_dashboard_station_managment_update(stationCode):
         station.drainageArea6 = form.drainageArea6.data
         station.drainageArea30 = form.drainageArea30.data
         station.areaStudyName = form.areaStudyName.data
+        station.areaStudyCode = form.areaStudyCode.data
         station.omor = form.omor.data
         station.county = form.county.data
         station.startYear = form.startYear.data
@@ -204,6 +210,7 @@ def precipitation_dashboard_station_managment_update(stationCode):
         form.drainageArea6.data = station.drainageArea6
         form.drainageArea30.data = station.drainageArea30
         form.areaStudyName.data = station.areaStudyName
+        form.areaStudyCode.data = station.areaStudyCode
         form.omor.data = station.omor
         form.county.data = station.county
         form.startYear.data = station.startYear
@@ -384,8 +391,9 @@ def precipitation_dashboard_add_precipitation_data_csv():
         for st in import_precipitation_data.stationCode.unique():
             df = import_precipitation_data[import_precipitation_data['stationCode'] == st] 
             if df.DATE.duplicated().any():
-                flash(message=f"در فایل ورودی تاریخ تکراری وجود دارد!", category='danger')
-                return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
+                flash(message=f"در فایل ورودی برای ایستگاه {st} رکورد تکراری وجود دارد!", category='warning')                
+                # return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
+        import_precipitation_data = import_precipitation_data.drop_duplicates(subset=['DATE'], keep='last')
 
         
         # CHECK DUPLICATE STATIONCODE IN DATABASE AND CSV
@@ -528,4 +536,58 @@ def precipitation_dashboard_add_precipitation_data():
     return render_template(
         template_name_or_list='precipitation_flask/add_precipitation_data.html',
         form=form
+    )
+
+from vega_datasets import data
+
+@app.route('/precipitation/dashboard')
+@login_required
+def precipitation_dashboard():
+    
+    db_precipitation = sqlite3.connect(db_path_precipitation, check_same_thread=False)       
+    stations = pd.read_sql_query(sql="SELECT * FROM station", con=db_precipitation)
+
+
+    # define data for demonstration
+    source = data.stocks()
+
+    # create an altair chart, then convert to JSON
+    chart = alt.Chart(source).transform_filter(
+        'datum.symbol==="GOOG"'
+        ).mark_area(
+            line={'color':'darkgreen'},
+            color=alt.Gradient(
+                gradient='linear',
+                stops=[alt.GradientStop(color='white', offset=0),
+                    alt.GradientStop(color='darkgreen', offset=1)],
+                x1=1,
+                x2=1,
+                y1=1,
+                y2=0
+            )
+        ).encode(
+            alt.X('date:T'),
+            alt.Y('price:Q')
+        ).properties(title='ایستگاه مشهد - 1380:1399', width=300, height=200)
+    vis1 = chart.to_json()
+    
+    map = folium.Map(
+        location=[stations["latDecimalDegrees"].mean(), stations["longDecimalDegrees"].mean()],
+        tiles='Stamen Terrain',
+        zoom_start=7
+    )
+    
+    for i in range(len(stations)):
+
+        folium.Marker(
+            location=[stations["latDecimalDegrees"][i], stations["longDecimalDegrees"][i]],
+            popup=folium.Popup(max_width=450).add_child(folium.VegaLite(vis1, width=400, height=300)),
+            # popup=f"{ stations.stationCode[i] } \n {stations.stationName[i]}",
+            tooltip="کلیک کنید"
+        ).add_to(map)
+
+    
+    return render_template(
+        template_name_or_list='precipitation_flask/precipitation_dashboard.html',
+        map=map._repr_html_()
     )

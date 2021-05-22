@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+# from flask_googlemaps import GoogleMaps
 # from flask_bootstrap import Bootstrap
 # from flask_datepicker import datepicker
 
@@ -12,8 +13,10 @@ from App.dashApp.chemograph.app import create_chemograph_app
 app = Flask(import_name=__name__, static_folder='static')
 
 app.config["DEBUG"] = True
+# app.config['GOOGLEMAPS_KEY'] = "AIzaSyAHzR-Pu6GlvFtxS6Xz813bdGqUjUjM1w8"
 # Bootstrap(app)
 # datepicker(app)
+# GoogleMaps(app)
 
 # Upload folder
 UPLOAD_FOLDER = 'App/static/files'

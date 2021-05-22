@@ -27,6 +27,7 @@ class Station(db.Model):
     drainageArea6 = db.Column(db.String(50), nullable=False)
     drainageArea30 = db.Column(db.String(50), nullable=False)
     areaStudyName = db.Column(db.String(50), nullable=False)
+    areaStudyCode = db.Column(db.Integer, nullable=False)
     omor = db.Column(db.String(50), nullable=False)
     county = db.Column(db.String(50), nullable=False)
     startYear = db.Column(db.String(4), nullable=False)
@@ -56,4 +57,5 @@ class Precipitation(db.Model):
     def __repr__(self):
         return f"{self.__class__.__name__}({self.stationCode}, {self.YEAR}, {self.MONTH}, {self.DAY})"
     
-    
+
+db.create_all(bind='precipitation')
