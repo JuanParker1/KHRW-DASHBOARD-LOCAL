@@ -204,10 +204,7 @@ class StationForm(FlaskForm):
     )
     
     submit = SubmitField(label='ثبت ایستگاه جدید')
-    
-    def __repr__(self):
-        return f"Station({self.stationCode}, {self.stationName}, {self.areaStudyName})"
-    
+   
     def validate_drainageArea6(self, drainageArea6):
         if drainageArea6.data == " ":
             raise ValidationError(message="انتخاب حوضه آبریز شش‌گانه الزامی می‌باشد.")
@@ -317,9 +314,7 @@ class UpdateStationForm(FlaskForm):
     
     submit = SubmitField(label='به روز رسانی ایستگاه')
         
-    def __repr__(self):
-        return f"Station({self.stationCode}, {self.stationName}, {self.areaStudyName})"
-    
+
     def validate_drainageArea6(self, drainageArea6):
         if drainageArea6.data == " ":
             raise ValidationError(message="انتخاب حوضه آبریز شش‌گانه الزامی می‌باشد.")
@@ -352,31 +347,63 @@ class UpdateStationForm(FlaskForm):
         stCode = Station.query.filter_by(stationCode=stationCode.data).first()
         if stCode:
             raise ValidationError(message="این کد ایستگاه موجود میباشد.")
-        
-
 
 
 class AddPrecipitationDataForm(FlaskForm):
+
+    class Meta:
+        csrf = False
+
     st_name = Station.query.order_by(Station.stationName).with_entities(Station.stationName).all()
-    
+
     stationName = SelectField(
         label="نام ایستگاه",
         choices=sorted([" "] + [st[0] for st in st_name]),
+        validators=[
+            DataRequired(message="انتخاب نام ایستگاه الزامی می‌باشد.")
+        ]
     )
-    
+
     baran = FloatField(
         label="باران (میلیمتر)",
+        default=0
     )
 
     barf = FloatField(
         label="برف (میلیمتر)",
+        default=0
     )
-    
+
     ab_barf = FloatField(
         label="آب برف (میلیمتر)",
+        default=0
     )
+
+
 class PrecipitationDataForm(FlaskForm):
-    date = StringField(label="تاریخ")
-    time = SelectField(label="زمان", choices=[" ", "06:30:00", "18:30:00"])
-    addPrecipData = FieldList(FormField(AddPrecipitationDataForm), min_entries=3)
-    submit = SubmitField(label='اضافه کردن داده‌های بارندگی')
+    time = SelectField(
+        label="زمان", 
+        choices=[" ", "06:30:00", "18:30:00"],
+        validators=[
+            DataRequired(message="انتخاب زمان الزامی می‌باشد.")
+        ]
+    )
+
+    date = StringField(
+        label="تاریخ",
+        validators=[
+            DataRequired(message="انتخاب تاریخ الزامی می‌باشد.")
+        ]
+    )
+
+    addPrecipData = FieldList(
+        FormField(AddPrecipitationDataForm),
+        min_entries=3,
+        validators=[
+            DataRequired()
+        ]
+    )
+
+    submit = SubmitField(
+        label='اضافه کردن داده‌های بارندگی'
+    )

@@ -18,23 +18,18 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="p-2" style="direction: rtl">
-        <form action="" method="post">
+        <form action="" method="post" novalidate>
           {{ form.hidden_tag() }}
           <fieldset class="form-group">
             <legend class="mb-4">اضافه کردن داده‌های بارندگی جدید</legend>
             <!--  -->
             <div class="row justify-content-center mb-5 text-center">
               <div class="col-md-2">
-                {{ form.date.label(class="form-control-label") }}
-                <!--  -->
-                {{ form.date(class="form-control text-center w-100", id="input1") }}
-                <!--  -->
-              </div>
+                {{ render_field(form.date, class="form-control text-center w-100", id="input1") }}
 
+              </div>
               <div class="col-md-2">
-                {{ form.time.label(class="form-control-label") }}
-                <!--  -->
-                {{ form.time(class="form-control text-center w-100", id="timepicker") }}
+                {{ render_field(form.time, class="form-control text-center w-100") }}
               </div>
             </div>
 
@@ -43,18 +38,16 @@
             <!--  -->
             <div class="row text-center justify-content-center">
               <div class="col-md-4">
-                {{ render_field(field.stationName.label) }} {{ render_field(field.stationName, label_visible=false,
-                class="w-100 text-center") }}
+                {{ render_field(field.stationName, class="w-100 text-center") }}
               </div>
               <div class="col-md-2">
-                {{ render_field(field.baran.label) }} {{ render_field(field.baran, label_visible=false, class="w-100 text-center")
-                }}
+                {{ render_field(field.baran, class="w-100 text-center") }}
               </div>
               <div class="col-md-2">
-                {{ render_field(field.barf.label) }} {{ render_field(field.barf, label_visible=false, class="w-100 text-center") }}
+                {{ render_field(field.barf, class="w-100 text-center") }}
               </div>
               <div class="col-md-2">
-                {{ render_field(field.ab_barf.label) }} {{ render_field(field.ab_barf, label_visible=false, class="w-100 text-center") }}
+                {{ render_field(field.ab_barf, class="w-100 text-center") }}
               </div>
             </div>
             <div class="justify-content-center align-content-center">
@@ -66,7 +59,7 @@
 
             <div class="form-group mt-3 text-center">
               {{ form.submit(class="btn btn-outline-success") }}
-              <a href="{{ url_for('precipitation_dashboard_station_management') }}" class="btn btn-outline-secondary">
+              <a href="{{ url_for('precipitation_dashboard_precipitation_data_management') }}" class="btn btn-outline-secondary">
                 نه بیخیال
               </a>
             </div>

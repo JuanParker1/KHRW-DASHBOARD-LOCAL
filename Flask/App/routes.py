@@ -7,9 +7,12 @@ from flask import render_template, redirect, url_for, flash, request
 from App import app, db, bcrypt
 
 
-from App.forms import RegistrationForm, LoginForm, UpdateProfileForm, UserManagementForm, StationForm, UpdateStationForm, PrecipitationDataForm
+from App.forms import RegistrationForm, LoginForm, UpdateProfileForm, UserManagementForm, StationForm, UpdateStationForm, PrecipitationDataForm, AddPrecipitationDataForm
 from App.models import User, Station, Precipitation
 from flask_login import login_user, current_user, logout_user, login_required
+
+
+db_path_precipitation = 'App/dashApp/precipitation/precipitation.sqlite'
 
 
 @app.route('/')
@@ -417,9 +420,9 @@ def precipitation_dashboard_precipitation_data_management(page):
     page = page
     pages = 25
     data = Precipitation.query.order_by(Precipitation.stationCode.asc()).paginate(page, pages, error_out=False)
-    if request.method == 'POST' and 'tag' in request.form and request.form["tag"] != "":
+    if request.method == 'POST' and 'tag-code' in request.form and request.form["tag-code"] != "":
         pages = 100
-        tag = request.form["tag"]
+        tag = request.form["tag-code"]
         search = "%{}%".format(tag)
         data = Precipitation.query.filter(Precipitation.stationCode.like(search)).paginate(per_page=pages, error_out=False)  
         return render_template('precipitation_flask/precipitation_data_management.html', data=data, tag=tag)       
@@ -451,32 +454,77 @@ def chemograph_route():
 @login_required
 def precipitation_dashboard_add_precipitation_data():
     form = PrecipitationDataForm()
-    
-    if request.method == "POST":
-    # if form.validate_on_submit():
-        # station = Station(
-        #     stationName = form.stationName.data,
-        #     stationCode = form.stationCode.data,
-        #     stationOldCode = form.stationOldCode.data,
-        #     drainageArea6 = form.drainageArea6.data,
-        #     drainageArea30 = form.drainageArea30.data,
-        #     areaStudyName = form.areaStudyName.data,
-        #     omor = form.omor.data,
-        #     county = form.county.data,
-        #     startYear = int(form.startYear.data),
-        #     longDecimalDegrees = form.longDecimalDegrees.data,
-        #     latDecimalDegrees = form.latDecimalDegrees.data,
-        #     elevation = form.elevation.data,
-        # )
-        print(form.date.data)
-        print(form.time.data)
-        print(form.addPrecipData.data)
-            
-        # db.session.add(station)
-        # db.session.commit()
-        flash(message=f"ایستگاه جدید با نام بع دیتابیس اضافه گردید!", category='success')
-        return redirect(url_for('precipitation_dashboard_precipitation_data_management'))
+    if form.validate_on_submit():
+        db_precipitation = sqlite3.connect(db_path_precipitation, check_same_thread=False)       
+        exist_precipitation_data = pd.read_sql_query(sql="SELECT * FROM precipitation", con=db_precipitation)
+        exist_precipitation_data_columns = list(exist_precipitation_data.columns)
+        exist_precipitation_data['DATE'] = exist_precipitation_data['YEAR'].astype(str) + "-" + exist_precipitation_data['MONTH'].astype(str).str.zfill(2) + "-" + exist_precipitation_data['DAY'].astype(str).str.zfill(2) + " " + exist_precipitation_data['HOURE'].astype(str).str.zfill(2) + ":" + exist_precipitation_data['MINUTE'].astype(str).str.zfill(2) + ":" + exist_precipitation_data['SECOND'].astype(str).str.zfill(2)
+        exist_precipitation_data["uniqueCode"] = exist_precipitation_data["stationCode"].astype(str) + "-" + exist_precipitation_data["DATE"]
+        exist_station = pd.read_sql_query(sql="SELECT * FROM station", con=db_precipitation)
+        
+        df = pd.DataFrame(columns=exist_precipitation_data_columns[1:] + ["stationName"])
 
+        date = form.date.data.split("/")
+        time = form.time.data.split(":")
+        data = form.addPrecipData.data
+
+        for i in range(len(data)):
+            df.loc[i,"stationCode"] = exist_station[exist_station['stationName'] == data[i]["stationName"]].iloc[0,1]
+            df.loc[i,"YEAR"] = date[0]
+            df.loc[i,"MONTH"] = date[1].zfill(2)
+            df.loc[i,"DAY"] = date[2].zfill(2)
+            df.loc[i,"HOURE"] = time[0].zfill(2)
+            df.loc[i,"MINUTE"] = time[1].zfill(2)
+            df.loc[i,"SECOND"] = time[2].zfill(2)
+            df.loc[i,"BARAN"] = data[i]["baran"]
+            df.loc[i,"BARF"] = data[i]["barf"]
+            df.loc[i,"AB_BARF"] = data[i]["ab_barf"]
+            df.loc[i,"JAM_BARAN"] = data[i]["baran"] + data[i]["ab_barf"]
+            df.loc[i,"stationName"] = data[i]["stationName"]
+
+        df['DATE'] = df['YEAR'].astype(str) + "-" + df['MONTH'].astype(str) + "-" + df['DAY'].astype(str) + " " + df['HOURE'].astype(str) + ":" + df['MINUTE'].astype(str) + ":" + df['SECOND'].astype(str)
+
+        df["uniqueCode"] = df["stationCode"].astype(str) + "-" + df["DATE"]
+        
+        
+        # DUPLICATE STATION ENTER
+        if df.duplicated(subset=["stationName"]).any():
+            st_duplicate_enter = df.loc[df.duplicated(subset=["stationName"]),:]["stationName"].unique().tolist()
+            flash(message=f"ایستگاه‌های {st_duplicate_enter} تکراری وارد شده‌اند.", category='warning')
+            return render_template(
+                template_name_or_list='precipitation_flask/add_precipitation_data.html',
+                form=form
+            )
+        
+        
+        # DUPLICATE STATION-DATE WITH DATABASE
+        if df["uniqueCode"].isin(exist_precipitation_data["uniqueCode"]).any():
+            st_date_duplicate = df.loc[df["uniqueCode"].isin(exist_precipitation_data["uniqueCode"]), :]
+            st_date_duplicate['ERROR'] = st_date_duplicate['stationName'] + ': ' + st_date_duplicate['DATE']
+            st_date_duplicate = st_date_duplicate['ERROR'].unique().tolist()
+            flash(message=f"ایستگاه‌ها و تاریخ‌های {st_date_duplicate} در دیتابیس موجود می‌باشند.", category='warning')
+            return render_template(
+                template_name_or_list='precipitation_flask/add_precipitation_data.html',
+                form=form
+            )
+        
+        df = df.drop(['uniqueCode', 'DATE', 'stationName'], axis=1)
+        df["stationCode"] = df["stationCode"].astype(int)
+        df["YEAR"] = df["YEAR"].astype(int)
+        df["MONTH"] = df["MONTH"].astype(int)
+        df["DAY"] = df["DAY"].astype(int)
+        df["HOURE"] = df["HOURE"].astype(int)
+        df["MINUTE"] = df["MINUTE"].astype(int)
+        df["SECOND"] = df["SECOND"].astype(int)
+        df["BARAN"] = df["BARAN"].astype(float)
+        df["BARF"] = df["BARF"].astype(float)
+        df["AB_BARF"] = df["AB_BARF"].astype(float)
+        df["JAM_BARAN"] = df["JAM_BARAN"].astype(float)
+        print(df)
+        df.to_sql(name="precipitation", con=db_precipitation, if_exists="append", index=False)
+        
+        flash(message=f"داده‌های بارندگی با موفقیت به دیتابیس اضافه گردید!", category='success')
+        return redirect(url_for('precipitation_dashboard_precipitation_data_management'))
     return render_template(
         template_name_or_list='precipitation_flask/add_precipitation_data.html',
         form=form

@@ -1,6 +1,4 @@
-{% extends "precipitation_flask/base.html" %}
-<!-- Errors Form -->
-{% include "form_errors.html" %}
+{% extends "precipitation_flask/base.html" %} {% from '_render_field.html' import render_field %}
 
 <!-- START BLOCK SECTION -->
 {% block content %}
@@ -9,7 +7,7 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="p-2" style="direction: rtl">
-        <form action="" method="post">
+        <form action="" method="post" novalidate>
           {{ form.hidden_tag() }}
           <fieldset class="form-group">
             <legend class="mb-4">اضافه کردن ایستگاه جدید</legend>

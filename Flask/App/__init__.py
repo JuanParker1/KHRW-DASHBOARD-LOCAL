@@ -2,8 +2,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-from flask_bootstrap import Bootstrap
-from flask_datepicker import datepicker
+# from flask_bootstrap import Bootstrap
+# from flask_datepicker import datepicker
 
 # from App.dashApp.isotope_analysis.app import create_isotope_analysis_app
 from App.dashApp.hydrograph.app import create_hydrograph_app
@@ -13,11 +13,11 @@ app = Flask(import_name=__name__, static_folder='static')
 
 app.config["DEBUG"] = True
 # Bootstrap(app)
-datepicker(app)
+# datepicker(app)
 
 # Upload folder
 UPLOAD_FOLDER = 'App/static/files'
-app.config['UPLOAD_FOLDER'] =  UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.config['SECRET_KEY'] = 'd3946e1cf4b2b53d4dcf5d9e3b126498ac2876892270735eddbb7e3aca8a7bbe'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database.db'

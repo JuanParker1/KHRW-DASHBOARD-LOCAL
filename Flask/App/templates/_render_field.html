@@ -1,8 +1,21 @@
-{% macro render_field(field) %} {{ field(**kwargs)|safe }}
-<!-- <ul>
-  {% for error in field.errors %}
-  <li style="color: red">{{ error }}</li>
-  {% endfor %}
-</ul> -->
-
+<!-- START MACRO -->
+{% macro render_field(field) %}
+<!-- LABEL -->
+{{ field.label }} {% if field.flags.required %} <span class="text-danger">*</span> {% endif %}
+<!-- IF ERROR -->
+{% if field.errors %}
+<!-- FORM -->
+{{ field(**kwargs) }}
+<!-- SHOW ERRORS -->
+{% for error in field.errors %}
+<span class="text-danger" style="font-size: small">{{ error }}</span>
+{% endfor %}
+<!-- ELSE ERROR -->
+{% else %}
+<!-- FORM -->
+{{ field(**kwargs) }}
+<!--  -->
+<!-- END ERROR -->
+{% endif %}
+<!-- END MACRO -->
 {% endmacro %}
