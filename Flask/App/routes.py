@@ -1,5 +1,6 @@
 from itertools import zip_longest
 import os
+from flask_wtf.recaptcha import validators
 import pandas as pd
 import sqlite3
 from werkzeug.utils import secure_filename
@@ -12,6 +13,7 @@ from App import app, db, bcrypt
 import folium 
 import altair as alt
 
+from App.data_cleansing import *
 
 
 from App.forms import RegistrationForm, LoginForm, UpdateProfileForm, UserManagementForm, StationForm, UpdateStationForm, PrecipitationDataForm, AddPrecipitationDataForm
@@ -393,7 +395,7 @@ def precipitation_dashboard_add_precipitation_data_csv():
             if df.DATE.duplicated().any():
                 flash(message=f"در فایل ورودی برای ایستگاه {st} رکورد تکراری وجود دارد!", category='warning')                
                 # return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
-        import_precipitation_data = import_precipitation_data.drop_duplicates(subset=['DATE'], keep='last')
+        import_precipitation_data = import_precipitation_data.drop_duplicates(subset=['uniqueCode'], keep='last')
 
         
         # CHECK DUPLICATE STATIONCODE IN DATABASE AND CSV
@@ -538,55 +540,63 @@ def precipitation_dashboard_add_precipitation_data():
         form=form
     )
 
-from vega_datasets import data
 
 @app.route('/precipitation/dashboard')
 @login_required
-def precipitation_dashboard():
-    
-    db_precipitation = sqlite3.connect(db_path_precipitation, check_same_thread=False)       
-    stations = pd.read_sql_query(sql="SELECT * FROM station", con=db_precipitation)
+def precipitation_dashboard():  
+    data = db_precipitation_precip_data
+    data_water_year_baran = data[['stationCode', 'wateryear', 'JAM_BARAN']].groupby(['stationCode', 'wateryear']).sum().reset_index()
 
-
-    # define data for demonstration
-    source = data.stocks()
-
-    # create an altair chart, then convert to JSON
-    chart = alt.Chart(source).transform_filter(
-        'datum.symbol==="GOOG"'
-        ).mark_area(
-            line={'color':'darkgreen'},
-            color=alt.Gradient(
-                gradient='linear',
-                stops=[alt.GradientStop(color='white', offset=0),
-                    alt.GradientStop(color='darkgreen', offset=1)],
-                x1=1,
-                x2=1,
-                y1=1,
-                y2=0
-            )
-        ).encode(
-            alt.X('date:T'),
-            alt.Y('price:Q')
-        ).properties(title='ایستگاه مشهد - 1380:1399', width=300, height=200)
-    vis1 = chart.to_json()
-    
     map = folium.Map(
-        location=[stations["latDecimalDegrees"].mean(), stations["longDecimalDegrees"].mean()],
+        location=[db_precipitation_stations["latDecimalDegrees"].mean(), db_precipitation_stations["longDecimalDegrees"].mean()],
         tiles='Stamen Terrain',
         zoom_start=7
     )
     
-    for i in range(len(stations)):
+    for i in range(len(db_precipitation_stations)):
+        
+        
+        
+        data_st = data_water_year_baran[data_water_year_baran["stationCode"] == db_precipitation_stations.stationCode[i]]
+        
+        # create an altair chart, then convert to JSON
+        bar = alt.Chart(data_st, width=600).mark_bar().encode(
+            x=alt.X('wateryear:O', axis=alt.Axis(title='سال آبی')),
+            y=alt.Y('JAM_BARAN:Q', axis=alt.Axis(title='بارندگی - میلیمتر'))
+        )
+        
+        
+        rule = alt.Chart(data_st).mark_rule(color='red').encode(
+            y='mean(JAM_BARAN):Q'
+        )
+        
+        chart = (bar + rule).properties(title=db_precipitation_stations.stationName[i]).configure_axisY(
+            labelFontSize=16,
+            labelFont="B Zar",
+            titleFont="B Zar",
+            titleFontSize=16
+        ).configure_axisX(
+            labelFontSize=16,
+            labelFont="B Zar",
+            titleFont="B Zar",
+            titleFontSize=16
+        ).configure_title(
+            fontSize=20,
+            font="B Titr",
+        )
+        
+        chart.configure_title(
+            align="left"
+        )
+        
+        vis = chart.to_json()                
 
         folium.Marker(
-            location=[stations["latDecimalDegrees"][i], stations["longDecimalDegrees"][i]],
-            popup=folium.Popup(max_width=450).add_child(folium.VegaLite(vis1, width=400, height=300)),
-            # popup=f"{ stations.stationCode[i] } \n {stations.stationName[i]}",
+            location=[db_precipitation_stations["latDecimalDegrees"][i], db_precipitation_stations["longDecimalDegrees"][i]],
+            popup=folium.Popup(max_width=700).add_child(folium.features.VegaLite(vis, width=700, height=300)),
             tooltip="کلیک کنید"
         ).add_to(map)
 
-    
     return render_template(
         template_name_or_list='precipitation_flask/precipitation_dashboard.html',
         map=map._repr_html_()
