@@ -19,10 +19,22 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="p-2" style="direction: rtl">
+        
+        <legend class="mb-4">اضافه کردن داده‌های بارندگی جدید</legend>
+        <form action="" method="post" autocomplete="off">
+          <div class="row justify-content-center align-content-center">
+            <div class="col-md-4">
+              <input type="text" name="tag" id="tag2" placeholder="تعداد ایستگاه مورد نظر" class="text-center"/>
+            </div>
+            <div class="col-md-2">
+              <input type="submit" id="form-numberStation" name="form-numberStation" value="اضافه کردن" class="form-control btn btn-outline-primary btn-lg" />
+            </div>
+          </div>
+        </form>
+
         <form action="" method="post" novalidate>
           {{ form.hidden_tag() }}
           <fieldset class="form-group">
-            <legend class="mb-4">اضافه کردن داده‌های بارندگی جدید</legend>
             <!--  -->
             <div class="row justify-content-center mb-5 text-center">
               <div class="col-md-2">
@@ -59,7 +71,8 @@
             {% endfor %}
 
             <div class="form-group mt-3 text-center">
-              {{ form.submit(class="btn btn-outline-success") }}
+              <input type="submit" id="form-addPrecipData" name="form-addPrecipData" value="اضافه کردن داده‌های بارندگی" class="btn btn-outline-success" />
+
               <a href="{{ url_for('precipitation_dashboard_precipitation_data_management') }}" class="btn btn-outline-secondary">
                 نه بیخیال
               </a>

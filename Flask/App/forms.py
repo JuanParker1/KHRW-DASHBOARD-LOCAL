@@ -394,6 +394,21 @@ class AddPrecipitationDataForm(FlaskForm):
     )
 
 
+
+class NumberStationAdd(FlaskForm):
+    numberStation = IntegerField(
+        label="تعداد ایستگاه مورد نظر",
+        default=3,
+        validators=[
+            DataRequired(message="وارد کردن تعداد ایستگاه الزامی می‌باشد.")
+        ]
+    )
+    
+    submit = SubmitField(
+        label='اضافه کردن'
+    )
+
+
 class PrecipitationDataForm(FlaskForm):
     time = SelectField(
         label="زمان", 
@@ -412,12 +427,11 @@ class PrecipitationDataForm(FlaskForm):
 
     addPrecipData = FieldList(
         FormField(AddPrecipitationDataForm),
-        min_entries=15,
         validators=[
             DataRequired()
         ]
     )
 
-    submit = SubmitField(
-        label='اضافه کردن داده‌های بارندگی'
-    )
+    # submit = SubmitField(
+    #     label='اضافه کردن داده‌های بارندگی'
+    # )

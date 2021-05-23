@@ -4,9 +4,13 @@ from flask_wtf.recaptcha import validators
 import pandas as pd
 import sqlite3
 from werkzeug.utils import secure_filename
-
+from wtforms.validators import DataRequired
+from wtforms import FormField, FieldList
 from flask import render_template, redirect, url_for, flash, request
 from App import app, db, bcrypt
+from flask import send_file
+
+from App.forms import AddPrecipitationDataForm
 
 # from flask_googlemaps import GoogleMaps
 # from flask_googlemaps import Map
@@ -16,12 +20,9 @@ import altair as alt
 from App.data_cleansing import *
 
 
-from App.forms import RegistrationForm, LoginForm, UpdateProfileForm, UserManagementForm, StationForm, UpdateStationForm, PrecipitationDataForm, AddPrecipitationDataForm
+from App.forms import RegistrationForm, LoginForm, UpdateProfileForm, UserManagementForm, StationForm, UpdateStationForm, PrecipitationDataForm, AddPrecipitationDataForm, NumberStationAdd
 from App.models import User, Station, Precipitation
 from flask_login import login_user, current_user, logout_user, login_required
-
-
-db_path_precipitation = 'App/dashApp/precipitation/precipitation.sqlite'
 
 
 @app.route('/')
@@ -464,7 +465,26 @@ def chemograph_route():
 @login_required
 def precipitation_dashboard_add_precipitation_data():
     form = PrecipitationDataForm()
-    if form.validate_on_submit():
+    form2 = NumberStationAdd()
+    print(request.form)
+    if "form-numberStation" in request.form:
+        
+        if request.form["tag"][0:] == '':
+            return render_template(
+                template_name_or_list='precipitation_flask/add_precipitation_data.html',
+                form=form
+            )            
+
+        for i in range(int(request.form["tag"][0:])):
+            form.addPrecipData.append_entry()
+        
+        return render_template(
+            template_name_or_list='precipitation_flask/add_precipitation_data.html',
+            form=form
+        )
+    
+    
+    if "form-addPrecipData" in request.form and form.validate_on_submit():
         db_precipitation = sqlite3.connect(db_path_precipitation, check_same_thread=False)       
         exist_precipitation_data = pd.read_sql_query(sql="SELECT * FROM precipitation", con=db_precipitation)
         exist_precipitation_data_columns = list(exist_precipitation_data.columns)
@@ -530,11 +550,11 @@ def precipitation_dashboard_add_precipitation_data():
         df["BARF"] = df["BARF"].astype(float)
         df["AB_BARF"] = df["AB_BARF"].astype(float)
         df["JAM_BARAN"] = df["JAM_BARAN"].astype(float)
-        print(df)
         df.to_sql(name="precipitation", con=db_precipitation, if_exists="append", index=False)
         
         flash(message=f"داده‌های بارندگی با موفقیت به دیتابیس اضافه گردید!", category='success')
         return redirect(url_for('precipitation_dashboard_precipitation_data_management'))
+    print(300)
     return render_template(
         template_name_or_list='precipitation_flask/add_precipitation_data.html',
         form=form
@@ -544,8 +564,18 @@ def precipitation_dashboard_add_precipitation_data():
 @app.route('/precipitation/dashboard')
 @login_required
 def precipitation_dashboard():  
-    data = db_precipitation_precip_data
-    data_water_year_baran = data[['stationCode', 'wateryear', 'JAM_BARAN']].groupby(['stationCode', 'wateryear']).sum().reset_index()
+    
+    try:
+        db_precipitation = sqlite3.connect(db_path_precipitation, check_same_thread=False)
+        db_precipitation_precip_data = pd.read_sql_query(sql="SELECT * FROM precipitation", con=db_precipitation)
+        db_precipitation_stations = pd.read_sql_query(sql="SELECT * FROM station", con=db_precipitation)
+        
+        db_precipitation_precip_data["wateryear"] = [extract_wateryear(month, year) for month, year in zip(db_precipitation_precip_data["MONTH"], db_precipitation_precip_data["YEAR"])]
+        data = db_precipitation_precip_data
+        data_water_year_baran = data[['stationCode', 'wateryear', 'JAM_BARAN']].groupby(['stationCode', 'wateryear']).sum().reset_index()
+        
+    except:
+        print("ERROR LOAD DATA FROM DATABASE")
 
     map = folium.Map(
         location=[db_precipitation_stations["latDecimalDegrees"].mean(), db_precipitation_stations["longDecimalDegrees"].mean()],
@@ -553,8 +583,8 @@ def precipitation_dashboard():
         zoom_start=7
     )
     
-    for i in range(len(db_precipitation_stations)):
-        
+    
+    for i in range(len(db_precipitation_stations)):       
         
         
         data_st = data_water_year_baran[data_water_year_baran["stationCode"] == db_precipitation_stations.stationCode[i]]
@@ -601,3 +631,13 @@ def precipitation_dashboard():
         template_name_or_list='precipitation_flask/precipitation_dashboard.html',
         map=map._repr_html_()
     )
+    
+@app.route('/downloadSampleDataFile')
+def downloadSampleDataFile ():
+    path = "dashApp/precipitation/assets/database/data.csv"
+    return send_file(path, as_attachment=True)
+
+@app.route('/downloadSampleStationFile')
+def downloadSampleStationFile ():
+    path = "dashApp/precipitation/assets/database/station.csv"
+    return send_file(path, as_attachment=True)
