@@ -384,10 +384,10 @@ def precipitation_dashboard_add_precipitation_data_csv():
             return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
         
 
-        # CHECK NONE VALUE IN CSV
-        if import_precipitation_data.iloc[:, 0:8].isna().any().any():
-            flash(message=f"فایل ورودی چک گردد. فایل دارای سلول‌های خالی می‌باشد!", category='danger')
-            return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
+        # # CHECK NONE VALUE IN CSV
+        # if import_precipitation_data.iloc[:, 0:8].isna().any().any():
+        #     flash(message=f"فایل ورودی چک گردد. فایل دارای سلول‌های خالی می‌باشد!", category='danger')
+        #     return redirect(url_for('precipitation_dashboard_add_precipitation_data_csv'))
         
 
         # CHECK DUPLICATE DATE IN CSV
