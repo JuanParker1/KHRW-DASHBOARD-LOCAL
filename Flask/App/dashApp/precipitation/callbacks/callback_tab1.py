@@ -1,141 +1,278 @@
+# --------------------------------------------------------------------------- #
+#                                                                             #
+#                         IMPORT REQUIREMENT MODULE                           #
+#                                                                             #
+# --------------------------------------------------------------------------- #
+
+import os
+import sqlite3
+from attr import dataclass
 import pandas as pd
-import dash_core_components as dcc
-import dash_html_components as html
-import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import plotly.graph_objects as go
 import plotly.express as px
 
-from server import app
-from callbacks.data_analysis import *
+from App.dashApp.precipitation.callbacks.initial_settings import *
 
 
-# No Matching Data Found Template
-No_Database_Connection = {
-    "layout": {
-        "xaxis": {"visible": False},
-        "yaxis": {"visible": False},
-        "annotations": [
-            {
-                "text": "No Database Connection ...",
-                "xref": "paper",
-                "yref": "paper",
-                "showarrow": False,
-                "font": {"size": 24}
-            }
-        ]
-    }
-}
+# --------------------------------------------------------------------------- #
+#                                                                             #
+#                         PRECIPITATION - CALLBACK TAB1                       #
+#                                                                             #
+# --------------------------------------------------------------------------- #
 
+def precipitation_callback_tab1(app):
 
-# Show Filename Of Selected File
-# Tab 1 - Sidebar - Card 1
-@app.callback(
-    Output('show_filename_selected_TAB1_SIDEBAR_CARD1', 'children'),
-    Output('show_filename_selected_TAB1_SIDEBAR_CARD1', 'className'),
-    Input('upload_button_TAB1_SIDEBAR_CARD1', 'contents'),
-    State('upload_button_TAB1_SIDEBAR_CARD1', 'filename')
-)
-def update_filename_selected_tab1_sidebar_card1(contents, filename):
-    if contents is None:
-        return "No File Choosen!", "text-danger"
-    return filename, "text-success"
+    # --------------------------------------------------------------------------- #
+    #                                                                             #
+    #                         TAB1 - SIDEBAR - LEFT                               #
+    #                                                                             #
+    # --------------------------------------------------------------------------- #
 
+    # CONNECT TO IP SERVER DATABASE
+    # -----------------------------------------------------------------------------
 
-# Database (database.csv) Generator From Imported Spreadsheet File
-@app.callback(
-    Output('database', 'children'),
-    Output("database_generator_toast_TAB1_SIDEBAR_CARD1_CONNECT2", "is_open"),
-    Output("database_generator_toast_TAB1_SIDEBAR_CARD1_CONNECT2", "icon"),
-    Output("database_generator_toast_TAB1_SIDEBAR_CARD1_CONNECT2", "children"),
-    Output("database_generator_toast_TAB1_SIDEBAR_CARD1_CONNECT2", "header"),
-    Output("connect_button_TAB1_SIDEBAR_CARD1_CONNECT2", "n_clicks"),
-    Input('upload_button_TAB1_SIDEBAR_CARD1', 'contents'),
-    Input('connect_button_TAB1_SIDEBAR_CARD1_CONNECT2', 'n_clicks'),
-    State('upload_button_TAB1_SIDEBAR_CARD1', 'filename')
-)
-def database_generator(contents, n, filename):
-    if contents is None and n > 0:
-        return "No Data", True, "danger", "Error Creating Database: No Spreadsheet Selected", "Warning!", 0
-    elif n > 0:
-        data = read_spreadsheet(contents, filename)
-        return data.to_json(date_format='iso', orient='split'), True, "success", "Database Created Successfully", "Success!", 1
-    else:
-        return "No Data", False, "", "", "", 0
-
-
-# Create and Update Map
-# Tab 1 - Body - Card 1
-@app.callback(
-    Output('TAB1_BODY_CONTENT1_ID', 'figure'),
-    Input('connect_button_TAB1_SIDEBAR_CARD1_CONNECT2', 'n_clicks'),
-    Input('database', 'children')
-)
-def update_map_tab1_body_card1(n, database):
-
-    if database is None or database == 'No Data' or n == 0:
-        return No_Database_Connection
-
-    token = open("assets/.mapbox_token").read()
-
-    data = pd.read_json(database, orient='split')
-    geo_info = geo_info_dataset(data)
-
-    mah_code = list(geo_info['study_area_code'].unique())
-
-    geodf, j_file = read_shapfile(mah_code=mah_code)
-
-    fig = px.choropleth_mapbox(data_frame=geodf,
-                               geojson=j_file,
-                               locations='Mah_code',
-                               opacity=0.3)
-
-    for mc in mah_code:
-        df = geo_info[geo_info['study_area_code'] == mc]
-
-        fig.add_trace(
-            go.Scattermapbox(
-                lat=df.decimal_degrees_y,
-                lon=df.decimal_degrees_x,
-                mode='markers',
-                marker=go.scattermapbox.Marker(size=10),
-                text=df['st_en_name']
-            )
-        )
-
-    fig.update_layout(
-        mapbox={'style': "stamen-terrain",
-                'center': {'lon': 58.8,
-                           'lat': 35.9},
-                'zoom': 6},
-        showlegend=False,
-        hovermode='closest',
-        margin={'l': 0, 'r': 0, 'b': 0, 't': 0},
-        mapbox_accesstoken=token
+    @app.callback(
+        Output("CONNECT_TO_SERVER_DATABASE-TAB1_SIDEBAR_CARD1", "n_clicks"),
+        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB1_SIDEBAR_CARD1", "is_open"),
+        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB1_SIDEBAR_CARD1", "icon"),
+        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB1_SIDEBAR_CARD1", "header"),
+        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB1_SIDEBAR_CARD1", "children"),
+        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB1_SIDEBAR_CARD1", "headerClassName"),
+        Input("CONNECT_TO_SERVER_DATABASE-TAB1_SIDEBAR_CARD1", "n_clicks")
     )
+    def FUNCTION_CONNECT_TO_SERVER_DATABASE_TAB1_SIDEBAR_LEFT_CARD1(n):
+        if n != 0:
+            result = [
+                0,
+                True,
+                None,
+                "اطلاعات",
+                "این بخش در حال تکمیل می‌باشد.",
+                "popup-notification-header-info"
+            ]
+            return result
+        else:
+            result = [
+                0,
+                False,
+                None,
+                None,
+                None,
+                None
+            ]
+            return result
 
-    return fig
+    # CONNECT TO EXIST DATABASE
+    # -----------------------------------------------------------------------------
+
+    @app.callback(
+        Output("DATABASE_STATE-TAB1", "children"),
+        Output("POPUP_CONNECT_TO_EXIST_DATABASE-TAB1_SIDEBAR_CARD1", "is_open"),
+        Output("POPUP_CONNECT_TO_EXIST_DATABASE-TAB1_SIDEBAR_CARD1", "icon"),
+        Output("POPUP_CONNECT_TO_EXIST_DATABASE-TAB1_SIDEBAR_CARD1", "header"),
+        Output("POPUP_CONNECT_TO_EXIST_DATABASE-TAB1_SIDEBAR_CARD1", "children"),
+        Output("POPUP_CONNECT_TO_EXIST_DATABASE-TAB1_SIDEBAR_CARD1", "headerClassName"),
+        Output('CONNECT_TO_EXIST_DATABASE-TAB1_SIDEBAR_CARD1', 'n_clicks'),
+        Input('CONNECT_TO_EXIST_DATABASE-TAB1_SIDEBAR_CARD1', 'n_clicks'),
+    )
+    def CONNECT_TO_EXIST_DATABASE_TAB1_SIDEBAR_LEFT_CARD1(n):
+        if n != 0 and not os.path.exists(precipitation_db_path):
+            result = [
+                "DATABASE NOT EXIST",
+                True,
+                None,
+                "خطا",
+                "هیچ پایگاه داده‌ای موجود نمی‌باشد.",
+                "popup-notification-header-danger",
+                0
+            ]
+            return result
+        elif n != 0 and os.path.exists(precipitation_db_path):
+            global precipitation_db
+            global data
+            global station
+            precipitation_db = sqlite3.connect(precipitation_db_path, check_same_thread=False)
+            data = pd.read_sql_query(sql="SELECT * FROM precipitation", con=precipitation_db)            
+            station = pd.read_sql_query(sql="SELECT * FROM station", con=precipitation_db)
+            tables_name = pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", precipitation_db)
+            if tables_name['name'].str.contains('station').any() \
+                and tables_name['name'].str.contains('precipitation').any():
+                result = [
+                    "DATABASE EXIST",
+                    True,
+                    None,
+                    "موفقیت آمیز",
+                    "پایگاه داده با موفقیت بارگذاری شد.",
+                    "popup-notification-header-success",
+                    0
+                ]
+                return result
+            else:
+                result = [
+                    "DATABASE EXIST - TABLES NOT EXIST",
+                    True,
+                    None,
+                    "خطا",
+                    "هیچ جدولی در پایگاه داده‌ای موجود نمی‌باشد.",
+                    "popup-notification-header-danger",
+                    0
+                ]
+                return result
+        else:
+            result = [
+                "NOT CLICK",
+                False,
+                None,
+                None,
+                None,
+                None,
+                0
+            ]
+            return result
 
 
-# Tab 1 - Body - Content 2 ----------------------------------------------------
-# Create and Update Table
+    # --------------------------------------------------------------------------- #
+    #                                                                             #
+    #                         TAB1 - SIDEBAR - RIGHT                              #
+    #                                                                             #
+    # --------------------------------------------------------------------------- #
 
-@app.callback(
-    Output('TAB1_BODY_CONTENT2_ID', 'data'),
-    Output('TAB1_BODY_CONTENT2_ID', 'columns'),
-    Output('TAB1_BODY_CONTENT2_ID', 'tooltip_header'),
-    Output('TAB1_BODY_CONTENT2_ID', 'tooltip_data'),
-    Input('connect_button_TAB1_SIDEBAR_CARD1_CONNECT2', 'n_clicks'),
-    Input('database', 'children')
-)
-def update_table_tab1_body_card1(n, database):
-    if database is None or database == 'No Data' or n == 0:
-        return [{}], [], {}, [{}]
-    data = pd.read_json(database, orient='split')
-    geo_info = geo_info_dataset(data)
-    return geo_info.to_dict('records'), [{"name": i, "id": i} for i in geo_info.columns], {j: j for j in geo_info.columns}, [
-        {
-            column: {'value': str(value), 'type': 'markdown'}
-            for column, value in row.items()
-        } for row in geo_info.to_dict('records')
-    ]
+    # UPDATE INFO CARD
+    # -----------------------------------------------------------------------------
+
+    @app.callback(
+        Output("INFO_CARD_NUMBER_HOZE30-TAB1_SIDEBAR_RIGHT_CARD1", "children"),
+        Output("INFO_CARD_NUMBER_MAHDOUDE-TAB1_SIDEBAR_RIGHT_CARD1", "children"),
+        Output("INFO_CARD_NUMBER_STATION-TAB1_SIDEBAR_RIGHT_CARD1", "children"),
+        Output("INFO_CARD_HIGH_ELEV_STATION-TAB1_SIDEBAR_RIGHT_CARD1", "children"),
+        Output("INFO_CARD_LOW_ELEV_STATION-TAB1_SIDEBAR_RIGHT_CARD1", "children"),
+        Output("INFO_CARD_OLD_STATION-TAB1_SIDEBAR_RIGHT_CARD1", "children"),
+        Output("INFO_CARD_NEW_STATION-TAB1_SIDEBAR_RIGHT_CARD1", "children"),
+        Input("DATABASE_STATE-TAB1", "children")
+    )
+    def FUNCTION_UPDATE_INFO_CARD_TAB1_SIDEBAR_RIGHT_CARD1(DATABASE_STATE):
+        if DATABASE_STATE == "DATABASE EXIST":
+            selected_station = station[station["stationCode"].isin(data["stationCode"].unique())]
+            selected_station["startYear"] = selected_station["startYear"].astype(int)
+            number_hoze30 = list(selected_station["drainageArea30"].unique())
+            number_mahdoude = list(selected_station["areaStudyCode"].unique())
+            number_station = list(selected_station["stationCode"].unique())
+            high_elev_station = selected_station.loc[selected_station["elevation"].idxmax(), :]
+            low_elev_station = selected_station.loc[selected_station["elevation"].idxmin(), :]
+            old_station = selected_station.loc[selected_station["startYear"].idxmin(), :]
+            new_station = selected_station.loc[selected_station["startYear"].idxmax(), :]
+            return f'{len(number_hoze30)} عدد', f'{len(number_mahdoude)} عدد', f'{len(number_station)} عدد',\
+                f'{high_elev_station["stationName"]} - {int(high_elev_station["elevation"])} متر',\
+                    f'{low_elev_station["stationName"]} - {int(low_elev_station["elevation"])} متر',\
+                        f'{old_station["stationName"]} - {int(old_station["startYear"])}',\
+                            f'{new_station["stationName"]} - {int(new_station["startYear"])}'
+                
+        else:
+            return "-", "-", "-", "-", "-", "-", "-"
+
+
+    # --------------------------------------------------------------------------- #
+    #                                                                             #
+    #                                  TAB1 - BODY                                #
+    #                                                                             #
+    # --------------------------------------------------------------------------- #
+
+    # CREATE MAP - TAB1 BODY CONTENT1
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output('MAP-TAB1_BODY_CONTENT1', 'figure'),
+        Input("DATABASE_STATE-TAB1", "children")
+    )
+    def FUNCTION_CREATE_MAP_TAB1_BODY_CONTENT1(DATABASE_STATE):
+        if DATABASE_STATE == "DATABASE EXIST":
+            try:
+                selected_station = station[station["stationCode"].isin(data["stationCode"].unique())]
+
+                geodf, j_file = read_shapfile(
+                    shapefile=MAHDOUDE,
+                    column="MahCode",
+                    # target=selected_station['areaStudyCode'].unique(),
+                    target="all"
+                )
+
+                fig = px.choropleth_mapbox(
+                    data_frame=geodf,
+                    geojson=j_file,
+                    locations='MahCode',
+                    opacity=0.3,
+                    color='Hoze30Name'
+                )
+
+                for mc in selected_station['drainageArea30'].unique():
+                    df = selected_station[selected_station['drainageArea30'] == mc]
+                    fig.add_trace(
+                        go.Scattermapbox(
+                            lat=df.latDecimalDegrees,
+                            lon=df.longDecimalDegrees,
+                            mode='markers',
+                            marker=go.scattermapbox.Marker(size=10),
+                            text=df['stationName'],
+                            hoverinfo='text',
+                            hovertemplate='<b>%{text}</b><extra></extra>'
+                        )
+                    )
+
+                fig.update_layout(
+                    mapbox={'style': "stamen-terrain",
+                            'center': {'lon': 58.8,
+                                    'lat': 35.9},
+                            'zoom': 5.5},
+                    showlegend=False,
+                    hovermode='closest',
+                    margin={'l': 0, 'r': 0, 'b': 0, 't': 0},
+                    mapbox_accesstoken=token,
+                    clickmode='event+select'
+                )
+                return fig
+            except:
+                return NO_DATABASE_CONNECTION
+        else:
+            return NO_DATABASE_CONNECTION
+
+
+    # -----------------------------------------------------------------------------
+    # CREATE TABLE - TAB1 BODY CONTENT2
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output('TABLE-TAB1_BODY_CONTENT2', 'data'),
+        Output('TABLE-TAB1_BODY_CONTENT2', 'columns'),
+        Input("DATABASE_STATE-TAB1", "children")
+    )
+    def FUNCTION_CREATE_TABLE_TAB1_BODY_CONTENT2(DATABASE_STATE):
+        if DATABASE_STATE != "DATABASE EXIST":
+            result = [
+                [{}],
+                [],
+            ]
+            return result
+        elif DATABASE_STATE == "DATABASE EXIST":
+            try:
+                selected_station = station[station["stationCode"].isin(data["stationCode"].unique())]
+                selected_station.columns = [STATION_TABLE_FARSI_HEADER_NAME.get(item, item) for item in selected_station.columns]
+                selected_station["ارتفاع"] = selected_station["ارتفاع"].round(2)
+                selected_station["طول جغرافیایی"] = selected_station["طول جغرافیایی"].round(2)
+                selected_station["عرض جغرافیایی"] = selected_station["عرض جغرافیایی"].round(2)
+                selected_station = selected_station.iloc[:, [0, 1, 4, 5, 6, 8, 10, 11, 12]]
+                result = [
+                    selected_station.to_dict('records'),
+                    [{"name": i, "id": i} for i in selected_station.columns],
+                ]
+                return result
+            except:
+                result = [
+                    [{}],
+                    []
+                ]
+                return result
+        else:
+            result = [
+                [{}],
+                []
+            ]
+            return result

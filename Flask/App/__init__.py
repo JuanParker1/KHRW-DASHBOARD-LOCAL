@@ -9,6 +9,7 @@ from flask_login import LoginManager
 # from App.dashApp.isotope_analysis.app import create_isotope_analysis_app
 from App.dashApp.hydrograph.app import create_hydrograph_app
 from App.dashApp.chemograph.app import create_chemograph_app
+from App.dashApp.precipitation.app import create_precipitation_app
 
 app = Flask(import_name=__name__, static_folder='static')
 
@@ -29,7 +30,6 @@ app.config['SQLALCHEMY_BINDS'] = {
 }
 
 
-
 db = SQLAlchemy(app=app)
 
 bcrypt = Bcrypt(app)
@@ -42,6 +42,7 @@ login_manager.login_message_category = "info"
 # create_isotope_analysis_app(server=app)
 create_hydrograph_app(server=app)
 create_chemograph_app(server=app)
+create_precipitation_app(server=app)
 
 
 from App import routes

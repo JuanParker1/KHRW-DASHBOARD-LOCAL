@@ -25,6 +25,14 @@ from App.models import User, Station, Precipitation
 from flask_login import login_user, current_user, logout_user, login_required
 
 
+# -----------------------------------------------------------------------------
+#
+#
+# MAIN FLASK APP ROUTE
+#
+#
+# -----------------------------------------------------------------------------
+
 @app.route('/')
 @login_required
 def home():
@@ -111,9 +119,6 @@ def delete(id):
         return redirect(location=url_for(endpoint='user_management'))
     except:
         return "اوپسس ..."
-    
-
-
 
 
 @app.route('/user_management')
@@ -123,14 +128,26 @@ def user_management():
     return render_template(template_name_or_list='user_management.html', users=users)
 
 
-@app.route('/precipitation')
+# -----------------------------------------------------------------------------
+#
+#
+# FLASK PRECIPITATION
+#
+#
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# HOME PAGE
+# -----------------------------------------------------------------------------
+@app.route('/precip')
 @login_required
-def precipitation():
-    return render_template(template_name_or_list='precipitation_flask/precipitation.html')
+def precip():
+    return render_template(template_name_or_list='precipitation_flask/home.html')
 
 
-
-
+# -----------------------------------------------------------------------------
+# STATION MANAGMENT
+# -----------------------------------------------------------------------------
 @app.route('/precipitation/dashboard/station_managment', methods=['GET', 'POST'], defaults={"page": 1})
 @app.route('/precipitation/dashboard/station_managment/<int:page>', methods=['GET', 'POST'])
 @login_required
@@ -224,7 +241,6 @@ def precipitation_dashboard_station_managment_update(stationCode):
             template_name_or_list='precipitation_flask/update_station.html',
             form=form
     )
-
 
 
 # -----------------------------------------------------------------------------
@@ -326,8 +342,6 @@ def precipitation_dashboard_station_managment_delete(stationCode):
     except:
         return "اوپسس ..."
     
-
-
 
 # -----------------------------------------------------------------------------
 # ADD PRECIPITATION DATA - IMPORT CSV
@@ -438,27 +452,6 @@ def precipitation_dashboard_precipitation_data_management(page):
         data = Precipitation.query.filter(Precipitation.stationCode.like(search)).paginate(per_page=pages, error_out=False)  
         return render_template('precipitation_flask/precipitation_data_management.html', data=data, tag=tag)       
     return render_template(template_name_or_list='precipitation_flask/precipitation_data_management.html', data=data)
-
-
-
-# @app.route('/isotope_analysis')
-# @login_required
-# def isotope_analysis_route():
-#     return app.index()
-
-
-@app.route('/hydrograph')
-@login_required
-def hydrograph_route():
-    return app.index()
-
-
-@app.route('/chemograph')
-@login_required
-def chemograph_route():
-    return app.index()
-
-
 
 
 @app.route('/precipitation/dashboard/add_precipitation_data', methods=['GET', 'POST'])
@@ -631,13 +624,41 @@ def precipitation_dashboard():
         template_name_or_list='precipitation_flask/precipitation_dashboard.html',
         map=map._repr_html_()
     )
-    
+
+
 @app.route('/downloadSampleDataFile')
 def downloadSampleDataFile ():
     path = "dashApp/precipitation/assets/database/data.csv"
     return send_file(path, as_attachment=True)
 
+
 @app.route('/downloadSampleStationFile')
 def downloadSampleStationFile ():
     path = "dashApp/precipitation/assets/database/station.csv"
     return send_file(path, as_attachment=True)
+
+
+# -----------------------------------------------------------------------------
+#
+#
+# DASH APP
+#
+#
+# -----------------------------------------------------------------------------
+
+@app.route('/hydrograph')
+@login_required
+def hydrograph_route():
+    return app.index()
+
+
+@app.route('/chemograph')
+@login_required
+def chemograph_route():
+    return app.index()
+
+
+@app.route('/precipitation')
+@login_required
+def precipitation_route():
+    return app.index()

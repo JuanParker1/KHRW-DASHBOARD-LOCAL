@@ -1,6 +1,6 @@
 import dash_html_components as html
 import dash_dangerously_set_inner_html
-from layouts.tabs.tab import *
+from App.dashApp.precipitation.layouts.tabs.tab import *
 
 
 # -----------------------------------------------------------------------------
@@ -16,13 +16,13 @@ TAB_PAN = html.Div(
             """
                     <ul class="nav nav-tabs mt-1" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#Tab_1">Data Entry Tab</a>
+                            <a class="nav-link active" data-toggle="tab" href="#Tab_1">اتصال به پایگاه داده</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#Tab_2">Section 2</a>
+                            <a class="nav-link" data-toggle="tab" href="#Tab_2">تحلیل ایستگاهی داده‌های بارش</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#Tab_3">Section 3</a>
+                            <a class="nav-link" data-toggle="tab" href="#Tab_3">تحلیل منطقه‌ای داده‌های بارش</a>
                         </li>
                     </ul>
             """
@@ -52,7 +52,7 @@ TAB_PAN = html.Div(
                     ],
                     className="tab-pane fade",
                     id="Tab_3"
-                )
+                ),
             ],
             className="tab-content"
         )

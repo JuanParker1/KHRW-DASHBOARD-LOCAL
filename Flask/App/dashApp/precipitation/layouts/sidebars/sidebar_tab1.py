@@ -1,231 +1,111 @@
-import base64
-import numpy as np
-from datetime import date
+# --------------------------------------------------------------------------- #
+#                                                                             #
+#                         IMPORT REQUIREMENT MODULE                           #
+#                                                                             #
+# --------------------------------------------------------------------------- #
+
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
-import dash_daq as daq
-import dash_table
+
+from App.dashApp.precipitation.callbacks.initial_settings import *
+from App.dashApp.precipitation.layouts.visualizations.visualization import *
 
 
-# -----------------------------------------------------------------------------
-# Tab 1 - Sidebar
-# -----------------------------------------------------------------------------
+# --------------------------------------------------------------------------- #
+#                                                                             #
+#                           TAB 1 - SIDEBAR - LEFT                            #
+#                                                                             #
+# --------------------------------------------------------------------------- #
 
-"""
----------------------------------------
-Left - Card 1: 
----------------------------------------
-"""
 
-LEFT_CARD_1_IMG = base64.b64encode(
-    open('assets/images/excel_logo.png', 'rb').read())
+# SIDEBAR - LEFT - CARD 1
+# --------------------------------------------------------------------------- #
 
-LEFT_CARD_1 = html.Div(
+TAB1_SIDEBAR_LEFT_CARD_1 = html.Div(
     children=[
         html.H6(
             children=[
-                html.Img(
-                    src='data:image/png;base64,{}'.format(LEFT_CARD_1_IMG.decode()), height=30),
-                "       Load Data From File"
+                "پایگاه داده     ",
+                html.Img(src='data:image/png;base64,{}'.format(DATABASE_LOGO), height=30),
             ],
-            className='card-header in'
+            className='card-header text-right'
         ),
         html.Div(
             children=[
                 html.Div(
                     children=[
-                        html.Label(
+                        html.H6(
                             children=[
-                                "Connect To An Existing Spreadsheet"
-                            ]
+                                "اتصال به پایگاه داده موجود"
+                            ],
+                            className="text-right"
                         ),
                         html.Div(
                             children=[
                                 html.Button(
                                     children=[
-                                        "Connect"
+                                        "اتصال",
+                                        html.I(className="fa fa-database ml-2"),
                                     ],
                                     n_clicks=0,
-                                    className="btn btn-success mt-3"
-                                ),
+                                    className="btn btn-info mt-3",
+                                    id="CONNECT_TO_EXIST_DATABASE-TAB1_SIDEBAR_CARD1"
+                                )
                             ],
-                            className="d-flex justify-content-end"
-                        )
-                    ],
-                    className="form-group my-0"
-                ),
-                html.Small(
-                    children=[
-                        "OR"
-                    ],
-                    className="breakLine text-secondary my-4"
-                ),
-                html.Div(
-                    children=[
-                        dcc.Upload([
-                            'Drag and Drop or ',
-                            html.A(html.B('Select a File')),
-                        ],
-                            className="upload-button",
-                            id="upload_button_TAB1_SIDEBAR_CARD1",
-                            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                        )
-                    ],
-                    className='card-text text-center'
-                ),
-                html.Div(
-                    children=[
-                        html.Button(
-                            children=[
-                                "Connect"
-                            ],
-                            n_clicks=0,
-                            className="btn btn-success mt-3",
-                            id="connect_button_TAB1_SIDEBAR_CARD1_CONNECT2"
+                            className="d-flex justify-content-start"
                         ),
                         dbc.Toast(
-                            id="database_generator_toast_TAB1_SIDEBAR_CARD1_CONNECT2",
                             is_open=False,
                             dismissable=True,
                             duration=5000,
-                            style={
-                                "position": "fixed",
-                                "top": 48,
-                                "right": 50,
-                                "width": 350
-                            },
-                        )
-                    ],
-                    className="d-flex justify-content-end"
-                )
-            ],
-            className='card-body text-dark'
-        ),
-        html.Div(
-            children=[
-                html.H6(
-                    id="show_filename_selected_TAB1_SIDEBAR_CARD1"
-                )
-            ],
-            className='card-footer'
-        ),
-    ],
-    className='card border-dark mb-2'
-)
-
-
-"""
----------------------------------------
-Left - Card 2: 
----------------------------------------
-"""
-
-LEFT_CARD_2_IMG = base64.b64encode(
-    open('assets/images/database_logo.png', 'rb').read())
-
-LEFT_CARD_2 = html.Div(
-    children=[
-        html.H6(
-            children=[
-                html.Img(
-                    src='data:image/png;base64,{}'.format(LEFT_CARD_2_IMG.decode()), height=30),
-                "       Load Data From Database"
-            ],
-            className='card-header'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Label(
-                            children=[
-                                "Connect To An Existing Database"
-                            ]
-                        ),
-                        html.Div(
-                            children=[
-                                html.Button(
-                                    children=[
-                                        "Connect"
-                                    ],
-                                    n_clicks=0,
-                                    className="btn btn-info mt-3"
-                                )
-                            ],
-                            className="d-flex justify-content-end"
+                            className="popup-notification",
+                            id="POPUP_CONNECT_TO_EXIST_DATABASE-TAB1_SIDEBAR_CARD1"
                         )
                     ],
                     className="form-group my-0"
                 ),
                 html.Small(
                     children=[
-                        "OR"
+                        "یا"
                     ],
                     className="breakLine text-secondary my-4"
                 ),
                 html.Div(
                     children=[
-                        html.Label(
+                        html.H6(
                             children=[
-                                "Connect To Database Server"
-                            ]
+                                "اتصال به پایگاه داده از طریق نشانی آی‌پی"
+                            ],
+                            className='text-right'
                         ),
                         dcc.Input(
                             placeholder='127.0.0.1:8080',
                             type='text',
                             value='',
-                            className="form-control"
+                            className="form-control mt-4 english_number",
+                            id="IP_SERVER_DATABASE-TAB1_SIDEBAR_CARD1",
                         ),
                         html.Div(
                             children=[
                                 html.Button(
                                     children=[
-                                        "Connect"
+                                        "اتصال",
+                                        html.I(className="fa fa-database ml-2"),
                                     ],
                                     n_clicks=0,
-                                    className="btn btn-info mt-3"
+                                    className="btn btn-info mt-4",
+                                    id="CONNECT_TO_SERVER_DATABASE-TAB1_SIDEBAR_CARD1"
                                 )
                             ],
-                            className="d-flex justify-content-end"
-                        )
-                    ],
-                    className="form-group my-0"
-                ),
-                html.Small(
-                    children=[
-                        "OR"
-                    ],
-                    className="breakLine text-secondary my-4"
-                ),
-                html.Div(
-                    children=[
-                        html.Label(
-                            children=[
-                                "Connect To Local Database"
-                            ]
+                            className="d-flex justify-content-start"
                         ),
-                        html.Div(
-                            children=[
-                                dcc.Upload([
-                                    'Drag and Drop or ',
-                                    html.A(html.B('Select a File'))
-                                ],
-                                    className="upload-button")
-                            ],
-                            className='card-text text-center'
-                        ),
-                        html.Div(
-                            children=[
-                                html.Button(
-                                    children=[
-                                        "Connect"
-                                    ],
-                                    n_clicks=0,
-                                    className="btn btn-info mt-3"
-                                )
-                            ],
-                            className="d-flex justify-content-end"
+                        dbc.Toast(
+                            is_open=False,
+                            dismissable=True,
+                            duration=5000,
+                            className="popup-notification",
+                            id="POPUP_CONNECT_TO_SERVER_DATABASE-TAB1_SIDEBAR_CARD1"
                         )
                     ],
                     className="form-group my-0"
@@ -233,31 +113,255 @@ LEFT_CARD_2 = html.Div(
             ],
             className='card-body text-dark'
         ),
-        html.Div(
-            children=[
-                "Card Footer"
-            ],
-            className='card-footer'
-        ),
     ],
-    className='card border-dark mb-2'
+    className='card border-dark my-2'
 )
 
 
-"""
----------------------------------------
-Sidebar Tab 1
----------------------------------------
-"""
 
-TAB_1_SIDEBAR = html.Div(
+# TAB 1 - SIDEBAR - LEFT
+# --------------------------------------------------------------------------- #
+
+TAB_1_SIDEBAR_LEFT = html.Div(
     children=[
         html.Div(
             children=[
                 html.Div(
                     children=[
-                        LEFT_CARD_1,
-                        LEFT_CARD_2
+                        TAB1_SIDEBAR_LEFT_CARD_1
+                    ],
+                    className='col px-0'
+                ),
+            ],
+            className='row'
+        ),
+    ],
+    className="container-fluid"
+)
+
+
+# --------------------------------------------------------------------------- #
+#                                                                             #
+#                           TAB 1 - SIDEBAR - RIGHT                            #
+#                                                                             #
+# --------------------------------------------------------------------------- #
+
+
+# SIDEBAR - RIGHT - CARD 1
+# --------------------------------------------------------------------------- #
+
+TAB1_SIDEBAR_RIGHT_CARD_1 = html.Div(
+    children=[
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Div(
+                            className='float-left',
+                            children=[
+                                html.Img(src='data:image/png;base64,{}'.format(DRAINAGE_BASIN_LOGO), height=50)              
+                            ]
+                        ),
+                        html.Div(
+                            className='text-right ',
+                            dir="rtl",
+                            children=[
+                                html.H4(
+                                    id="INFO_CARD_NUMBER_HOZE30-TAB1_SIDEBAR_RIGHT_CARD1"
+                                ),
+                                html.Span(
+                                    children="حوزه آبریز"
+                                )
+                            ]
+                        )
+                    ],
+                    className='card-body text-dark'
+                ),
+            ],
+            className='card border-dark my-2 bg-light'
+        ),
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Div(
+                            className='float-left',
+                            children=[
+                                html.Img(src='data:image/png;base64,{}'.format(STUDY_AREA_LOGO), height=50)              
+                            ]
+                        ),
+                        html.Div(
+                            className='text-right ',
+                            dir="rtl",
+                            children=[
+                                html.H4(
+                                    id="INFO_CARD_NUMBER_MAHDOUDE-TAB1_SIDEBAR_RIGHT_CARD1"
+                                ),
+                                html.Span(
+                                    children="محدوده مطالعاتی"
+                                )                        
+                            ]
+                        )
+                    ],
+                    className='card-body text-dark'
+                ),
+            ],
+            className='card border-dark my-2 bg-light'
+        ),
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Div(
+                            className='float-left',
+                            children=[
+                                html.Img(src='data:image/png;base64,{}'.format(DROP_WATER_LOGO), height=50)              
+                            ]
+                        ),
+                        html.Div(
+                            className='text-right',
+                            dir="rtl",
+                            children=[
+                                html.H4(
+                                    id="INFO_CARD_NUMBER_STATION-TAB1_SIDEBAR_RIGHT_CARD1"
+                                ),
+                                html.Span(
+                                    children="ایستگاه"
+                                )                        
+                            ]
+                        )
+                    ],
+                    className='card-body text-dark'
+                ),
+            ],
+            className='card border-dark my-2 bg-light'
+        ),
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Div(
+                            className='float-left',
+                            children=[
+                                html.Img(src='data:image/png;base64,{}'.format(ALTITUDE_LOGO), height=50)              
+                            ]
+                        ),
+                        html.Div(
+                            className='text-right',
+                            dir="rtl",
+                            children=[
+                                html.H5(
+                                    id="INFO_CARD_HIGH_ELEV_STATION-TAB1_SIDEBAR_RIGHT_CARD1"
+                                ),
+                                html.Span(
+                                    children="مرتفع‌ترین ایستگاه"
+                                )                        
+                            ]
+                        )
+                    ],
+                    className='card-body text-dark'
+                ),
+            ],
+            className='card border-dark my-2 bg-light'
+        ),
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Div(
+                            className='float-left',
+                            children=[
+                                html.Img(src='data:image/png;base64,{}'.format(ALTITUDE_LOGO), height=50)
+                            ]
+                        ),
+                        html.Div(
+                            className='text-right',
+                            dir="rtl",
+                            children=[
+                                html.H5(
+                                    id="INFO_CARD_LOW_ELEV_STATION-TAB1_SIDEBAR_RIGHT_CARD1"
+                                ),
+                                html.Span(
+                                    children="پست‌ترین ایستگاه"
+                                )                        
+                            ]
+                        )
+                    ],
+                    className='card-body text-dark'
+                ),
+            ],
+            className='card border-dark my-2 bg-light'
+        ),
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Div(
+                            className='float-left',
+                            children=[
+                                html.Img(src='data:image/png;base64,{}'.format(CALENDAR_LOGO), height=50)              
+                            ]
+                        ),
+                        html.Div(
+                            className='text-right',
+                            dir="rtl",
+                            children=[
+                                html.H5(
+                                    id="INFO_CARD_OLD_STATION-TAB1_SIDEBAR_RIGHT_CARD1"
+                                ),
+                                html.Span(
+                                    children="قدیمی‌ترین ایستگاه"
+                                )                        
+                            ]
+                        )
+                    ],
+                    className='card-body text-dark'
+                ),
+            ],
+            className='card border-dark my-2 bg-light'
+        ),
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Div(
+                            className='float-left',
+                            children=[
+                                html.Img(src='data:image/png;base64,{}'.format(CALENDAR_LOGO), height=50)              
+                            ]
+                        ),
+                        html.Div(
+                            className='text-right',
+                            dir="rtl",
+                            children=[
+                                html.H5(
+                                    id="INFO_CARD_NEW_STATION-TAB1_SIDEBAR_RIGHT_CARD1"
+                                ),
+                                html.Span(
+                                    children="جدیدترین ایستگاه"
+                                )                        
+                            ]
+                        )
+                    ],
+                    className='card-body text-dark'
+                ),
+            ],
+            className='card border-dark my-2 bg-light'
+        ),
+    ]
+)
+
+
+# TAB 1 - SIDEBAR - RIGHT
+# --------------------------------------------------------------------------- #
+
+TAB_1_SIDEBAR_RIGHT = html.Div(
+    children=[
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        TAB1_SIDEBAR_RIGHT_CARD_1
                     ],
                     className='col px-0'
                 ),

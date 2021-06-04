@@ -15,15 +15,12 @@ TAB_3_HEADER = html.Div(
                     # TODO: Find Beter Way!
                     children=[
                         '''
-                        <b>Isotope Analysis!</b> 
-                        <small>Stable Isotope Compositions 
-                        (<b>δ<sup>2</sup>H</b> & <b>δ<sup>18</sup>O</b>) 
-                        of Rainfall</small>
+
                         '''
                     ]
                 )
             ],
-            className='page-header m-1 pb-2 text-dark')
+            className='page-header text-dark')
     ],
     className="page-header m-1 pt-2"
 )
