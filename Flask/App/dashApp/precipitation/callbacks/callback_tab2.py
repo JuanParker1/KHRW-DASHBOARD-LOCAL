@@ -17,132 +17,156 @@ from dash.exceptions import PreventUpdate
 
 
 from App.dashApp.precipitation.callbacks.initial_settings import *
+from App.dashApp.precipitation.layouts.sidebars.sidebar_tab1 import *
 
 
+# --------------------------------------------------------------------------- #
+#                                                                             #
+#                         PRECIPITATION - CALLBACK TAB2                       #
+#                                                                             #
+# --------------------------------------------------------------------------- #
 
 def precipitation_callback_tab2(app):
-    pass
 
-#     # CASE-DEPENDENT
-#     TABLE_HEADER_NAME = {    
-#         "Mahdodeh_Name" : "نام محدوده",
-#         "Mahdodeh_Code" : "کد محدوده",
-#         "Aquifer_Name" : "نام آبخوان",
-#         "Well_Type" : "نوع چاه",
-#         "Well_Type_Sign" : "علامت نوع چاه",
-#         "Well_Name" : "نام چاه",
-#         "Well_ID" : "شناسه چاه",
-#         "ID" : "شناسه",
-#         "Zone_UTM" : "منطقه UTM",
-#         "X_UTM" : "طول جغرافیایی - UTM",
-#         "Y_UTM" : "عرض جغرافیایی - UTM",
-#         "UTM_Grid" : "شبکه UTM",
-#         "X_Decimal" : "طول جغرافیایی",
-#         "Y_Decimal" : "عرض جغرافیایی",
-#         "G.S.L_M.S.L" : "ارتفاع - MSL",
-#         "G.S.L_DGPS" : "ارتفاع - DGPS",
-#         "G.S.L_DEM_SRTM" : "ارتفاع - SRTM",
-#         "Final_Elevation" : "ارتفاع",
-#         "Data_Typ" : "نوع داده",  
-#     }
+
+    # --------------------------------------------------------------------------- #
+    #                                                                             #
+    #                         TAB2 - SIDEBAR - LEFT                               #
+    #                                                                             #
+    # --------------------------------------------------------------------------- #
+
+    # SELECT HOZE30 - TAB2 SIDEBAR LEFT CARD1
+    # -----------------------------------------------------------------------------
+
+    @app.callback(
+        Output('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Input("DATABASE_STATE-TAB1", "children")
+    )
+    def FUNCTION_SELECT_HOZE30_TAB2_SIDEBAR_LEFT_CARD1(DATABASE_STATE):
+        if DATABASE_STATE == "DATABASE EXIST":
+            selected_station = station[station["stationCode"].isin(data["stationCode"].unique())]
+            return [{"label": i, "value": i} for i in list(selected_station["drainageArea30"].unique())]
+        else:
+            return []
+
+
+    # SELECT MAHDOUDE - TAB2 SIDEBAR LEFT CARD1
+    # -----------------------------------------------------------------------------
+
+    @app.callback(
+        Output('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value')
+    )
+    def FUNCTION_SELECT_MAHDOUDE_TAB2_SIDEBAR_LEFT_CARD1(HOZE30):
+        if HOZE30 is not None and len(HOZE30) != 0:
+            selected_station = station[station["stationCode"].isin(data["stationCode"].unique())]
+            selected_station = selected_station[selected_station["drainageArea30"].isin(HOZE30)]
+            return [{"label": i, "value": i} for i in list(selected_station["areaStudyName"].unique())]
+        else:
+            return []
+
+
+    # SELECT STATION - TAB2 SIDEBAR LEFT CARD1
+    # -----------------------------------------------------------------------------
+
+    @app.callback(
+        Output('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value')
+    )
+    def FUNCTION_SELECT_STATION_TAB2_SIDEBAR_LEFT_CARD1(HOZE30, MAHDOUDE):
+        if MAHDOUDE is not None and len(MAHDOUDE) != 0 and HOZE30 is not None and len(HOZE30) != 0:
+            selected_station = station[station["stationCode"].isin(data["stationCode"].unique())]
+            selected_station = selected_station[selected_station["areaStudyName"].isin(MAHDOUDE)]
+            return [{"label": i, "value": i} for i in list(selected_station["stationName"].unique())]
+        else:
+            return []
+        
+
+    # SELECT END YEAR - TAB2 SIDEBAR LEFT CARD1
+    # -----------------------------------------------------------------------------
+    # FIXME : Problem Duration Of Date
+    
+    @app.callback(
+        Output('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value')
+    )
+    def FUNCTION_SELECT_END_YEAR_TAB2_SIDEBAR_LEFT_CARD1(START):
+        if START is not None:
+            return [{'label': '{}'.format(i), 'value': i, 'disabled': False if i >= START else True} for i in range(1369, 1426)]
+        else:
+            return []
+    
+    
+    # CREATE MAP - TAB2 SIDEBAR LEFT CARD1
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output('MAP-TAB2_SIDEBAR_LEFT_CARD1', 'figure'),
+        Input("DATABASE_STATE-TAB1", "children"),
+        Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value')
+    )
+    def FUNCTION_MAP_TAB2_SIDEBAR_LEFT_CARD1(DATABASE_STATE, HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED):
+        if (DATABASE_STATE == "DATABASE EXIST") and\
+            (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
+                (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
+                    (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0):
+            try:
+                all_station = station[station["stationCode"].isin(data["stationCode"].unique())]
+                selected_station = all_station[all_station["stationName"].isin(STATION_SELECTED)]
+                selected_mahdoude = list(selected_station["areaStudyCode"].unique())
+
+                geodf, j_file = read_shapfile(
+                    shapefile=MAHDOUDE,
+                    column="MahCode",
+                    target=selected_mahdoude
+                )
+
+                fig = px.choropleth_mapbox(
+                    data_frame=geodf,
+                    geojson=j_file,
+                    locations='MahCode',
+                    opacity=0.3,
+                    color='Hoze30Name'
+                )
+
+                for mc in selected_station['drainageArea30'].unique():
+                    df = selected_station[selected_station['drainageArea30'] == mc]
+                    fig.add_trace(
+                        go.Scattermapbox(
+                            lat=df.latDecimalDegrees,
+                            lon=df.longDecimalDegrees,
+                            mode='markers',
+                            marker=go.scattermapbox.Marker(size=10),
+                            text=df['stationName'],
+                            hoverinfo='text',
+                            hovertemplate='<b>%{text}</b><extra></extra>'
+                        )
+                    )
+
+                fig.update_layout(
+                    mapbox={'style': "stamen-terrain",
+                            'center': {
+                                'lat': selected_station.latDecimalDegrees.mean(),
+                                'lon': selected_station.longDecimalDegrees.mean()
+                            },
+                            'zoom': 5.5},
+                    showlegend=False,
+                    hovermode='closest',
+                    margin={'l': 0, 'r': 0, 'b': 0, 't': 0},
+                    mapbox_accesstoken=token,
+                    clickmode='event+select'
+                )
+                return fig
+            except:
+                return BASE_MAP_EMPTY
+        else:
+            return BASE_MAP_EMPTY
 
 
 #     # -----------------------------------------------------------------------------
-#     # NO MATCHING DATA FOUND TEMPLATE
-#     # -----------------------------------------------------------------------------
-#     NO_MATCHING_DATA_FOUND = {
-#         "layout": {
-#             "xaxis": {"visible": False},
-#             "yaxis": {"visible": False},
-#             "annotations": [
-#                 {
-#                     "text": "No Data Found ...",
-#                     "xref": "paper",
-#                     "yref": "paper",
-#                     "showarrow": False,
-#                     "font": {"size": 36}
-#                 }
-#             ]
-#         }
-#     }
-
-
-#     # -----------------------------------------------------------------------------
-#     # BASE MAP
-#     # -----------------------------------------------------------------------------
-#     BASE_MAP = go.Figure(
-#         go.Scattermapbox(
-#             lat=[36.25],
-#             lon=[59.55],
-#             mode='markers',
-#             marker=go.scattermapbox.Marker(size=9),
-#             text="شهر مشهد"
-#         )
-#     )
-
-#     BASE_MAP.update_layout(
-#         mapbox={
-#             'style': "stamen-terrain",
-#             'center': {
-#                 'lon': 59.55,
-#                 'lat': 36.25
-#             },
-#             'zoom': 5.5
-#         },
-#         showlegend=False,
-#         hovermode='closest',
-#         margin={'l':0, 'r':0, 'b':0, 't':0},
-#         autosize=False
-#     )
-
-
-
-#     # -----------------------------------------------------------------------------
-#     # SELECT AQUIFER - TAB2 SIDEBAR LEFT CARD1
-#     # -----------------------------------------------------------------------------
-#     @app.callback(
-#         Output('SELECT_AQUIFER-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
-#         Input("TABLE_RAWDATA-TAB1_SIDEBAR", "children")
-#     )
-#     def FUNCTION_SELECT_AQUIFER_TAB2_SIDEBAR_LEFT_CARD1(RAWDATA_TABLE):
-#         if RAWDATA_TABLE == "OK":
-#             return [{"label": col, "value": col} for col in GeoInfoData['Aquifer_Name'].unique()]            
-#         else:
-#             return []
-
-
-#     # -----------------------------------------------------------------------------
-#     # SELECT WELL - TAB2 SIDEBAR LEFT CARD1
-#     # -----------------------------------------------------------------------------
-#     @app.callback(
-#         Output('SELECT_WELL-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
-#         Input('SELECT_AQUIFER-TAB2_SIDEBAR_LEFT_CARD1', 'value')
-#     )
-#     def FUNCTION_SELECT_WELL_TAB2_SIDEBAR_LEFT_CARD1(aquifers):
-#         if aquifers is not None and len(aquifers) != 0:
-#             df = GeoInfoData[GeoInfoData["Aquifer_Name"].isin(aquifers)]
-#             return [{"label": col, "value": col} for col in df["Well_Name"].unique()]
-#         else:
-#             return []
-
-
-#     # -----------------------------------------------------------------------------
-#     # SELECT END YEAR - TAB2 SIDEBAR LEFT CARD1
-#     # -----------------------------------------------------------------------------
-#     # FIXME : Problem Duration Of Date
-#     @app.callback(
-#         Output('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
-#         Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value')
-#     )
-#     def FUNCTION_SELECT_END_YEAR_TAB2_SIDEBAR_LEFT_CARD1(start):
-#         if start is not None:
-#             return [{'label': '{}'.format(i), 'value': i, 'disabled': False if i >= start else True} for i in range(1370, 1426)]
-#         else:
-#             return []
-
-
-#     # -----------------------------------------------------------------------------
-#     # CREATE MAP - TAB2 SIDEBAR LEFT CARD1
+#     # 
 #     # -----------------------------------------------------------------------------
 #     # FIXME : Problem With Same Well Name
 #     @app.callback(
@@ -552,3 +576,24 @@ def precipitation_callback_tab2(app):
 #             return result
 #         else:
 #             raise PreventUpdate
+
+
+
+    # # DEBUG SECTION
+    # # -----------------------------------------------------------------------------   
+
+    # @app.callback(
+    #     Output("DEBUG_OUTPUT-TAB2_SIDEBAR_CARD2", "children"),
+    #     Output("DEBUG_BUTTON-TAB2_SIDEBAR_CARD2", "n_clicks"),
+    #     Input("DEBUG_CONTENT-TAB2_SIDEBAR_LEFT_CARD2", "value"),
+    #     Input("DEBUG_BUTTON-TAB2_SIDEBAR_CARD2", "n_clicks"),
+    # )
+    # def FUNCTION_DEBUG_TAB_SIDEBAR_LEFT_CARD3(value, n):
+    #     if n != 0 and value is not None:
+    #         print("-" * 80)
+    #         print(value)
+    #         print("-" * 30)
+    #         print(eval(value))
+    #         return "OK", 0
+    #     else:
+    #         return "No Value", 0

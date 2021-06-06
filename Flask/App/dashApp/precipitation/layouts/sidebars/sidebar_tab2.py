@@ -8,7 +8,6 @@ import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash_html_components.Div import Div
-import dash_dangerously_set_inner_html
 
 from App.dashApp.precipitation.callbacks.initial_settings import *
 
@@ -26,7 +25,7 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
     children=[
         html.H6(
             children=[
-                "   ایستگاه باران‌سنجی",
+                "   تحلیل ایستگاهی",
                 html.Img(src='data:image/png;base64,{}'.format(DROP_WATER_LOGO), height=30, className="ml-2"),
             ],
             className='card-header text-right'
@@ -35,18 +34,9 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
             children=[
                 html.Div(
                     children=[
-                        dash_dangerously_set_inner_html.DangerouslySetInnerHTML(
-                            """
-                               <input type="text" id="datepicker"/>
-                            """
-                        )
-                    ]
-                ),
-                html.Div(
-                    children=[
                         html.H6(
                             children=[
-                                "انتخاب آبخوان:"
+                                "انتخاب حوزه آبریز:"
                             ],
                             dir="rtl",
                             className="text-right "
@@ -54,11 +44,11 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                         html.Div(
                             children=[
                                 dcc.Dropdown(
-                                    id="SELECT_AQUIFER-TAB2_SIDEBAR_LEFT_CARD1",
-                                    placeholder="یک یا چند آبخوان انتخاب کنید",
+                                    id="SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1",
+                                    placeholder="یک یا چند حوزه انتخاب کنید",
                                     multi=True,
-                                    # persistence=True,
-                                    # persistence_type="memory",
+                                    className="dash-dropdown-select",
+                                    
                                 )
                             ],
                         ),
@@ -69,7 +59,7 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                     children=[
                         html.H6(
                             children=[
-                                "انتخاب چاه مشاهده‌ای:"
+                                "انتخاب محدوده مطالعاتی:"
                             ],
                             dir="rtl",
                             className="text-right "
@@ -77,11 +67,32 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                         html.Div(
                             children=[
                                 dcc.Dropdown(
-                                    id="SELECT_WELL-TAB2_SIDEBAR_LEFT_CARD1",
-                                    placeholder="یک یا چند چاه مشاهده‌ای انتخاب کنید",
+                                    id="SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1",
+                                    placeholder="یک یا چند محدوده مطالعاتی انتخاب کنید",
                                     multi=True,
-                                    # persistence=True,
-                                    # persistence_type="memory",
+                                    className="dash-dropdown-select"
+                                )
+                            ],
+                        ),
+                    ],
+                    className="form-group mb-4"
+                ),
+                html.Div(
+                    children=[
+                        html.H6(
+                            children=[
+                                "انتخاب ایستگاه:"
+                            ],
+                            dir="rtl",
+                            className="text-right "
+                        ),
+                        html.Div(
+                            children=[
+                                dcc.Dropdown(
+                                    id="SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1",
+                                    placeholder="یک یا چند ایستگاه انتخاب کنید",
+                                    multi=True,
+                                    className="dash-dropdown-select"
                                 )
                             ],
                         ),
@@ -102,20 +113,15 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                                 dcc.Dropdown(
                                     id="SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
                                     placeholder="سال شروع",
-                                    # persistence=True,
-                                    # persistence_type="memory",
                                     options=[
-                                        {'label': '{}'.format(i), 'value': i} for i in range(1370, 1426)
+                                        {'label': '{}'.format(i), 'value': i} for i in range(1369, 1426)
                                     ],
-                                    value=1380
+                                    value=1369
                                 ),
                                 dcc.Dropdown(
                                     id="SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
                                     placeholder="سال پایان",
                                     value=1400
-                                    # persistence=True,
-                                    # persistence_type="memory",
-
                                 )
                             ],
                         ),
@@ -142,123 +148,44 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
     className='card border-dark my-2'
 )
 
-"""
----------------------------------------
-Left - Card 2: 
----------------------------------------
-"""
+
+# # SIDEBAR - LEFT - CARD 2 - DEBUG
+# # --------------------------------------------------------------------------- #
+
+# TAB2_SIDEBAR_LEFT_CARD_2 = html.Div(
+#     children=[
+#         html.Div(
+#             children=[
+#                 dcc.Input(
+#                     id="DEBUG_CONTENT-TAB2_SIDEBAR_LEFT_CARD2",
+#                     type="text",
+#                     placeholder="Input Variable Name",
+#                     className="form-control"
+#                 ),
+#                 html.Div(
+#                     children=[
+#                         html.Button(
+#                             children=[
+#                                 "اجرا"
+#                             ],
+#                             n_clicks=0,
+#                             className="btn btn-success mt-3",
+#                             id="DEBUG_BUTTON-TAB2_SIDEBAR_CARD2",
+#                         ),
+#                     ],
+#                     className="d-flex justify-content-start"
+#                 ),
+#                 html.Div(id="DEBUG_OUTPUT-TAB2_SIDEBAR_CARD2"),
+#             ],
+#         className='card-body text-dark'
+#         ),
+#     ],
+#     className='card border-dark my-2'
+# )
 
 
-
-
-TAB2_SIDEBAR_LEFT_CARD_2 = html.Div(
-    children=[
-        html.H6(
-            children=[
-                "تنظیمات جدول خروجی",
-                html.I(className="fa fa-table ml-2"),
-            ],
-            className='card-header text-right'
-        ),
-        html.Div(
-            children=[
-                
-                html.H6(
-                    children=[
-                        "انتخاب دوره آماری:"
-                    ],
-                    dir="rtl",
-                    className="text-right"
-                ),
-                
-                dcc.RadioItems(
-                    id="SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD2",
-                    options=[
-                        {'label': 'سال آبی', 'value': 'WATER_YEAR'},
-                        {'label': 'سال شمسی', 'value': 'PERSIAN_YEAR'},
-                    ],
-                    value='WATER_YEAR',
-                    labelClassName ="d-block mr-3 text-right text-secondary font_size"    ,
-                    inputClassName="ml-1"           
-                )
-
-            ],
-            dir="rtl",
-            className='card-body text-dark text-right'
-        ),
-        html.Div(
-            children=[
-                
-                html.H6(
-                    children=[
-                        "انتخاب پارامتر:"
-                    ],
-                    dir="rtl",
-                    className="text-right"
-                ),
-                
-                dcc.RadioItems(
-                    id="SELECT_PARAMETER-TAB2_SIDEBAR_LEFT_CARD2",
-                    options=[
-                        {'label': 'تراز سطح آب', 'value': 'WATER_TABLE_MONTLY'},
-                        {'label': 'تغییرات تراز سطح آب (نسبت به ماه قبل)', 'value': 'WATER_TABLE_DIFF_MONTLY'},
-                        {'label': 'تغییرات تراز سطح آب (نسبت به ماه سال قبل)', 'value': 'WATER_TABLE_DIFF_MONTLY_YEARLY'},
-                    ],
-                    value='WATER_TABLE_MONTLY',
-                    labelClassName ="d-block mr-3 text-right text-secondary font_size",
-                    inputClassName="ml-1"           
-                )
-
-            ],
-            dir="rtl",
-            className='card-body text-dark text-right'
-        ),
-            html.Div(
-            children=[
-                html.H6(
-                    children=[
-                        "انتخاب تحلیل آماری:"
-                    ],
-                    dir="rtl",
-                    className="text-right"
-                ),
-                
-                dcc.Checklist(
-                    id="STATISTICAL_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD2",
-                    options=[
-                        {'label': 'نمایش تحلیل‌های آماری', 'value': 'STATISTICAL_ANALYSIS'},
-                    ],
-                    labelClassName ="d-block mr-3 text-right text-secondary font_size",
-                    inputClassName="ml-1"           
-                )
-
-            ],
-            dir="rtl",
-            className='card-body text-dark text-right'
-        ),
-        # Hidden Div For Store Data--------------------------------------------
-        html.Div(
-            children=[
-                html.Div(
-                    id="STATE_TABLE_DOWNLOAD_BUTTON-TAB2_SIDEBAR",
-                )
-            ],
-            style={
-                'display': 'none'
-            }
-        )
-    ],
-    className='card border-dark mt-3'
-)
-
-
-
-
-"""
----------------------------------------
-Sidebar Tab 1 - Left
----------------------------------------
-"""
+# TAB 2 - SIDEBAR - LEFT
+# --------------------------------------------------------------------------- #
 
 TAB_2_SIDEBAR_LEFT = html.Div(
     children=[
@@ -267,7 +194,7 @@ TAB_2_SIDEBAR_LEFT = html.Div(
                 html.Div(
                     children=[
                         TAB2_SIDEBAR_LEFT_CARD_1,
-                        TAB2_SIDEBAR_LEFT_CARD_2
+                        # TAB2_SIDEBAR_LEFT_CARD_2
                     ],
                     className='col px-0'
                 ),
@@ -279,20 +206,14 @@ TAB_2_SIDEBAR_LEFT = html.Div(
 )
 
 
+# --------------------------------------------------------------------------- #
+#                                                                             #
+#                           TAB 2 - SIDEBAR - Right                           #
+#                                                                             #
+# --------------------------------------------------------------------------- #
 
-
-
-
-# -----------------------------------------------------------------------------
-# Tab 2 - Sidebar - Right
-# -----------------------------------------------------------------------------
-
-
-"""
----------------------------------------
-Right - Card 1
----------------------------------------
-"""
+# SIDEBAR - RIGHT - CARD 1
+# --------------------------------------------------------------------------- #
 
 TAB2_SIDEBAR_RIGHT_CARD_1 = html.Div(
     className='mt-2 text-right border border-secondary rounded',
@@ -301,16 +222,14 @@ TAB2_SIDEBAR_RIGHT_CARD_1 = html.Div(
         html.Div(
             className='card bg-light',
             children=[
-                
                 html.Img(
                     id="IMG_OW-TAB2_SIDEBAR_RIGHT_CARD1",
                     height=220,
                     width=220,
                     className="mt-3 rounded mx-auto d-block"
                 ),
-                
                 html.Div(
-                    className='card-body', 
+                    className='card-body',
                     children=[
                         html.H5(
                             id="NAME_OW-TAB2_SIDEBAR_RIGHT_CARD1",
@@ -322,9 +241,8 @@ TAB2_SIDEBAR_RIGHT_CARD_1 = html.Div(
                         # )                        
                     ]
                 ),
-                
                 html.Ul(
-                    className='list-group list-group-flush', 
+                    className='list-group list-group-flush',
                     children=[
                         html.Li(
                             id="ID_OW-TAB2_SIDEBAR_RIGHT_CARD1",
@@ -336,15 +254,15 @@ TAB2_SIDEBAR_RIGHT_CARD_1 = html.Div(
                         ),
                         html.Li(
                             id="LONG_OW-TAB2_SIDEBAR_RIGHT_CARD1",
-                            className='list-group-item', 
+                            className='list-group-item',
                         ),
                         html.Li(
                             id="LAT_OW-TAB2_SIDEBAR_RIGHT_CARD1",
-                            className='list-group-item', 
+                            className='list-group-item',
                         ),
                         html.Li(
                             id="ELEV_OW-TAB2_SIDEBAR_RIGHT_CARD1",
-                            className='list-group-item', 
+                            className='list-group-item',
                         ),
                         html.Li(
                             id="START_DATE_OW-TAB2_SIDEBAR_RIGHT_CARD1",
@@ -356,19 +274,14 @@ TAB2_SIDEBAR_RIGHT_CARD_1 = html.Div(
                         ),
                     ]
                 )
-                
             ]
         )
     ]
 )
 
 
-
-"""
----------------------------------------
-Sidebar Tab 2 - Right
----------------------------------------
-"""
+# TAB 2 - SIDEBAR - Right
+# --------------------------------------------------------------------------- #
 
 TAB_2_SIDEBAR_RIGHT = html.Div(
     id="SHOW_HIDE-TAB2_SIDEBAR_RIGHT",

@@ -327,7 +327,6 @@ def precipitation_dashboard_add_station_csv():
         template_name_or_list='precipitation_flask/add_station_csv.html'
     )
 
-
 # -----------------------------------------------------------------------------
 # DELETE STATION
 # -----------------------------------------------------------------------------

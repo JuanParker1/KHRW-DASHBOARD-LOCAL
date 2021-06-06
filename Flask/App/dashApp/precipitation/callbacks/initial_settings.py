@@ -4,6 +4,8 @@
 #                                                                             #
 # --------------------------------------------------------------------------- #
 
+import os
+import sqlite3
 import base64
 import pandas as pd
 import geopandas as gpd
@@ -96,6 +98,17 @@ token = open(TOKEN_PATH).read()
 #       startYear, longDecimalDegrees, latDecimalDegrees, elevation
 
 precipitation_db_path = './App/dashApp/precipitation/precipitation.sqlite'
+
+if os.path.exists(precipitation_db_path):
+    try:
+        global precipitation_db
+        global data
+        global station
+        precipitation_db = sqlite3.connect(precipitation_db_path, check_same_thread=False)
+        data = pd.read_sql_query(sql="SELECT * FROM precipitation", con=precipitation_db)
+        station = pd.read_sql_query(sql="SELECT * FROM station", con=precipitation_db)
+    except print("NO DATABASE EXIST!"):
+        pass
 
 
 # NO DATABASE CONNECTINO TEMPLATE

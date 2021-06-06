@@ -89,12 +89,6 @@ def precipitation_callback_tab1(app):
             ]
             return result
         elif n != 0 and os.path.exists(precipitation_db_path):
-            global precipitation_db
-            global data
-            global station
-            precipitation_db = sqlite3.connect(precipitation_db_path, check_same_thread=False)
-            data = pd.read_sql_query(sql="SELECT * FROM precipitation", con=precipitation_db)            
-            station = pd.read_sql_query(sql="SELECT * FROM station", con=precipitation_db)
             tables_name = pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", precipitation_db)
             if tables_name['name'].str.contains('station').any() \
                 and tables_name['name'].str.contains('precipitation').any():

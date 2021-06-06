@@ -46,7 +46,21 @@
   /* background-color: rebeccapurple; */
 }
 
-.upload-button {
+.dash-dropdown-select {
+  font-size: small !important;
+  direction: rtl;
+  text-align: right;
+}
+
+.DateRangePickerInput__rtl {
+  direction: rtl;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  font-size: smaller;
+}
+
+rtl .upload-button {
   width: 50%;
   height: 40px;
   line-height: 40px;
