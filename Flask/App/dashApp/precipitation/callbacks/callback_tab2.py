@@ -1,16 +1,22 @@
-# import os
-# import sqlite3
-# import pandas as pd
-# import dash_core_components as dcc
-# import dash_html_components as html
-# import dash_bootstrap_components as dbc
-# from dash.dependencies import Input, Output, State
-# import plotly.graph_objects as go
-# import plotly.express as px
-# from dash.exceptions import PreventUpdate
+# --------------------------------------------------------------------------- #
+#                                                                             #
+#                         IMPORT REQUIREMENT MODULE                           #
+#                                                                             #
+# --------------------------------------------------------------------------- #
+
+import os
+import sqlite3
+import pandas as pd
+import dash_core_components as dcc
+import dash_html_components as html
+import dash_bootstrap_components as dbc
+from dash.dependencies import Input, Output, State
+import plotly.graph_objects as go
+import plotly.express as px
+from dash.exceptions import PreventUpdate
 
 
-# from App.dashApp.precipitation.callbacks.data_analysis import *
+from App.dashApp.precipitation.callbacks.initial_settings import *
 
 
 

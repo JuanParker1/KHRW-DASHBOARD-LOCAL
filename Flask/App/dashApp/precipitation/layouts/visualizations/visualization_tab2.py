@@ -65,15 +65,3 @@ TAB2_BODY_CONTENT2 = dash_table.DataTable(
     page_size=30
 )
 
-
-# -----------------------------------------------------------------------------
-# Tab 2 - Sidebar Left
-# -----------------------------------------------------------------------------
-MAP_TAB2_SIDEBAR_LEFT_CARD1 = dcc.Graph(
-    id='MAP-TAB2_SIDEBAR_LEFT_CARD1',
-    style={
-        "width": "250px",
-        "height": "250px",
-        "margin": "auto"
-    }
-)

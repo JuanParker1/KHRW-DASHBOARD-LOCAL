@@ -1,21 +1,26 @@
-import base64
+# --------------------------------------------------------------------------- #
+#                                                                             #
+#                         IMPORT REQUIREMENT MODULE                           #
+#                                                                             #
+# --------------------------------------------------------------------------- #
+
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
+from dash_html_components.Div import Div
+import dash_dangerously_set_inner_html
 
-from App.dashApp.precipitation.layouts.visualizations.visualization import *
 from App.dashApp.precipitation.callbacks.initial_settings import *
 
 
-# -----------------------------------------------------------------------------
-# Tab 2 - Sidebar - Left
-# -----------------------------------------------------------------------------
+# --------------------------------------------------------------------------- #
+#                                                                             #
+#                           TAB 2 - SIDEBAR - LEFT                            #
+#                                                                             #
+# --------------------------------------------------------------------------- #
 
-"""
----------------------------------------
-Left - Card 1: 
----------------------------------------
-"""
+# SIDEBAR - LEFT - CARD 1
+# --------------------------------------------------------------------------- #
 
 TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
     children=[
@@ -28,6 +33,15 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
         ),
         html.Div(
             children=[
+                html.Div(
+                    children=[
+                        dash_dangerously_set_inner_html.DangerouslySetInnerHTML(
+                            """
+                               <input type="text" id="datepicker"/>
+                            """
+                        )
+                    ]
+                ),
                 html.Div(
                     children=[
                         html.H6(
@@ -110,7 +124,14 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                 ),
                 html.Div(
                     children=[
-                        MAP_TAB2_SIDEBAR_LEFT_CARD1
+                        dcc.Graph(
+                            id='MAP-TAB2_SIDEBAR_LEFT_CARD1',
+                            style={
+                                "width": "250px",
+                                "height": "250px",
+                                "margin": "auto"
+                            }
+                        )
                     ],
                     className="form-group mb-0"
                 ),

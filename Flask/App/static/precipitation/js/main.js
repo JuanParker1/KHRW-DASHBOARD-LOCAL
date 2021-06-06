@@ -1,0 +1,1 @@
+var picker = new Lightpick({ field: document.getElementById('datepicker') });
