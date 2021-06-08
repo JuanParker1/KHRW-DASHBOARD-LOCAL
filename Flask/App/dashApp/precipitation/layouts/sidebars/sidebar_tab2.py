@@ -132,14 +132,10 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                     children=[
                         dcc.Graph(
                             id='MAP-TAB2_SIDEBAR_LEFT_CARD1',
-                            style={
-                                "width": "250px",
-                                "height": "250px",
-                                "margin": "auto"
-                            }
+                            className="sidebar-map"
                         )
                     ],
-                    className="form-group mb-0"
+                    className="form-group mb-0 mx-0"
                 ),
             ],
             className='card-body text-dark'

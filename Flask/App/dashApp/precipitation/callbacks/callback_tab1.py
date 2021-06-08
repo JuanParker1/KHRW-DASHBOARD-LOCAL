@@ -136,6 +136,7 @@ def precipitation_callback_tab1(app):
     # -----------------------------------------------------------------------------
 
     @app.callback(
+        Output("INFO_CARD_NUMBER_HOZE6-TAB1_SIDEBAR_RIGHT_CARD1", "children"),
         Output("INFO_CARD_NUMBER_HOZE30-TAB1_SIDEBAR_RIGHT_CARD1", "children"),
         Output("INFO_CARD_NUMBER_MAHDOUDE-TAB1_SIDEBAR_RIGHT_CARD1", "children"),
         Output("INFO_CARD_NUMBER_STATION-TAB1_SIDEBAR_RIGHT_CARD1", "children"),
@@ -149,6 +150,7 @@ def precipitation_callback_tab1(app):
         if DATABASE_STATE == "DATABASE EXIST":
             selected_station = station[station["stationCode"].isin(data["stationCode"].unique())]
             selected_station["startYear"] = selected_station["startYear"].astype(int)
+            number_hoze6 = list(selected_station["drainageArea6"].unique())
             number_hoze30 = list(selected_station["drainageArea30"].unique())
             number_mahdoude = list(selected_station["areaStudyCode"].unique())
             number_station = list(selected_station["stationCode"].unique())
@@ -156,14 +158,14 @@ def precipitation_callback_tab1(app):
             low_elev_station = selected_station.loc[selected_station["elevation"].idxmin(), :]
             old_station = selected_station.loc[selected_station["startYear"].idxmin(), :]
             new_station = selected_station.loc[selected_station["startYear"].idxmax(), :]
-            return f'{len(number_hoze30)} عدد', f'{len(number_mahdoude)} عدد', f'{len(number_station)} عدد',\
+            return f'{len(number_hoze6)} عدد', f'{len(number_hoze30)} عدد', f'{len(number_mahdoude)} عدد', f'{len(number_station)} عدد',\
                 f'{high_elev_station["stationName"]} - {int(high_elev_station["elevation"])} متر',\
                     f'{low_elev_station["stationName"]} - {int(low_elev_station["elevation"])} متر',\
                         f'{old_station["stationName"]} - {int(old_station["startYear"])}',\
                             f'{new_station["stationName"]} - {int(new_station["startYear"])}'
                 
         else:
-            return "-", "-", "-", "-", "-", "-", "-"
+            return "-", "-", "-", "-", "-", "-", "-", "-"
 
 
     # --------------------------------------------------------------------------- #

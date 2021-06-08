@@ -30,32 +30,33 @@ TAB_1 = html.Div(
         # Sidebars & Body ------------------------------------------------------
         html.Div(
             children=[
-                # Sidebar Left ----------------------------
                 html.Div(
                     children=[
-                        TAB_1_SIDEBAR_LEFT
-                    ],
-                    className='left-sidebar'
-                ),
-                # Body ------------------------------------
-                html.Div(
-                    children=[
+                        # Sidebar Left ----------------------------
                         html.Div(
-                            children=TAB_1_BODY,
-                            className="container-fluid"
-                        )
+                            children=[
+                                TAB_1_SIDEBAR_LEFT
+                            ],
+                        ),
                     ],
-                    className='my-body pt-2'
+                    className="col-lg-3 col-xl-2 px-1 bg-light mb-3"
                 ),
-                # Sidebar right ---------------------------
                 html.Div(
                     children=[
-                        TAB_1_SIDEBAR_RIGHT
+                        # Body ------------------------------------
+                        html.Div(
+                            children=[
+                                html.Div(
+                                    children=TAB_1_BODY,
+                                    className="container-fluid"
+                                )
+                            ],
+                        ),
                     ],
-                    className='right-sidebar'
+                    className="col-lg-9 col-xl-10 px-2"
                 ),
             ],
-            className="row p-0 m-0 w-100"
+            className="row justify-content-between p-0 m-0 w-100"
         ),
         # Footer --------------------------------------------------------------
         html.Div(

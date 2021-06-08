@@ -29,7 +29,7 @@ TAB1_SIDEBAR_LEFT_CARD_1 = html.Div(
                 "پایگاه داده     ",
                 html.Img(src='data:image/png;base64,{}'.format(DATABASE_LOGO), height=30),
             ],
-            className='card-header text-right'
+            className='card-header text-right bg-light'
         ),
         html.Div(
             children=[
@@ -39,7 +39,7 @@ TAB1_SIDEBAR_LEFT_CARD_1 = html.Div(
                             children=[
                                 "اتصال به پایگاه داده موجود"
                             ],
-                            className="text-right"
+                            className="text-right",
                         ),
                         html.Div(
                             children=[
@@ -75,7 +75,7 @@ TAB1_SIDEBAR_LEFT_CARD_1 = html.Div(
                     children=[
                         html.H6(
                             children=[
-                                "اتصال به پایگاه داده از طریق نشانی آی‌پی"
+                                "اتصال از طریق نشانی آی‌پی"
                             ],
                             className='text-right'
                         ),
@@ -114,7 +114,7 @@ TAB1_SIDEBAR_LEFT_CARD_1 = html.Div(
             className='card-body text-dark'
         ),
     ],
-    className='card border-dark my-2'
+    className='card border-dark my-2 h-100'
 )
 
 
@@ -129,239 +129,6 @@ TAB_1_SIDEBAR_LEFT = html.Div(
                 html.Div(
                     children=[
                         TAB1_SIDEBAR_LEFT_CARD_1
-                    ],
-                    className='col px-0'
-                ),
-            ],
-            className='row'
-        ),
-    ],
-    className="container-fluid"
-)
-
-
-# --------------------------------------------------------------------------- #
-#                                                                             #
-#                           TAB 1 - SIDEBAR - RIGHT                            #
-#                                                                             #
-# --------------------------------------------------------------------------- #
-
-
-# SIDEBAR - RIGHT - CARD 1
-# --------------------------------------------------------------------------- #
-
-TAB1_SIDEBAR_RIGHT_CARD_1 = html.Div(
-    children=[
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(src='data:image/png;base64,{}'.format(DRAINAGE_BASIN_LOGO), height=50)              
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right ',
-                            dir="rtl",
-                            children=[
-                                html.H4(
-                                    id="INFO_CARD_NUMBER_HOZE30-TAB1_SIDEBAR_RIGHT_CARD1"
-                                ),
-                                html.Span(
-                                    children="حوزه آبریز"
-                                )
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark'
-                ),
-            ],
-            className='card border-dark my-2 bg-light'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(src='data:image/png;base64,{}'.format(STUDY_AREA_LOGO), height=50)              
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right ',
-                            dir="rtl",
-                            children=[
-                                html.H4(
-                                    id="INFO_CARD_NUMBER_MAHDOUDE-TAB1_SIDEBAR_RIGHT_CARD1"
-                                ),
-                                html.Span(
-                                    children="محدوده مطالعاتی"
-                                )                        
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark'
-                ),
-            ],
-            className='card border-dark my-2 bg-light'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(src='data:image/png;base64,{}'.format(DROP_WATER_LOGO), height=50)              
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right',
-                            dir="rtl",
-                            children=[
-                                html.H4(
-                                    id="INFO_CARD_NUMBER_STATION-TAB1_SIDEBAR_RIGHT_CARD1"
-                                ),
-                                html.Span(
-                                    children="ایستگاه"
-                                )                        
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark'
-                ),
-            ],
-            className='card border-dark my-2 bg-light'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(src='data:image/png;base64,{}'.format(ALTITUDE_LOGO), height=50)              
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right',
-                            dir="rtl",
-                            children=[
-                                html.H5(
-                                    id="INFO_CARD_HIGH_ELEV_STATION-TAB1_SIDEBAR_RIGHT_CARD1"
-                                ),
-                                html.Span(
-                                    children="مرتفع‌ترین ایستگاه"
-                                )                        
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark'
-                ),
-            ],
-            className='card border-dark my-2 bg-light'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(src='data:image/png;base64,{}'.format(ALTITUDE_LOGO), height=50)
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right',
-                            dir="rtl",
-                            children=[
-                                html.H5(
-                                    id="INFO_CARD_LOW_ELEV_STATION-TAB1_SIDEBAR_RIGHT_CARD1"
-                                ),
-                                html.Span(
-                                    children="پست‌ترین ایستگاه"
-                                )                        
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark'
-                ),
-            ],
-            className='card border-dark my-2 bg-light'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(src='data:image/png;base64,{}'.format(CALENDAR_LOGO), height=50)              
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right',
-                            dir="rtl",
-                            children=[
-                                html.H5(
-                                    id="INFO_CARD_OLD_STATION-TAB1_SIDEBAR_RIGHT_CARD1"
-                                ),
-                                html.Span(
-                                    children="قدیمی‌ترین ایستگاه"
-                                )                        
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark'
-                ),
-            ],
-            className='card border-dark my-2 bg-light'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(src='data:image/png;base64,{}'.format(CALENDAR_LOGO), height=50)              
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right',
-                            dir="rtl",
-                            children=[
-                                html.H5(
-                                    id="INFO_CARD_NEW_STATION-TAB1_SIDEBAR_RIGHT_CARD1"
-                                ),
-                                html.Span(
-                                    children="جدیدترین ایستگاه"
-                                )                        
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark'
-                ),
-            ],
-            className='card border-dark my-2 bg-light'
-        ),
-    ]
-)
-
-
-# TAB 1 - SIDEBAR - RIGHT
-# --------------------------------------------------------------------------- #
-
-TAB_1_SIDEBAR_RIGHT = html.Div(
-    children=[
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        TAB1_SIDEBAR_RIGHT_CARD_1
                     ],
                     className='col px-0'
                 ),

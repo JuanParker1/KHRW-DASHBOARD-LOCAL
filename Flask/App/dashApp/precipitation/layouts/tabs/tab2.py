@@ -35,7 +35,7 @@ TAB_2 = html.Div(
                     children=[
                         TAB_2_SIDEBAR_LEFT
                     ],
-                    className='left-sidebar'
+                    className="col-lg-3 col-xl-2 px-1 bg-light"
                 ),
                 # Body ------------------------------------
                 html.Div(
@@ -46,19 +46,10 @@ TAB_2 = html.Div(
                             className="container-fluid"
                         )
                     ],
-                    className='tab2-right-sidebar-hidden-my-body pt-2'
-                ),
-                # Sidebar right ---------------------------
-                html.Div(
-                    id="TAB_2_SIDEBAR_RIGHT",
-                    hidden=True,
-                    children=[
-                        TAB_2_SIDEBAR_RIGHT
-                    ],
-                    className='tab2-right-sidebar-hidden'
+                    className="col-lg-9 col-xl-10 px-2"
                 ),
             ],
-            className="row p-0 m-0 w-100"
+            className="row justify-content-between p-0 m-0 w-100"
         ),
         # Footer --------------------------------------------------------------
         html.Div(

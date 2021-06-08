@@ -13,7 +13,7 @@ import dash_table
 # Graph
 TAB2_BODY_CONTENT1 = dcc.Graph(
     id='GRAPH-TAB2_BODY_CONTENT1',
-    className="w-100 h-100 mx-4 mb-4"
+    className="w-100 h-100 mx-4 mb-4 border border-primar"
 )
 
 
