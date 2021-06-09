@@ -13,6 +13,84 @@ import json
 import plotly.graph_objects as go
 import plotly.express as px
 
+
+# --------------------------------------------------------------------------- #
+#                                                                             #
+#                                 FUNCTIONS                                   #
+#                                                                             #
+# --------------------------------------------------------------------------- #
+
+# READ SHAPEFILES FUNCTION
+# --------------------------------------------------------------------------- #
+
+def read_shapfile(
+    shapefile=None,
+    column=None,
+    target="all"
+):
+    # geodf = gpd.read_file(shapefile, encoding='windows-1256')
+    geodf = gpd.read_file(shapefile, encoding='utf-8')
+
+    if target == "all":
+        j_file = json.loads(geodf.to_json())
+    else:
+        geodf = geodf[geodf[column].isin(target)]
+        j_file = json.loads(geodf.to_json())
+
+    for feature in j_file["features"]:
+        feature['id'] = feature['properties'][column]
+
+    return geodf, j_file
+
+
+# CHECK LEAP YEAR
+# --------------------------------------------------------------------------- #
+
+def check_leap_year(year):
+    if (year % 4) == 0:
+        if (year % 100) == 0:
+            if (year % 400) == 0:
+                True
+            else:
+                False
+        else:
+            True
+    else:
+        False
+
+
+# WATER YEAR EXTRACT FUNCTION
+# --------------------------------------------------------------------------- #
+
+def water_year(
+    year,
+    month,
+    day
+):
+    # YEAR AND MONTH
+    if month >= 7 and month <= 12:
+        WY = str(int(year)) + "-" + str(int(year) + 1)[2:4]
+        WM = int(month) - 6
+    elif month >= 1 and month <= 6:
+        WY = str(int(year) - 1) + "-" + str(int(year))[2:4]
+        WM = int(month) + 6
+    else:
+        WY = None
+        WM = None
+
+    # DAY
+    if WM <= 6:
+        WD = int(((WM - 1) * 30) + day)
+    elif WM >= 7 and check_leap_year(year - 1):
+        WD = int((6 * 30) + ((WM - 7) * 31) + day)
+    elif WM >= 7 and not check_leap_year(year - 1):
+        WD = int((5 * 30) + (1 * 29) + ((WM - 7) * 31) + day)
+    else:
+        WD = None
+
+    return [WY, WM, WD]
+
+
 # --------------------------------------------------------------------------- #
 #                                                                             #
 #                     VARIABLES, CONSTANTS AND PARAMETERS                     #
@@ -104,9 +182,22 @@ if os.path.exists(precipitation_db_path):
         global precipitation_db
         global data
         global station
-        precipitation_db = sqlite3.connect(precipitation_db_path, check_same_thread=False)
-        data = pd.read_sql_query(sql="SELECT * FROM precipitation", con=precipitation_db)
-        station = pd.read_sql_query(sql="SELECT * FROM station", con=precipitation_db)
+
+        precipitation_db = sqlite3.connect(
+            precipitation_db_path, check_same_thread=False
+        )
+
+        data = pd.read_sql_query(
+            sql="SELECT * FROM precipitation", con=precipitation_db
+        )
+
+        station = pd.read_sql_query(
+            sql="SELECT * FROM station", con=precipitation_db
+        )
+
+        data[['WATERYEAR', 'WATERMONTH', 'WATREDAY']] = pd.DataFrame(data.apply(lambda row: water_year(row.YEAR, row.MONTH, row.DAY),
+                                                                                axis=1).to_list(), columns=['WATERYEAR', 'WATERMONTH', 'WATREDAY'])
+
     except print("NO DATABASE EXIST!"):
         pass
 
@@ -184,7 +275,7 @@ BASE_MAP_EMPTY.update_layout(
 # --------------------------------------------------------------------------- #
 
 # CASE-DEPENDENT
-STATION_TABLE_FARSI_HEADER_NAME = {    
+STATION_TABLE_FARSI_HEADER_NAME = {
     "stationName": "نام ایستگاه",
     "stationCode": "کد ایستگاه",
     "stationOldCode": "کد قدیم ایستگاه",
@@ -194,56 +285,8 @@ STATION_TABLE_FARSI_HEADER_NAME = {
     "areaStudyCode": "کد محدوده",
     "omor": "امور",
     "county": "شهرستان",
-    "startYear": "سال شروع",    
+    "startYear": "سال شروع",
     "longDecimalDegrees": "طول جغرافیایی",
     "latDecimalDegrees": "عرض جغرافیایی",
     "elevation": "ارتفاع"
 }
-
-
-# --------------------------------------------------------------------------- #
-#                                                                             #
-#                                 FUNCTIONS                                   #
-#                                                                             #
-# --------------------------------------------------------------------------- #
-
-# READ SHAPEFILES FUNCTION
-# --------------------------------------------------------------------------- #
-
-def read_shapfile(
-    shapefile=None,
-    column=None,
-    target="all"
-):
-    # geodf = gpd.read_file(shapefile, encoding='windows-1256')
-    geodf = gpd.read_file(shapefile, encoding='utf-8')
-
-    if target == "all":
-        j_file = json.loads(geodf.to_json())
-    else:
-        geodf = geodf[geodf[column].isin(target)]
-        j_file = json.loads(geodf.to_json())
-
-    for feature in j_file["features"]:
-        feature['id'] = feature['properties'][column]
-
-    return geodf, j_file
-
-
-# WATER YEAR EXTRACT FUNCTION
-# --------------------------------------------------------------------------- #
-
-def water_year(
-    year,
-    month
-):
-    if month >= 7 and month <= 12:
-        WY = str(year) + "-" + str(year + 1)[2:4]
-        WM = month - 6
-    elif month >= 1 and month <= 6:
-        WY = str(year - 1) + "-" + str(year)[2:4]
-        WM = month + 6
-    else:
-        WY = None
-        WM = None
-    return [WY, WM]

@@ -35,7 +35,7 @@ TAB_2 = html.Div(
                     children=[
                         TAB_2_SIDEBAR_LEFT
                     ],
-                    className="col-lg-3 col-xl-2 px-1 bg-light"
+                    className="col-lg-3 col-xl-2 px-1 bg-light mb-3"
                 ),
                 # Body ------------------------------------
                 html.Div(
@@ -67,4 +67,3 @@ TAB_2 = html.Div(
     className="container-fluid p-0",
     style={"position": "relativ"}
 )
-

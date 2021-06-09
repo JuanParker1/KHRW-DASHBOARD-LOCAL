@@ -36,14 +36,14 @@ TAB_PAN = html.Div(
                     children=[
                         TAB_1
                     ],
-                    className="tab-pane active",
+                    className="tab-pane fade",
                     id="Tab_1"
                 ),
                 html.Div(
                     children=[
                         TAB_2
                     ],
-                    className="tab-pane fade",
+                    className="tab-pane active",
                     id="Tab_2"
                 ),
                 html.Div(
