@@ -8,6 +8,7 @@ import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash_html_components.Div import Div
+from dash_html_components.Label import Label
 
 from App.dashApp.precipitation.callbacks.initial_settings import *
 
@@ -32,6 +33,8 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
         ),
         html.Div(
             children=[
+                
+                
                 html.Div(
                     children=[
                         html.H6(
@@ -55,6 +58,8 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                     ],
                     className="form-group mb-4"
                 ),
+                
+                
                 html.Div(
                     children=[
                         html.H6(
@@ -77,6 +82,8 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                     ],
                     className="form-group mb-4"
                 ),
+                
+                
                 html.Div(
                     children=[
                         html.H6(
@@ -99,8 +106,11 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                     ],
                     className="form-group mb-4"
                 ),
+                
+                
                 html.Div(
                     children=[
+                        
                         html.H6(
                             children=[
                                 "انتخاب بازه زمانی:"
@@ -108,26 +118,92 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                             dir="rtl",
                             className="text-right "
                         ),
+                        
                         html.Div(
                             children=[
-                                dcc.Dropdown(
-                                    id="SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
-                                    placeholder="سال شروع",
+                                dcc.RadioItems(
+                                    id="SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
                                     options=[
-                                        {'label': '{}'.format(i), 'value': i} for i in range(1369, 1426)
+                                        {'label': 'سال آبی', 'value': 'WATER_YEAR'},
+                                        {'label': 'سال شمسی', 'value': 'SHAMSI_YEAR'},
                                     ],
-                                    value=1369
-                                ),
-                                dcc.Dropdown(
-                                    id="SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
-                                    placeholder="سال پایان",
-                                    value=1400
+                                    value='WATER_YEAR',
+                                    labelStyle={'display': 'inline-block'},
+                                    inputClassName="mr-3 ml-1",
                                 )
                             ],
+                            dir="rtl",
+                            className="text-right align-items-center justify-content-center",
+                        ),
+                        
+                        html.Div(
+                            children=[
+                                
+                                html.P(
+                                    children=[
+                                        "شروع"
+                                    ],
+                                    dir="rtl",
+                                    className="text-center mt-2"
+                                ),
+                                
+                                html.Div(
+                                    children=[
+                                        dcc.Dropdown(
+                                            id="SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
+                                            placeholder="سال",
+                                            className="dash-dropdown-select"
+                                        ),                                                
+                                        dcc.Dropdown(
+                                            id="SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1",
+                                            placeholder="ماه",
+                                            className="dash-dropdown-select",
+                                        ),                                                
+                                        dcc.Dropdown(
+                                            id="SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1",
+                                            placeholder="روز",
+                                            className="dash-dropdown-select"
+                                        ),
+                                    ],
+                                    className="form-group m-auto w-75"
+                                ),
+                                
+                                html.P(
+                                    children=[
+                                        "پایان"
+                                    ],
+                                    dir="rtl",
+                                    className="text-center mt-2"
+                                ),
+                                
+                                html.Div(
+                                    children=[
+                                        dcc.Dropdown(
+                                            id="SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
+                                            placeholder="سال",
+                                            className="dash-dropdown-select"
+                                        ),                                                
+                                        dcc.Dropdown(
+                                            id="SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1",
+                                            placeholder="ماه",
+                                            className="dash-dropdown-select",
+                                        ),                                                
+                                        dcc.Dropdown(
+                                            id="SELECT_END_DAY-TAB2_SIDEBAR_LEFT_CARD1",
+                                            placeholder="روز",
+                                            className="dash-dropdown-select"
+                                        ),
+                                    ],
+                                    className="form-group w-75 m-auto"
+                                )
+                            ],
+                            dir="rtl",
                         ),
                     ],
                     className="form-group mb-4"
                 ),
+        
+        
                 html.Div(
                     children=[
                         dcc.Graph(

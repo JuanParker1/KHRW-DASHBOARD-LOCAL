@@ -84,19 +84,321 @@ def precipitation_callback_tab2(app):
         else:
             return []
 
-    # SELECT END YEAR - TAB2 SIDEBAR LEFT CARD1
+
+    # SELECT START YEAR - TAB2 SIDEBAR LEFT CARD1
     # -----------------------------------------------------------------------------
-    # FIXME : Problem Duration Of Date
 
     @app.callback(
-        Output('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
-        Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value')
+        Output('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Output('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value')
     )
-    def FUNCTION_SELECT_END_YEAR_TAB2_SIDEBAR_LEFT_CARD1(START):
-        if START is not None:
-            return [{'label': '{}'.format(i), 'value': i, 'disabled': False if i >= START else True} for i in range(1369, 1426)]
+    def FUNCTION_SELECT_START_YEAR_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR):
+        if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
+            (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
+                (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0):
+            try:
+                
+                selected_station = station[
+                    (station["drainageArea30"].isin(HOZE30_SELECTED)) &\
+                        (station["areaStudyName"].isin(MAHDOUDE_SELECTED)) &\
+                            (station["stationName"].isin(STATION_SELECTED))
+                ]
+                
+                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
+                
+                if TYPE_YEAR == "WATER_YEAR":
+                    START_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in sorted(list(selected_data["WATERYEAR"].unique()))]
+                    START_YEAR_VALUE = min(sorted(list(selected_data["WATERYEAR"].unique())))
+                    return START_YEAR_OPTIONS, START_YEAR_VALUE
+                else:
+                    START_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in sorted(list(selected_data["YEAR"].unique()))]
+                    START_YEAR_VALUE = min(sorted(list(selected_data["YEAR"].unique())))
+                    return START_YEAR_OPTIONS, START_YEAR_VALUE
+            except:
+                return [], None
         else:
-            return []
+            return [], None
+    
+
+    # SELECT END YEAR - TAB2 SIDEBAR LEFT CARD1
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Output('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    )
+    def FUNCTION_SELECT_END_YEAR_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR):
+        if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
+            (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
+                (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
+                    START_YEAR is not None:
+            try:
+                
+                selected_station = station[
+                    (station["drainageArea30"].isin(HOZE30_SELECTED)) &\
+                        (station["areaStudyName"].isin(MAHDOUDE_SELECTED)) &\
+                            (station["stationName"].isin(STATION_SELECTED))
+                ]
+                
+                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
+                
+                if TYPE_YEAR == "WATER_YEAR":
+                    END_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i >= START_YEAR else True} for i in sorted(list(selected_data["WATERYEAR"].unique()))]
+                    END_YEAR_VALUE = max(sorted(list(selected_data["WATERYEAR"].unique())))
+                    return END_YEAR_OPTIONS, END_YEAR_VALUE
+                else:
+                    END_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i >= START_YEAR else True} for i in sorted(list(selected_data["YEAR"].unique()))]
+                    END_YEAR_VALUE = max(sorted(list(selected_data["YEAR"].unique())))
+                    return END_YEAR_OPTIONS, END_YEAR_VALUE
+            except:
+                return [], None
+        else:
+            return [], None
+
+
+    # SELECT START MONTH - TAB2 SIDEBAR LEFT CARD1
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Output('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    )
+    def FUNCTION_SELECT_START_MONTH_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR):
+        if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
+            (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
+                (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
+                    START_YEAR is not None:
+            try:
+                
+                selected_station = station[
+                    (station["drainageArea30"].isin(HOZE30_SELECTED)) &\
+                        (station["areaStudyName"].isin(MAHDOUDE_SELECTED)) &\
+                            (station["stationName"].isin(STATION_SELECTED))
+                ]
+                
+                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
+                
+                if TYPE_YEAR == "WATER_YEAR":
+                    selected_data = selected_data[selected_data["WATERYEAR"] == START_YEAR]
+                    all_existed_month = sorted(list(selected_data["WATERMONTH"].unique()))
+                    all_existed_month = [M_WATERYEAR[i] for i in [x - 1 for x in all_existed_month]]
+                    
+                    START_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_WATERYEAR]
+                    START_MONTH_VALUE = min(sorted(list(selected_data["WATERMONTH"].unique())))
+                    return START_MONTH_OPTIONS, M_WATERYEAR[START_MONTH_VALUE - 1]
+                else:
+                    selected_data = selected_data[selected_data["YEAR"] == START_YEAR]
+                    all_existed_month = sorted(list(selected_data["MONTH"].unique()))
+                    all_existed_month = [M_SHAMSIYEAR[i] for i in [x - 1 for x in all_existed_month]]
+                    
+                    START_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_SHAMSIYEAR]
+                    START_MONTH_VALUE = min(sorted(list(selected_data["MONTH"].unique())))
+                    return START_MONTH_OPTIONS, M_SHAMSIYEAR[START_MONTH_VALUE - 1]
+            except:
+                return [], None
+        else:
+            return [], None
+    
+
+    # SELECT END MONTH - TAB2 SIDEBAR LEFT CARD1
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output('SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Output('SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    )
+    def FUNCTION_SELECT_END_MONTH_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR, START_MONTH, END_YEAR):
+        if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
+            (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
+                (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
+                    START_YEAR is not None and START_MONTH is not None and END_YEAR is not None:
+            try:
+                selected_station = station[
+                    (station["drainageArea30"].isin(HOZE30_SELECTED)) &\
+                        (station["areaStudyName"].isin(MAHDOUDE_SELECTED)) &\
+                            (station["stationName"].isin(STATION_SELECTED))
+                ]
+                
+                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
+                
+                if TYPE_YEAR == "WATER_YEAR":
+                    if END_YEAR == START_YEAR:
+                        selected_data = selected_data[selected_data["WATERYEAR"] == END_YEAR]
+                        all_existed_month = sorted(list(selected_data["WATERMONTH"].unique()))
+                        all_existed_month = [M_WATERYEAR[i] for i in [x - 1 for x in all_existed_month]]                        
+                        all_existed_month = list(set(all_existed_month).difference(M_WATERYEAR[0:M_WATERYEAR.index(START_MONTH)]))
+                        
+                        END_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_WATERYEAR]
+                        END_MONTH_VALUE = max(sorted(list(selected_data["WATERMONTH"].unique())))
+                        return END_MONTH_OPTIONS, M_WATERYEAR[END_MONTH_VALUE - 1]
+                    else:
+                        selected_data = selected_data[selected_data["WATERYEAR"] == END_YEAR]
+                        all_existed_month = sorted(list(selected_data["WATERMONTH"].unique()))
+                        all_existed_month = [M_WATERYEAR[i] for i in [x - 1 for x in all_existed_month]]
+                        
+                        END_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_WATERYEAR]
+                        END_MONTH_VALUE = max(sorted(list(selected_data["WATERMONTH"].unique())))
+                        return END_MONTH_OPTIONS, M_WATERYEAR[END_MONTH_VALUE - 1]
+                else:
+                    if END_YEAR == START_YEAR:
+                        selected_data = selected_data[selected_data["YEAR"] == END_YEAR]
+                        all_existed_month = sorted(list(selected_data["MONTH"].unique()))
+                        all_existed_month = [M_SHAMSIYEAR[i] for i in [x - 1 for x in all_existed_month]]                        
+                        all_existed_month = list(set(all_existed_month).difference(M_SHAMSIYEAR[0:M_SHAMSIYEAR.index(START_MONTH)]))
+                        
+                        END_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_SHAMSIYEAR]
+                        END_MONTH_VALUE = max(sorted(list(selected_data["MONTH"].unique())))
+                        return END_MONTH_OPTIONS, M_SHAMSIYEAR[END_MONTH_VALUE - 1]
+                    else:
+                        selected_data = selected_data[selected_data["YEAR"] == END_YEAR]
+                        all_existed_month = sorted(list(selected_data["MONTH"].unique()))
+                        all_existed_month = [M_SHAMSIYEAR[i] for i in [x - 1 for x in all_existed_month]]
+                        
+                        END_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_SHAMSIYEAR]
+                        END_MONTH_VALUE = max(sorted(list(selected_data["MONTH"].unique())))
+                        return END_MONTH_OPTIONS, M_SHAMSIYEAR[END_MONTH_VALUE - 1]
+            except:
+                return [], None
+        else:
+            return [], None
+
+
+
+    # SELECT START DAY - TAB2 SIDEBAR LEFT CARD1
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output('SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Output('SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    )
+    def FUNCTION_SELECT_START_DAY_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR, START_MONTH):
+        if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
+            (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
+                (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
+                    START_YEAR is not None and START_MONTH is not None:
+            try:
+                selected_station = station[
+                    (station["drainageArea30"].isin(HOZE30_SELECTED)) &\
+                        (station["areaStudyName"].isin(MAHDOUDE_SELECTED)) &\
+                            (station["stationName"].isin(STATION_SELECTED))
+                ]
+                
+                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
+                
+                if TYPE_YEAR == "WATER_YEAR":
+                    selected_data = selected_data[selected_data["WATERYEAR"] == START_YEAR]
+                    selected_data = selected_data[selected_data["WATERMONTH"] == (M_WATERYEAR.index(START_MONTH) + 1)]
+                    all_existed_day = sorted(list(selected_data["DAY"].unique()))
+                    
+                    START_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1,32)]
+                    START_DAY_VALUE = min(sorted(list(selected_data["DAY"].unique())))
+                    return START_DAY_OPTIONS, START_DAY_VALUE
+                else:
+                    selected_data = selected_data[selected_data["YEAR"] == START_YEAR]
+                    selected_data = selected_data[selected_data["MONTH"] == (M_SHAMSIYEAR.index(START_MONTH) + 1)]
+                    all_existed_day = sorted(list(selected_data["DAY"].unique()))
+                    
+                    START_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1,32)]
+                    START_DAY_VALUE = min(sorted(list(selected_data["DAY"].unique())))
+                    return START_DAY_OPTIONS, START_DAY_VALUE
+            except:
+                return [], None
+        else:
+            return [], None
+
+
+    # SELECT END DAY - TAB2 SIDEBAR LEFT CARD1
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output('SELECT_END_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Output('SELECT_END_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    )
+    def FUNCTION_SELECT_END_DAY_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR, START_MONTH, START_DAY, END_YEAR, END_MONTH):
+        if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
+            (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
+                (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
+                    START_YEAR is not None and START_MONTH is not None and START_DAY is not None and\
+                        END_YEAR is not None and END_MONTH is not None:
+            try:
+                selected_station = station[
+                    (station["drainageArea30"].isin(HOZE30_SELECTED)) &\
+                        (station["areaStudyName"].isin(MAHDOUDE_SELECTED)) &\
+                            (station["stationName"].isin(STATION_SELECTED))
+                ]
+                
+                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
+                
+                if TYPE_YEAR == "WATER_YEAR":
+                    if END_YEAR == START_YEAR and START_MONTH == END_MONTH:
+                        selected_data = selected_data[selected_data["WATERYEAR"] == END_YEAR]
+                        selected_data = selected_data[selected_data["WATERMONTH"] == (M_WATERYEAR.index(END_MONTH) + 1)]
+                        all_existed_day = sorted(list(selected_data["DAY"].unique()))
+                        all_existed_day = list(set(all_existed_day).difference(list(range(1, START_DAY))))
+                        
+                        END_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1, 32)]
+                        END_DAY_VALUE = max(all_existed_day)
+                        return END_DAY_OPTIONS, END_DAY_VALUE
+                    else:
+                        selected_data = selected_data[selected_data["WATERYEAR"] == END_YEAR]
+                        selected_data = selected_data[selected_data["WATERMONTH"] == (M_WATERYEAR.index(END_MONTH) + 1)]
+                        all_existed_day = sorted(list(selected_data["DAY"].unique())) 
+                        END_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1, 32)]
+                        END_DAY_VALUE = max(all_existed_day)
+                        return END_DAY_OPTIONS, END_DAY_VALUE
+                else:
+                    if END_YEAR == START_YEAR and START_MONTH == END_MONTH:
+                        selected_data = selected_data[selected_data["YEAR"] == END_YEAR]
+                        selected_data = selected_data[selected_data["MONTH"] == (M_SHAMSIYEAR.index(END_MONTH) + 1)]
+                        all_existed_day = sorted(list(selected_data["DAY"].unique()))
+                        all_existed_day = list(set(all_existed_day).difference(list(range(1, START_DAY))))
+                        
+                        END_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1, 32)]
+                        END_DAY_VALUE = max(all_existed_day)
+                        return END_DAY_OPTIONS, END_DAY_VALUE
+                    else:
+                        selected_data = selected_data[selected_data["YEAR"] == END_YEAR]
+                        selected_data = selected_data[selected_data["MONTH"] == (M_SHAMSIYEAR.index(END_MONTH) + 1)]
+                        all_existed_day = sorted(list(selected_data["DAY"].unique()))
+                        
+                        END_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1, 32)]
+                        END_DAY_VALUE = max(all_existed_day.unique())
+                        return END_DAY_OPTIONS, END_DAY_VALUE
+            except:
+                return [], None
+        else:
+            return [], None
 
     # CREATE MAP - TAB2 SIDEBAR LEFT CARD1
     # -----------------------------------------------------------------------------
@@ -176,16 +478,16 @@ def precipitation_callback_tab2(app):
 
     # CONTENT 1 - CARD INFO
     # -----------------------------------------------------------------------------
-    @app.callback(
-        Output('MAP-TAB2_SIDEBAR_LEFT_CARD1', 'figure'),
-        Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-        Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-        Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-        Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-        Input('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-    )
-    def FUNCTION_MAP_TAB2_SIDEBAR_LEFT_CARD1(DATABASE_STATE, HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED):
-        pass
+    # @app.callback(
+    #     Output('MAP-TAB2_SIDEBAR_LEFT_CARD1', 'figure'),
+    #     Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    #     Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    #     Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    #     Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    #     Input('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    # )
+    # def FUNCTION_MAP_TAB2_SIDEBAR_LEFT_CARD1(DATABASE_STATE, HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED):
+    #     pass
 
 
 #     # -----------------------------------------------------------------------------
