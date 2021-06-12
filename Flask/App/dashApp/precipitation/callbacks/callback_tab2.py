@@ -93,12 +93,17 @@ def precipitation_callback_tab2(app):
     @app.callback(
         Output('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
         Output('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Output('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'disabled'),
+        Output('SELECT_START_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Output('SELECT_START_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Output('SELECT_START_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'disabled'),
         Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-        Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value')
+        Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_TYPE_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     )
-    def FUNCTION_SELECT_START_YEAR_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR):
+    def FUNCTION_SELECT_START_YEAR_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, TYPE_ANALYSIS):
         if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
             (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
                 (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0):
@@ -112,18 +117,35 @@ def precipitation_callback_tab2(app):
                 
                 selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
                 
+                # DEFINED VARIABLE
                 if TYPE_YEAR == "WATER_YEAR":
-                    START_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in sorted(list(selected_data["WATERYEAR"].unique()))]
-                    START_YEAR_VALUE = min(sorted(list(selected_data["WATERYEAR"].unique())))
-                    return START_YEAR_OPTIONS, START_YEAR_VALUE
+                    YEAR = "WATERYEAR"
+                    MONTH = "WATERMONTH"
+                    DAY = "DAY"
+                    MONTH_NAME = M_WATERYEAR
                 else:
-                    START_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in sorted(list(selected_data["YEAR"].unique()))]
-                    START_YEAR_VALUE = min(sorted(list(selected_data["YEAR"].unique())))
-                    return START_YEAR_OPTIONS, START_YEAR_VALUE
+                    YEAR = "YEAR"
+                    MONTH = "MONTH"
+                    DAY = "DAY"
+                    MONTH_NAME = M_SHAMSIYEAR
+                
+                if TYPE_ANALYSIS == "CURRENTvsPREVIOUS":
+                    MAX_YEAR = selected_data[YEAR].max()
+                    MIN_YEAR = selected_data[YEAR].min()
+                    START_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in [MAX_YEAR]]
+                    START_YEAR_VALUE = MAX_YEAR
+                    return START_YEAR_OPTIONS, START_YEAR_VALUE, True,\
+                        START_DURATION_OPTIONS, START_DURATION_VALUE, True
+                else:
+                    # START_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in sorted(list(selected_data["WATERYEAR"].unique()))]
+                    # START_YEAR_VALUE = min(sorted(list(selected_data["WATERYEAR"].unique())))
+                    # return START_YEAR_OPTIONS, START_YEAR_VALUE, True
+                    return [], None, False
+
             except:
-                return [], None
+                return [], None, False
         else:
-            return [], None
+            return [], None, False
     
 
     # SELECT END YEAR - TAB2 SIDEBAR LEFT CARD1
@@ -131,13 +153,15 @@ def precipitation_callback_tab2(app):
     @app.callback(
         Output('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
         Output('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Output('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'disabled'),
         Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_TYPE_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     )
-    def FUNCTION_SELECT_END_YEAR_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR):
+    def FUNCTION_SELECT_END_YEAR_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR, TYPE_ANALYSIS):
         if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
             (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
                 (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
@@ -152,18 +176,32 @@ def precipitation_callback_tab2(app):
                 
                 selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
                 
+                # DEFINED VARIABLE
                 if TYPE_YEAR == "WATER_YEAR":
-                    END_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i >= START_YEAR else True} for i in sorted(list(selected_data["WATERYEAR"].unique()))]
-                    END_YEAR_VALUE = max(sorted(list(selected_data["WATERYEAR"].unique())))
-                    return END_YEAR_OPTIONS, END_YEAR_VALUE
+                    YEAR = "WATERYEAR"
+                    MONTH = "WATERMONTH"
+                    DAY = "DAY"
+                    MONTH_NAME = M_WATERYEAR
                 else:
-                    END_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i >= START_YEAR else True} for i in sorted(list(selected_data["YEAR"].unique()))]
-                    END_YEAR_VALUE = max(sorted(list(selected_data["YEAR"].unique())))
-                    return END_YEAR_OPTIONS, END_YEAR_VALUE
+                    YEAR = "YEAR"
+                    MONTH = "MONTH"
+                    DAY = "DAY"
+                    MONTH_NAME = M_SHAMSIYEAR
+                
+                if TYPE_ANALYSIS == "CURRENTvsPREVIOUS":
+                    MAX_YEAR = selected_data[YEAR].max()
+                    START_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in [MAX_YEAR]]
+                    START_YEAR_VALUE = MAX_YEAR
+                    return START_YEAR_OPTIONS, START_YEAR_VALUE, True
+                else:
+                    # END_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i >= START_YEAR else True} for i in sorted(list(selected_data["YEAR"].unique()))]
+                    # END_YEAR_VALUE = max(sorted(list(selected_data["YEAR"].unique())))
+                    # return END_YEAR_OPTIONS, END_YEAR_VALUE
+                    return [], None, False
             except:
-                return [], None
+                return [], None, False
         else:
-            return [], None
+            return [], None, False
 
 
     # SELECT START MONTH - TAB2 SIDEBAR LEFT CARD1

@@ -27,22 +27,48 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
         html.H6(
             children=[
                 "   تحلیل ایستگاهی",
-                html.Img(src='data:image/png;base64,{}'.format(DROP_WATER_LOGO), height=30, className="ml-2"),
+                html.Img(src='data:image/png;base64,{}'.format(DROP_WATER_LOGO),
+                         height=30, className="ml-2"),
             ],
             className='card-header text-right'
         ),
         html.Div(
             children=[
-                
+
                 html.Div(
                     children=[
+
                         html.H6(
                             children=[
-                                "گام زمانی:"
+                                "انتخاب نوع تحلیل آماری:"
                             ],
                             dir="rtl",
-                            className="text-right "
+                            className="text-right text-primary mb-3"
                         ),
+
+                        html.Div(
+                            children=[
+                                dcc.RadioItems(
+                                    id="SELECT_TYPE_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD1",
+                                    options=[
+                                        {'label': 'تحلیل سال آبی/شمسی جاری', 'value': 'CURRENTvsPREVIOUS'},
+                                    ],
+                                    value='CURRENTvsPREVIOUS',
+                                    inputClassName="mr-1 ml-1",
+                                )
+                            ],
+                            dir="rtl",
+                            className="text-right align-items-center justify-content-center my-0",
+                        ),
+                        
+                        html.H6(
+                            children=[
+                                "انتخاب گام زمانی تحلیل آماری:"
+                            ],
+                            dir="rtl",
+                            className="text-right text-primary my-3"
+                        ),
+
                         html.Div(
                             children=[
                                 dcc.RadioItems(
@@ -50,21 +76,49 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                                     options=[
                                         {'label': 'ساعتی', 'value': 'TIMESTEP_HOURE'},
                                         {'label': 'روزانه', 'value': 'TIMESTEP_DAY'},
-                                        {'label': 'ماهانه', 'value': 'TIMESTEP_MONTH'},
-                                        {'label': 'سالانه', 'value': 'TIMESTEP_YEAR'},
+                                        {'label': 'ماهانه',
+                                            'value': 'TIMESTEP_MONTH'},
+                                        {'label': 'سالانه',
+                                            'value': 'TIMESTEP_YEAR'},
                                     ],
                                     value='TIMESTEP_YEAR',
                                     labelStyle={'display': 'inline-block'},
-                                    inputClassName="mr-3 ml-1",
+                                    inputClassName="mr-1 ml-1",
                                 )
                             ],
                             dir="rtl",
-                            className="text-center align-items-center justify-content-center",
+                            className="text-center align-items-center justify-content-center my-0",
+                        ),
+                        
+                        html.H6(
+                            children=[
+                                "انتخاب نوع سال:"
+                            ],
+                            dir="rtl",
+                            className="text-right text-primary my-3"
+                        ),
+
+                        html.Div(
+                            children=[
+                                dcc.RadioItems(
+                                    id="SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
+                                    options=[
+                                        {'label': 'سال آبی', 'value': 'WATER_YEAR'},
+                                        {'label': 'سال شمسی',
+                                            'value': 'SHAMSI_YEAR'},
+                                    ],
+                                    value='WATER_YEAR',
+                                    labelStyle={'display': 'inline-block'},
+                                    inputClassName="mr-1 ml-1",
+                                )
+                            ],
+                            dir="rtl",
+                            className="text-center align-items-center justify-content-center my-0",
                         ),
                     ],
                     className="form-group mb-4"
                 ),
-                
+
                 html.Div(
                     children=[
                         html.H6(
@@ -72,7 +126,7 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                                 "انتخاب حوزه آبریز:"
                             ],
                             dir="rtl",
-                            className="text-right "
+                            className="text-right text-primary"
                         ),
                         html.Div(
                             children=[
@@ -81,15 +135,15 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                                     placeholder="یک یا چند حوزه انتخاب کنید",
                                     multi=True,
                                     className="dash-dropdown-select",
-                                    
+
                                 )
                             ],
                         ),
                     ],
                     className="form-group mb-4"
                 ),
-                
-                
+
+
                 html.Div(
                     children=[
                         html.H6(
@@ -97,7 +151,7 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                                 "انتخاب محدوده مطالعاتی:"
                             ],
                             dir="rtl",
-                            className="text-right "
+                            className="text-right text-primary"
                         ),
                         html.Div(
                             children=[
@@ -112,8 +166,8 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                     ],
                     className="form-group mb-4"
                 ),
-                
-                
+
+
                 html.Div(
                     children=[
                         html.H6(
@@ -121,7 +175,7 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                                 "انتخاب ایستگاه:"
                             ],
                             dir="rtl",
-                            className="text-right "
+                            className="text-right text-primary"
                         ),
                         html.Div(
                             children=[
@@ -136,75 +190,79 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                     ],
                     className="form-group mb-4"
                 ),
-                
-                
+
+
                 html.Div(
                     children=[
-                        
-                        html.H6(
-                            children=[
-                                "انتخاب بازه زمانی:"
-                            ],
-                            dir="rtl",
-                            className="text-right "
-                        ),
-                        
                         html.Div(
                             children=[
-                                dcc.RadioItems(
-                                    id="SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
-                                    options=[
-                                        {'label': 'سال آبی', 'value': 'WATER_YEAR'},
-                                        {'label': 'سال شمسی', 'value': 'SHAMSI_YEAR'},
+
+                                html.H6(
+                                    children=[
+                                        "انتخاب طول دوره آماری:",
+                                        
                                     ],
-                                    value='WATER_YEAR',
-                                    labelStyle={'display': 'inline-block'},
-                                    inputClassName="mr-3 ml-1",
-                                )
-                            ],
-                            dir="rtl",
-                            className="text-center align-items-center justify-content-center",
-                        ),
-                        
-                        html.Div(
-                            children=[
-                                dcc.Checklist(
-                                    id="SELECT_LAST_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
-                                    options=[
-                                        {'label': 'استفاده از سال آخر آبی/شمسی در محاسبات', 'value': 'LASTYEAR'},
+                                    dir="rtl",
+                                    className="text-right text-primary mt-4"
+                                ),
+
+                                html.Div(
+                                    children=[
+                                        html.Div(
+                                            children=[
+                                                dcc.Dropdown(
+                                                    id="SELECT_START_DURATION-TAB2_SIDEBAR_LEFT_CARD1",
+                                                    placeholder="شروع",
+                                                    className="dash-dropdown-select"
+                                                ),
+                                            ],
+                                            className="col-6 pl-0"
+                                        ),
+                                        html.Div(
+                                            children=[
+                                                dcc.Dropdown(
+                                                    id="SELECT_END_DURATION-TAB2_SIDEBAR_LEFT_CARD1",
+                                                    placeholder="پایان",
+                                                    className="dash-dropdown-select"
+
+                                                ),
+                                            ],
+                                            className="col-6 pr-0"
+                                        ),                                  
+
                                     ],
-                                    value=['LASTYEAR'],
-                                    labelStyle={'display': 'inline-block'},
-                                    inputClassName="mr-3 ml-1",
-                                )
-                            ],
-                            dir="rtl",
-                            className="text-right align-items-center justify-content-center mt-3",
-                        ),
-                        
-                        html.Div(
-                            children=[
-                                
+                                    dir="rtl",
+                                    className="row align-items-center justify-content-center mt-3 mb-1"
+                                ),
+              
+                                html.H6(
+                                    children=[
+                                        "انتخاب بازه زمانی:"
+                                    ],
+                                    dir="rtl",
+                                    className="text-right text-primary mt-4"
+                                ),
+
                                 html.P(
                                     children=[
                                         "شروع"
                                     ],
                                     dir="rtl",
-                                    className="text-center mt-2"
+                                    className="text-center mt-3 mb-1",
                                 ),
-                                
+
                                 html.Div(
                                     children=[
                                         dcc.Dropdown(
                                             id="SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
                                             placeholder="سال",
                                             className="dash-dropdown-select"
-                                        ),                                                
+                                        ),
                                         dcc.Dropdown(
                                             id="SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1",
                                             placeholder="ماه",
                                             className="dash-dropdown-select",
-                                        ),                                                
+                                        ),
                                         dcc.Dropdown(
                                             id="SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1",
                                             placeholder="روز",
@@ -213,27 +271,27 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                                     ],
                                     className="form-group m-auto w-75"
                                 ),
-                                
+
                                 html.P(
                                     children=[
                                         "پایان"
                                     ],
                                     dir="rtl",
-                                    className="text-center mt-2"
+                                    className="text-center mt-3 mb-1"
                                 ),
-                                
+
                                 html.Div(
                                     children=[
                                         dcc.Dropdown(
                                             id="SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
                                             placeholder="سال",
                                             className="dash-dropdown-select"
-                                        ),                                                
+                                        ),
                                         dcc.Dropdown(
                                             id="SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1",
                                             placeholder="ماه",
                                             className="dash-dropdown-select",
-                                        ),                                                
+                                        ),
                                         dcc.Dropdown(
                                             id="SELECT_END_DAY-TAB2_SIDEBAR_LEFT_CARD1",
                                             placeholder="روز",
@@ -250,8 +308,8 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                     ],
                     className="form-group mb-4"
                 ),
-        
-        
+
+
                 html.Div(
                     children=[
                         dcc.Graph(
@@ -358,7 +416,7 @@ TAB2_SIDEBAR_RIGHT_CARD_1 = html.Div(
                         # html.P(
                         #     className='card-text',
                         #     children='چاه حسن آباد در آبخوان جوین واقع شده است.'
-                        # )                        
+                        # )
                     ]
                 ),
                 html.Ul(
@@ -367,7 +425,7 @@ TAB2_SIDEBAR_RIGHT_CARD_1 = html.Div(
                         html.Li(
                             id="ID_OW-TAB2_SIDEBAR_RIGHT_CARD1",
                             className='list-group-item'
-                        ),                      
+                        ),
                         html.Li(
                             id="AQUIFER_OW-TAB2_SIDEBAR_RIGHT_CARD1",
                             className='list-group-item',
