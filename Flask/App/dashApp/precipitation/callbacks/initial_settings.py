@@ -132,6 +132,10 @@ CALENDAR_LOGO = base64.b64encode(
     open(IMAGES_FOLDER_PATH + 'CALENDAR_LOGO.png', 'rb').read()
 ).decode()
 
+CALENDAR_2_LOGO = base64.b64encode(
+    open(IMAGES_FOLDER_PATH + 'CALENDAR_2_LOGO.png', 'rb').read()
+).decode()
+
 PRECIPITATION_2_LOGO = base64.b64encode(
     open(IMAGES_FOLDER_PATH + 'PRECIPITATION_2_LOGO.png', 'rb').read()
 ).decode()

@@ -24,6 +24,7 @@ from App.dashApp.precipitation.callbacks.initial_settings import *
 
 TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
     children=[
+        
         html.H6(
             children=[
                 "   تحلیل ایستگاهی",
@@ -32,273 +33,354 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
             ],
             className='card-header text-right'
         ),
+        
         html.Div(
             children=[
-
                 html.Div(
-                    children=[
-
-                        html.H6(
-                            children=[
-                                "انتخاب نوع تحلیل آماری:"
-                            ],
-                            dir="rtl",
-                            className="text-right text-primary mb-3"
-                        ),
-
+                    children=[  
+                                                    
                         html.Div(
                             children=[
-                                dcc.RadioItems(
-                                    id="SELECT_TYPE_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD1",
-                                    options=[
-                                        {'label': 'تحلیل سال آبی/شمسی جاری', 'value': 'CURRENTvsPREVIOUS'},
-                                    ],
-                                    value='CURRENTvsPREVIOUS',
-                                    inputClassName="mr-1 ml-1",
-                                )
-                            ],
-                            dir="rtl",
-                            className="text-right align-items-center justify-content-center my-0",
-                        ),
-                        
-                        html.H6(
-                            children=[
-                                "انتخاب گام زمانی تحلیل آماری:"
-                            ],
-                            dir="rtl",
-                            className="text-right text-primary my-3"
-                        ),
-
-                        html.Div(
-                            children=[
-                                dcc.RadioItems(
-                                    id="SELECT_TIME_STEP-TAB2_SIDEBAR_LEFT_CARD1",
-                                    options=[
-                                        {'label': 'ساعتی', 'value': 'TIMESTEP_HOURE'},
-                                        {'label': 'روزانه', 'value': 'TIMESTEP_DAY'},
-                                        {'label': 'ماهانه',
-                                            'value': 'TIMESTEP_MONTH'},
-                                        {'label': 'سالانه',
-                                            'value': 'TIMESTEP_YEAR'},
-                                    ],
-                                    value='TIMESTEP_YEAR',
-                                    labelStyle={'display': 'inline-block'},
-                                    inputClassName="mr-1 ml-1",
-                                )
-                            ],
-                            dir="rtl",
-                            className="text-center align-items-center justify-content-center my-0",
-                        ),
-                        
-                        html.H6(
-                            children=[
-                                "انتخاب نوع سال:"
-                            ],
-                            dir="rtl",
-                            className="text-right text-primary my-3"
-                        ),
-
-                        html.Div(
-                            children=[
-                                dcc.RadioItems(
-                                    id="SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
-                                    options=[
-                                        {'label': 'سال آبی', 'value': 'WATER_YEAR'},
-                                        {'label': 'سال شمسی',
-                                            'value': 'SHAMSI_YEAR'},
-                                    ],
-                                    value='WATER_YEAR',
-                                    labelStyle={'display': 'inline-block'},
-                                    inputClassName="mr-1 ml-1",
-                                )
-                            ],
-                            dir="rtl",
-                            className="text-center align-items-center justify-content-center my-0",
-                        ),
-                    ],
-                    className="form-group mb-4"
-                ),
-
-                html.Div(
-                    children=[
-                        html.H6(
-                            children=[
-                                "انتخاب حوزه آبریز:"
-                            ],
-                            dir="rtl",
-                            className="text-right text-primary"
-                        ),
-                        html.Div(
-                            children=[
-                                dcc.Dropdown(
-                                    id="SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1",
-                                    placeholder="یک یا چند حوزه انتخاب کنید",
-                                    multi=True,
-                                    className="dash-dropdown-select",
-
-                                )
-                            ],
-                        ),
-                    ],
-                    className="form-group mb-4"
-                ),
-
-
-                html.Div(
-                    children=[
-                        html.H6(
-                            children=[
-                                "انتخاب محدوده مطالعاتی:"
-                            ],
-                            dir="rtl",
-                            className="text-right text-primary"
-                        ),
-                        html.Div(
-                            children=[
-                                dcc.Dropdown(
-                                    id="SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1",
-                                    placeholder="یک یا چند محدوده مطالعاتی انتخاب کنید",
-                                    multi=True,
-                                    className="dash-dropdown-select"
-                                )
-                            ],
-                        ),
-                    ],
-                    className="form-group mb-4"
-                ),
-
-
-                html.Div(
-                    children=[
-                        html.H6(
-                            children=[
-                                "انتخاب ایستگاه:"
-                            ],
-                            dir="rtl",
-                            className="text-right text-primary"
-                        ),
-                        html.Div(
-                            children=[
-                                dcc.Dropdown(
-                                    id="SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1",
-                                    placeholder="یک یا چند ایستگاه انتخاب کنید",
-                                    multi=True,
-                                    className="dash-dropdown-select"
-                                )
-                            ],
-                        ),
-                    ],
-                    className="form-group mb-4"
-                ),
-
-
-                html.Div(
-                    children=[
-                        html.Div(
-                            children=[
-
                                 html.H6(
                                     children=[
-                                        "انتخاب طول دوره آماری:",
+                                        "انتخاب حوزه آبریز:"
+                                    ],
+                                    dir="rtl",
+                                    className="text-right text-primary"
+                                ),
+                                html.Div(
+                                    children=[
+                                        dcc.Dropdown(
+                                            id="SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1",
+                                            placeholder="یک یا چند حوزه انتخاب کنید",
+                                            multi=True,
+                                            className="dash-dropdown-select",
+
+                                        )
+                                    ],
+                                ),
+                            ],
+                            className="form-group mb-4"
+                        ),
+
+                        html.Div(
+                            children=[
+                                html.H6(
+                                    children=[
+                                        "انتخاب محدوده مطالعاتی:"
+                                    ],
+                                    dir="rtl",
+                                    className="text-right text-primary"
+                                ),
+                                html.Div(
+                                    children=[
+                                        dcc.Dropdown(
+                                            id="SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1",
+                                            placeholder="یک یا چند محدوده مطالعاتی انتخاب کنید",
+                                            multi=True,
+                                            className="dash-dropdown-select"
+                                        )
+                                    ],
+                                ),
+                            ],
+                            className="form-group mb-4"
+                        ),
+
+                        html.Div(
+                            children=[
+                                html.H6(
+                                    children=[
+                                        "انتخاب ایستگاه:"
+                                    ],
+                                    dir="rtl",
+                                    className="text-right text-primary"
+                                ),
+                                html.Div(
+                                    children=[
+                                        dcc.Dropdown(
+                                            id="SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1",
+                                            placeholder="یک یا چند ایستگاه انتخاب کنید",
+                                            multi=True,
+                                            className="dash-dropdown-select"
+                                        )
+                                    ],
+                                ),
+                            ],
+                            className="form-group mb-4"
+                        ),
+                    ],
+                    className="form-group"
+                ),
+                
+                html.Hr(
+                    className="mb-4"
+                ),
+                
+                html.Div(
+                    children=[
+                        
+                        html.Div(
+                            children=[
+                                html.H6(
+                                    children=[
+                                        "انتخاب نوع تحلیل آماری:"
+                                    ],
+                                    dir="rtl",
+                                    className="text-right text-primary mb-3"
+                                ),
+
+                                html.Div(
+                                    children=[
+                                        dcc.RadioItems(
+                                            id="SELECT_TYPE_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD1",
+                                            options=[
+                                                {'label': 'تحلیل سال آبی/شمسی جاری', 'value': 'CURRENTvsPREVIOUS'},
+                                            ],
+                                            value='CURRENTvsPREVIOUS',
+                                            inputClassName="mr-1 ml-1",
+                                        )
+                                    ],
+                                    dir="rtl",
+                                    className="text-right align-items-center justify-content-center my-0",
+                                ),
+                            ],
+                            className="form-group"
+                        ),
+                        
+                        html.Div(
+                            children=[
+                                html.H6(
+                                    children=[
+                                        "انتخاب گام زمانی تحلیل آماری:"
+                                    ],
+                                    dir="rtl",
+                                    className="text-right text-primary my-3"
+                                ),
+
+                                html.Div(
+                                    children=[
+                                        dcc.RadioItems(
+                                            id="SELECT_TIME_STEP-TAB2_SIDEBAR_LEFT_CARD1",
+                                            options=[
+                                                {'label': 'ساعتی', 'value': 'TIMESTEP_HOURE'},
+                                                {'label': 'روزانه', 'value': 'TIMESTEP_DAY'},
+                                                {'label': 'ماهانه',
+                                                    'value': 'TIMESTEP_MONTH'},
+                                                {'label': 'سالانه',
+                                                    'value': 'TIMESTEP_YEAR'},
+                                            ],
+                                            value='TIMESTEP_YEAR',
+                                            labelStyle={'display': 'inline-block'},
+                                            inputClassName="mr-1 ml-1",
+                                        )
+                                    ],
+                                    dir="rtl",
+                                    className="text-center align-items-center justify-content-center my-0",
+                                ),
+                            ],
+                            className="form-group"
+                        ),
+                        
+                        html.Div(
+                            children=[
+                                html.H6(
+                                    children=[
+                                        "انتخاب نوع سال:"
+                                    ],
+                                    dir="rtl",
+                                    className="text-right text-primary my-3"
+                                ),
+
+                                html.Div(
+                                    children=[
+                                        dcc.RadioItems(
+                                            id="SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
+                                            options=[
+                                                {'label': 'سال آبی', 'value': 'WATER_YEAR'},
+                                                {'label': 'سال شمسی',
+                                                    'value': 'SHAMSI_YEAR'},
+                                            ],
+                                            value='WATER_YEAR',
+                                            labelStyle={'display': 'inline-block'},
+                                            inputClassName="mr-1 ml-1",
+                                        )
+                                    ],
+                                    dir="rtl",
+                                    className="text-center align-items-center justify-content-center my-0",
+                                ),
+                            ],
+                            className="form-group"
+                        ),
+                    ],
+                    className="form-group"
+                ),
+                
+                html.Hr(
+                    className="mb-4"
+                ),
+                
+                html.Div(
+                    children=[
+                        html.Div(
+                            children=[
+                                
+                                html.Div(
+                                    children=[
+                                        html.H6(
+                                            children=[
+                                                "انتخاب طول دوره آماری:",
+                                                
+                                            ],
+                                            dir="rtl",
+                                            className="text-right text-primary mt-4"
+                                        ),
+
+                                        html.Div(
+                                            children=[
+                                                html.Div(
+                                                    children=[
+                                                        dcc.Dropdown(
+                                                            id="SELECT_START_DURATION-TAB2_SIDEBAR_LEFT_CARD1",
+                                                            placeholder="سال شروع",
+                                                            className="dash-dropdown-select",
+                                                            clearable=False
+                                                        ),
+                                                    ],
+                                                    className="col-6 pl-0"
+                                                ),
+                                                html.Div(
+                                                    children=[
+                                                        dcc.Dropdown(
+                                                            id="SELECT_END_DURATION-TAB2_SIDEBAR_LEFT_CARD1",
+                                                            placeholder="سال پایان",
+                                                            className="dash-dropdown-select",
+                                                            clearable=False
+
+                                                        ),
+                                                    ],
+                                                    className="col-6 pr-0"
+                                                ),                                  
+
+                                            ],
+                                            dir="rtl",
+                                            className="row align-items-center justify-content-center mt-3 mb-1"
+                                        ),
+                                    ],
+                                    className="form-group"
+                                ),
+                                
+                                html.Div(
+                                    children=[
+                                        html.H6(
+                                            children=[
+                                                "انتخاب بازه زمانی:"
+                                            ],
+                                            dir="rtl",
+                                            className="text-right text-primary mt-4"
+                                        ),
+                                        html.Div(
+                                            children=[
+                                                html.P(
+                                                    children=[
+                                                        "شروع"
+                                                    ],
+                                                    dir="rtl",
+                                                    className="text-center mt-3 mb-0",
+                                                ),
+                                                html.Div(
+                                                    children=[
+                                                        html.Div(
+                                                            children=[
+                                                                dcc.Dropdown(
+                                                                    id="SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1",
+                                                                    placeholder="روز",
+                                                                    className="dash-dropdown-select",
+                                                                    clearable=False
+                                                                ), 
+                                                            ],
+                                                            className="col-3 pl-0"    
+                                                        ),
+                                                        html.Div(
+                                                            children=[
+                                                                dcc.Dropdown(
+                                                                    id="SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1",
+                                                                    placeholder="ماه",
+                                                                    className="dash-dropdown-select",
+                                                                    clearable=False
+                                                                ),
+                                                            ],
+                                                            className="col-4 px-0"    
+                                                        ),
+                                                        html.Div(
+                                                            children=[
+                                                                dcc.Dropdown(
+                                                                    id="SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
+                                                                    placeholder="سال",
+                                                                    className="dash-dropdown-select",
+                                                                    clearable=False
+                                                                ),
+                                                            ],
+                                                            className="col-5 pr-0"    
+                                                        ),
+                                                    ],
+                                                    className="row align-items-center justify-content-center mt-3 mb-1"
+                                                )
+                                            ],
+                                            className="form-group"
+                                        ),
                                         
-                                    ],
-                                    dir="rtl",
-                                    className="text-right text-primary mt-4"
-                                ),
-
-                                html.Div(
-                                    children=[
                                         html.Div(
                                             children=[
-                                                dcc.Dropdown(
-                                                    id="SELECT_START_DURATION-TAB2_SIDEBAR_LEFT_CARD1",
-                                                    placeholder="شروع",
-                                                    className="dash-dropdown-select"
+                                                html.P(
+                                                    children=[
+                                                        "پایان"
+                                                    ],
+                                                    dir="rtl",
+                                                    className="text-center mt-3 mb-0"
                                                 ),
+                                                html.Div(
+                                                    children=[
+                                                        html.Div(
+                                                            children=[
+                                                                dcc.Dropdown(
+                                                                    id="SELECT_END_DAY-TAB2_SIDEBAR_LEFT_CARD1",
+                                                                    placeholder="روز",
+                                                                    className="dash-dropdown-select",
+                                                                    clearable=False
+                                                                ),
+                                                            ],
+                                                            className="col-3 pl-0"    
+                                                        ),
+                                                        html.Div(
+                                                            children=[
+                                                                dcc.Dropdown(
+                                                                    id="SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1",
+                                                                    placeholder="ماه",
+                                                                    className="dash-dropdown-select",
+                                                                    clearable=False
+                                                                ),
+                                                            ],
+                                                            className="col-4 px-0"    
+                                                        ),
+                                                        html.Div(
+                                                            children=[
+                                                                dcc.Dropdown(
+                                                                    id="SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
+                                                                    placeholder="سال",
+                                                                    className="dash-dropdown-select",
+                                                                    clearable=False
+                                                                ),
+                                                            ],
+                                                            className="col-5 pr-0"    
+                                                        ),
+                                                    ],
+                                                    className="row align-items-center justify-content-center mt-3 mb-1"
+                                                )
                                             ],
-                                            className="col-6 pl-0"
-                                        ),
-                                        html.Div(
-                                            children=[
-                                                dcc.Dropdown(
-                                                    id="SELECT_END_DURATION-TAB2_SIDEBAR_LEFT_CARD1",
-                                                    placeholder="پایان",
-                                                    className="dash-dropdown-select"
-
-                                                ),
-                                            ],
-                                            className="col-6 pr-0"
-                                        ),                                  
-
-                                    ],
-                                    dir="rtl",
-                                    className="row align-items-center justify-content-center mt-3 mb-1"
-                                ),
-              
-                                html.H6(
-                                    children=[
-                                        "انتخاب بازه زمانی:"
-                                    ],
-                                    dir="rtl",
-                                    className="text-right text-primary mt-4"
-                                ),
-
-                                html.P(
-                                    children=[
-                                        "شروع"
-                                    ],
-                                    dir="rtl",
-                                    className="text-center mt-3 mb-1",
-                                ),
-
-                                html.Div(
-                                    children=[
-                                        dcc.Dropdown(
-                                            id="SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
-                                            placeholder="سال",
-                                            className="dash-dropdown-select"
-                                        ),
-                                        dcc.Dropdown(
-                                            id="SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1",
-                                            placeholder="ماه",
-                                            className="dash-dropdown-select",
-                                        ),
-                                        dcc.Dropdown(
-                                            id="SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1",
-                                            placeholder="روز",
-                                            className="dash-dropdown-select"
+                                            className="form-group"
                                         ),
                                     ],
-                                    className="form-group m-auto w-75"
-                                ),
-
-                                html.P(
-                                    children=[
-                                        "پایان"
-                                    ],
-                                    dir="rtl",
-                                    className="text-center mt-3 mb-1"
-                                ),
-
-                                html.Div(
-                                    children=[
-                                        dcc.Dropdown(
-                                            id="SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
-                                            placeholder="سال",
-                                            className="dash-dropdown-select"
-                                        ),
-                                        dcc.Dropdown(
-                                            id="SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1",
-                                            placeholder="ماه",
-                                            className="dash-dropdown-select",
-                                        ),
-                                        dcc.Dropdown(
-                                            id="SELECT_END_DAY-TAB2_SIDEBAR_LEFT_CARD1",
-                                            placeholder="روز",
-                                            className="dash-dropdown-select"
-                                        ),
-                                    ],
-                                    className="form-group w-75 m-auto"
+                                    className="form-group"
                                 )
                             ],
                             dir="rtl",
@@ -309,6 +391,9 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                     className="form-group mb-4"
                 ),
 
+                html.Hr(
+                    className="mb-4"
+                ),
 
                 html.Div(
                     children=[

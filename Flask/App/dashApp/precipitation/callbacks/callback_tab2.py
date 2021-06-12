@@ -134,18 +134,23 @@ def precipitation_callback_tab2(app):
                     MIN_YEAR = selected_data[YEAR].min()
                     START_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in [MAX_YEAR]]
                     START_YEAR_VALUE = MAX_YEAR
+                    START_DURATION_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in sorted(list(selected_data[YEAR].unique()))[:-1]]
+                    START_DURATION_VALUE = MIN_YEAR
                     return START_YEAR_OPTIONS, START_YEAR_VALUE, True,\
-                        START_DURATION_OPTIONS, START_DURATION_VALUE, True
+                        START_DURATION_OPTIONS, START_DURATION_VALUE, False
                 else:
                     # START_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in sorted(list(selected_data["WATERYEAR"].unique()))]
                     # START_YEAR_VALUE = min(sorted(list(selected_data["WATERYEAR"].unique())))
                     # return START_YEAR_OPTIONS, START_YEAR_VALUE, True
-                    return [], None, False
+                    return [], None, True,\
+                        [], None, True
 
             except:
-                return [], None, False
+                return [], None, True,\
+                    [], None, True
         else:
-            return [], None, False
+            return [], None, True,\
+                [], None, True
     
 
     # SELECT END YEAR - TAB2 SIDEBAR LEFT CARD1
@@ -154,14 +159,18 @@ def precipitation_callback_tab2(app):
         Output('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
         Output('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Output('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'disabled'),
+        Output('SELECT_END_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Output('SELECT_END_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Output('SELECT_END_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'disabled'),
         Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_TYPE_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     )
-    def FUNCTION_SELECT_END_YEAR_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR, TYPE_ANALYSIS):
+    def FUNCTION_SELECT_END_YEAR_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR, TYPE_ANALYSIS, START_DURATION):
         if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
             (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
                 (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
@@ -190,18 +199,24 @@ def precipitation_callback_tab2(app):
                 
                 if TYPE_ANALYSIS == "CURRENTvsPREVIOUS":
                     MAX_YEAR = selected_data[YEAR].max()
-                    START_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in [MAX_YEAR]]
-                    START_YEAR_VALUE = MAX_YEAR
-                    return START_YEAR_OPTIONS, START_YEAR_VALUE, True
+                    END_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in [MAX_YEAR]]
+                    END_YEAR_VALUE = MAX_YEAR
+                    END_DURATION_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i >= START_DURATION else True} for i in sorted(list(selected_data[YEAR].unique()))[:-1]]
+                    END_DURATION_VALUE = sorted(list(selected_data[YEAR].unique()))[-2]
+                    return END_YEAR_OPTIONS, END_YEAR_VALUE, True,\
+                        END_DURATION_OPTIONS, END_DURATION_VALUE, False
                 else:
                     # END_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i >= START_YEAR else True} for i in sorted(list(selected_data["YEAR"].unique()))]
                     # END_YEAR_VALUE = max(sorted(list(selected_data["YEAR"].unique())))
                     # return END_YEAR_OPTIONS, END_YEAR_VALUE
-                    return [], None, False
+                    return [], None, True,\
+                        [], None, True
             except:
-                return [], None, False
+                return [], None, True,\
+                    [], None, True
         else:
-            return [], None, False
+            return [], None, True,\
+                [], None, True
 
 
     # SELECT START MONTH - TAB2 SIDEBAR LEFT CARD1
@@ -209,6 +224,7 @@ def precipitation_callback_tab2(app):
     @app.callback(
         Output('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
         Output('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Output('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'disabled'),
         Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
@@ -237,7 +253,7 @@ def precipitation_callback_tab2(app):
                     
                     START_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_WATERYEAR]
                     START_MONTH_VALUE = min(sorted(list(selected_data["WATERMONTH"].unique())))
-                    return START_MONTH_OPTIONS, M_WATERYEAR[START_MONTH_VALUE - 1]
+                    return START_MONTH_OPTIONS, M_WATERYEAR[START_MONTH_VALUE - 1], False
                 else:
                     selected_data = selected_data[selected_data["YEAR"] == START_YEAR]
                     all_existed_month = sorted(list(selected_data["MONTH"].unique()))
@@ -245,11 +261,11 @@ def precipitation_callback_tab2(app):
                     
                     START_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_SHAMSIYEAR]
                     START_MONTH_VALUE = min(sorted(list(selected_data["MONTH"].unique())))
-                    return START_MONTH_OPTIONS, M_SHAMSIYEAR[START_MONTH_VALUE - 1]
+                    return START_MONTH_OPTIONS, M_SHAMSIYEAR[START_MONTH_VALUE - 1], False
             except:
-                return [], None
+                return [], None, True
         else:
-            return [], None
+            return [], None, True
     
 
     # SELECT END MONTH - TAB2 SIDEBAR LEFT CARD1
@@ -257,6 +273,7 @@ def precipitation_callback_tab2(app):
     @app.callback(
         Output('SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
         Output('SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Output('SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'disabled'),
         Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
@@ -288,7 +305,7 @@ def precipitation_callback_tab2(app):
                         
                         END_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_WATERYEAR]
                         END_MONTH_VALUE = max(sorted(list(selected_data["WATERMONTH"].unique())))
-                        return END_MONTH_OPTIONS, M_WATERYEAR[END_MONTH_VALUE - 1]
+                        return END_MONTH_OPTIONS, M_WATERYEAR[END_MONTH_VALUE - 1], False
                     else:
                         selected_data = selected_data[selected_data["WATERYEAR"] == END_YEAR]
                         all_existed_month = sorted(list(selected_data["WATERMONTH"].unique()))
@@ -296,7 +313,7 @@ def precipitation_callback_tab2(app):
                         
                         END_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_WATERYEAR]
                         END_MONTH_VALUE = max(sorted(list(selected_data["WATERMONTH"].unique())))
-                        return END_MONTH_OPTIONS, M_WATERYEAR[END_MONTH_VALUE - 1]
+                        return END_MONTH_OPTIONS, M_WATERYEAR[END_MONTH_VALUE - 1], False
                 else:
                     if END_YEAR == START_YEAR:
                         selected_data = selected_data[selected_data["YEAR"] == END_YEAR]
@@ -306,7 +323,7 @@ def precipitation_callback_tab2(app):
                         
                         END_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_SHAMSIYEAR]
                         END_MONTH_VALUE = max(sorted(list(selected_data["MONTH"].unique())))
-                        return END_MONTH_OPTIONS, M_SHAMSIYEAR[END_MONTH_VALUE - 1]
+                        return END_MONTH_OPTIONS, M_SHAMSIYEAR[END_MONTH_VALUE - 1], False
                     else:
                         selected_data = selected_data[selected_data["YEAR"] == END_YEAR]
                         all_existed_month = sorted(list(selected_data["MONTH"].unique()))
@@ -314,11 +331,11 @@ def precipitation_callback_tab2(app):
                         
                         END_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_SHAMSIYEAR]
                         END_MONTH_VALUE = max(sorted(list(selected_data["MONTH"].unique())))
-                        return END_MONTH_OPTIONS, M_SHAMSIYEAR[END_MONTH_VALUE - 1]
+                        return END_MONTH_OPTIONS, M_SHAMSIYEAR[END_MONTH_VALUE - 1], False
             except:
-                return [], None
+                return [], None, True
         else:
-            return [], None
+            return [], None, True
 
 
 
@@ -327,6 +344,7 @@ def precipitation_callback_tab2(app):
     @app.callback(
         Output('SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
         Output('SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Output('SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'disabled'),
         Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
@@ -355,7 +373,7 @@ def precipitation_callback_tab2(app):
                     
                     START_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1,32)]
                     START_DAY_VALUE = min(sorted(list(selected_data["DAY"].unique())))
-                    return START_DAY_OPTIONS, START_DAY_VALUE
+                    return START_DAY_OPTIONS, START_DAY_VALUE, False
                 else:
                     selected_data = selected_data[selected_data["YEAR"] == START_YEAR]
                     selected_data = selected_data[selected_data["MONTH"] == (M_SHAMSIYEAR.index(START_MONTH) + 1)]
@@ -363,11 +381,11 @@ def precipitation_callback_tab2(app):
                     
                     START_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1,32)]
                     START_DAY_VALUE = min(sorted(list(selected_data["DAY"].unique())))
-                    return START_DAY_OPTIONS, START_DAY_VALUE
+                    return START_DAY_OPTIONS, START_DAY_VALUE, False
             except:
-                return [], None
+                return [], None, True
         else:
-            return [], None
+            return [], None, True
 
 
     # SELECT END DAY - TAB2 SIDEBAR LEFT CARD1
@@ -375,6 +393,7 @@ def precipitation_callback_tab2(app):
     @app.callback(
         Output('SELECT_END_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
         Output('SELECT_END_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Output('SELECT_END_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'disabled'),
         Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
@@ -409,14 +428,14 @@ def precipitation_callback_tab2(app):
                         
                         END_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1, 32)]
                         END_DAY_VALUE = max(all_existed_day)
-                        return END_DAY_OPTIONS, END_DAY_VALUE
+                        return END_DAY_OPTIONS, END_DAY_VALUE, False
                     else:
                         selected_data = selected_data[selected_data["WATERYEAR"] == END_YEAR]
                         selected_data = selected_data[selected_data["WATERMONTH"] == (M_WATERYEAR.index(END_MONTH) + 1)]
                         all_existed_day = sorted(list(selected_data["DAY"].unique())) 
                         END_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1, 32)]
                         END_DAY_VALUE = max(all_existed_day)
-                        return END_DAY_OPTIONS, END_DAY_VALUE
+                        return END_DAY_OPTIONS, END_DAY_VALUE, False
                 else:
                     if END_YEAR == START_YEAR and START_MONTH == END_MONTH:
                         selected_data = selected_data[selected_data["YEAR"] == END_YEAR]
@@ -426,7 +445,7 @@ def precipitation_callback_tab2(app):
                         
                         END_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1, 32)]
                         END_DAY_VALUE = max(all_existed_day)
-                        return END_DAY_OPTIONS, END_DAY_VALUE
+                        return END_DAY_OPTIONS, END_DAY_VALUE, False
                     else:
                         selected_data = selected_data[selected_data["YEAR"] == END_YEAR]
                         selected_data = selected_data[selected_data["MONTH"] == (M_SHAMSIYEAR.index(END_MONTH) + 1)]
@@ -434,11 +453,11 @@ def precipitation_callback_tab2(app):
                         
                         END_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1, 32)]
                         END_DAY_VALUE = max(all_existed_day)
-                        return END_DAY_OPTIONS, END_DAY_VALUE
+                        return END_DAY_OPTIONS, END_DAY_VALUE, False
             except:
-                return [], None
+                return [], None, True
         else:
-            return [], None
+            return [], None, True
 
     # CREATE MAP - TAB2 SIDEBAR LEFT CARD1
     # -----------------------------------------------------------------------------
@@ -520,32 +539,43 @@ def precipitation_callback_tab2(app):
     # CONTENT 1 - CARD INFO
     # -----------------------------------------------------------------------------
     @app.callback(
-        Output('SELECT_LAST_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Output('INFO_CARD_CURRENT_YEAR_VALUE-TAB2_BODY_CONTENT1', 'children'),
+        Output('INFO_CARD_MEAN_VALUE-TAB2_BODY_CONTENT1', 'children'),
         Output('INFO_CARD_MAX_VALUE-TAB2_BODY_CONTENT1', 'children'),
         Output('INFO_CARD_MIN_VALUE-TAB2_BODY_CONTENT1', 'children'),
-        Output('INFO_CARD_MEAN_VALUE-TAB2_BODY_CONTENT1', 'children'),
+        
         Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-        Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-        Input('SELECT_LAST_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),    
+        
+        Input('SELECT_TYPE_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_TIME_STEP-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        
+        Input('SELECT_START_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_END_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        
         Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        
         Input('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_END_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     )
     def FUNCTION_UPDATE_INFO_CARD_TAB2_BODY_CONTENT1(
-        HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, LAST_YEAR, TIME_STEP,
-        START_YEAR, START_MONTH, START_DAY, END_YEAR, END_MONTH, END_DAY
+        HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED,
+        TYPE_ANALYSIS, TIME_STEP, TYPE_YEAR,
+        START_DURATION, END_DURATION,
+        START_YEAR, START_MONTH, START_DAY,
+        END_YEAR, END_MONTH, END_DAY
     ):
         if (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
             (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
                 (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
-                    (START_YEAR is not None) and (START_MONTH is not None) and (START_DAY is not None) and\
-                        (END_YEAR is not None) and (END_MONTH is not None) and (END_DAY is not None):
+                    (START_DURATION is not None) and (END_DURATION is not None) and\
+                        (START_YEAR is not None) and (START_MONTH is not None) and (START_DAY is not None) and\
+                            (END_YEAR is not None) and (END_MONTH is not None) and (END_DAY is not None):
             try:
                 # LOAD DATA: ----------------------------------------------------------------------
                 
@@ -555,17 +585,12 @@ def precipitation_callback_tab2(app):
                     MONTH = "WATERMONTH"
                     DAY = "DAY"
                     MONTH_NAME = M_WATERYEAR
-                    TXT_TABLE_LAST_YEAR = f"از {START_DAY} {START_MONTH} تا {END_DAY} {END_MONTH} هر سال آبی"                   
-                    TXT_TABLE_NO_LAST_YEAR = f"از 1 مهر تا 31 شهریور هر سال آبی"
                 else:
                     YEAR = "YEAR"
                     MONTH = "MONTH"
                     DAY = "DAY"
                     MONTH_NAME = M_SHAMSIYEAR
-                    TXT_TABLE_LAST_YEAR = f"از {START_DAY} {START_MONTH} تا {END_DAY} {END_MONTH} هر سال شمسی"                   
-                    TXT_TABLE_NO_LAST_YEAR = f"از 1 فروردین تا 29 اسفند هر سال شمسی"
 
-                
                 # LOAD STATIONS
                 selected_station = station[
                     (station["drainageArea30"].isin(HOZE30_SELECTED)) &\
@@ -574,132 +599,121 @@ def precipitation_callback_tab2(app):
                 ]
                 
                 # LOAD DATA
-                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]                
-                MAX_YEAR = selected_data[YEAR].max(skipna=True)
-
-                # TIME SLICING
-                selected_data = selected_data.loc[(selected_data[YEAR] >= START_YEAR)]
-                selected_data = selected_data.loc[~((selected_data[YEAR] == START_YEAR) & (selected_data[MONTH] < (MONTH_NAME.index(START_MONTH) + 1)))]
-                selected_data = selected_data.loc[~((selected_data[YEAR] == START_YEAR) & (selected_data[MONTH] == (MONTH_NAME.index(START_MONTH) + 1)) & (selected_data[DAY] < START_DAY))]
-                selected_data = selected_data.loc[(selected_data[YEAR] <= END_YEAR)]
-                selected_data = selected_data.loc[~((selected_data[YEAR] == END_YEAR) & (selected_data[MONTH] > (MONTH_NAME.index(END_MONTH) + 1)))]
-                selected_data = selected_data.loc[~((selected_data[YEAR] == END_YEAR) & (selected_data[MONTH] == (MONTH_NAME.index(END_MONTH) + 1)) & (selected_data[DAY] > END_DAY))]
-                selected_data.reset_index(inplace=True, drop=True)
+                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
                 
-                if "LASTYEAR" in LAST_YEAR:
-                    selected_data = selected_data.loc[~((selected_data[MONTH] < (MONTH_NAME.index(START_MONTH) + 1)))]
-                    selected_data = selected_data.loc[~((selected_data[MONTH] == (MONTH_NAME.index(START_MONTH) + 1)) & (selected_data[DAY] < START_DAY))]
-                    selected_data = selected_data.loc[~((selected_data[MONTH] > (MONTH_NAME.index(END_MONTH) + 1)))]
-                    selected_data = selected_data.loc[~((selected_data[MONTH] == (MONTH_NAME.index(END_MONTH) + 1)) & (selected_data[DAY] > END_DAY))]
-                    selected_data.reset_index(inplace=True, drop=True)
+                if "CURRENTvsPREVIOUS" in TYPE_ANALYSIS:
+                    df_cp = selected_data.copy()
+                    df_cp = df_cp.loc[~((df_cp[MONTH] < (MONTH_NAME.index(START_MONTH) + 1)))]
+                    df_cp = df_cp.loc[~((df_cp[MONTH] > (MONTH_NAME.index(END_MONTH) + 1)))]
+                    df_cp = df_cp.loc[~((df_cp[MONTH] == (MONTH_NAME.index(START_MONTH) + 1)) & (df_cp[DAY] < START_DAY))]
+                    df_cp = df_cp.loc[~((df_cp[MONTH] == (MONTH_NAME.index(END_MONTH) + 1)) & (df_cp[DAY] > END_DAY))]
                     
-                    pmx_txt = f"<p>{TXT_TABLE_LAST_YEAR}</p><table style='width:100%'>"
-                    pmn_txt = f"<p>{TXT_TABLE_LAST_YEAR}</p><table style='width:100%'>"
-                    pm_txt = f"<p>{TXT_TABLE_LAST_YEAR}</p><table style='width:100%'>"
+
+                                     
                     
                     
+                    pc_txt = "<table style='width:100%'>"
+                    phm_txt = "<table style='width:100%'>"
+                    phmx_txt = "<table style='width:100%'>"
+                    phmn_txt = "<table style='width:100%'>"
+                    
+                    if TIME_STEP == "TIMESTEP_YEAR":
+                        # YEARLY ANALYSIS
+                        for st in df_cp["stationCode"].unique():
+                            df = df_cp[df_cp["stationCode"] == st]
+                            df.reset_index(inplace=True, drop=True)
+                                                
+                            df_year = pd.pivot_table(
+                                df,
+                                values=['JAM_BARAN'],
+                                index=[YEAR],
+                                aggfunc=np.sum
+                            ).reset_index()
+                            
+                            st_name = selected_station.loc[selected_station["stationCode"] == st, "stationName"].values[0]
+                            
+                            # CURRENT YEAR DATA
+                            current_year_data = df_year[df_year[YEAR] == START_YEAR]
+                            current_year_data.reset_index(inplace=True, drop=True)
+                            
+                            # HISTORICAL DATA 
+                            historical_data = df_year[(df_year[YEAR] >= START_DURATION) & (df_year[YEAR] <= END_DURATION)]
+                            historical_data.reset_index(inplace=True, drop=True)
+                            
+                            # CURRENT YEAR
+                            pc_value = round(current_year_data['JAM_BARAN'].mean(skipna = True), 1)
+                            pc_txt = pc_txt + f'''
+                                    <tr>
+                                        <td style="text-align: right;">{st_name}</td>
+                                        <td style="text-align: left; color: red">{pc_value} میلیمتر</td>
+                                    </tr>
+                            '''
+                            
+                            # HISTORICAL MEAN
+                            phm_value = round(historical_data['JAM_BARAN'].mean(skipna = True), 1)
+                            phm_txt = phm_txt + f'''
+                                    <tr>
+                                        <td style="text-align: right;">{st_name}</td>
+                                        <td style="text-align: left; color: red">{phm_value} میلیمتر</td>
+                                    </tr>
+                            '''
+                             
+                            # HISTORICAL MAX
+                            phmx_index = historical_data["JAM_BARAN"].idxmax(axis=1, skipna=True)
+                            phmx_value = round(historical_data.at[phmx_index, 'JAM_BARAN'], 1)
+                            phmx_year = str(historical_data.at[phmx_index, YEAR])
+                            phmx_txt = phmx_txt + f'''
+                                    <tr>
+                                        <td style="text-align: right;">{st_name}</td>
+                                        <td style="text-align: left; color: red">{phmx_value} میلیمتر</td>
+                                        <td style="text-align: left; color: green">{phmx_year}</td>
+                                    </tr>
+                            '''
+                            
+                            # HISTORICAL MIN
+                            phmn_index = historical_data["JAM_BARAN"].idxmin(axis=1, skipna=True)
+                            phmn_value = round(historical_data.at[phmn_index, 'JAM_BARAN'], 1)
+                            phmn_year = str(historical_data.at[phmn_index, YEAR])
+                            phmn_txt = phmn_txt + f'''
+                                    <tr>
+                                        <td style="text-align: right;">{st_name}</td>
+                                        <td style="text-align: left; color: red">{phmn_value} میلیمتر</td>
+                                        <td style="text-align: left; color: green">{phmn_year}</td>
+                                    </tr>
+                            '''
+
+                        pc_txt = pc_txt + "</table>"
+                        phm_txt = phm_txt + "</table>"
+                        phmx_txt = phmx_txt + "</table>"
+                        phmn_txt = phmn_txt + "</table>"
+                        
+                        result = [
+                            dash_dangerously_set_inner_html.DangerouslySetInnerHTML(pc_txt),
+                            dash_dangerously_set_inner_html.DangerouslySetInnerHTML(phm_txt),
+                            dash_dangerously_set_inner_html.DangerouslySetInnerHTML(phmx_txt),
+                            dash_dangerously_set_inner_html.DangerouslySetInnerHTML(phmn_txt),
+                        ]
+                        
+                    else:
+                        result = [
+                            "-",
+                            "-",
+                            "-",
+                            "-"
+                        ]
                 else:
-                    selected_data = selected_data.loc[(selected_data[YEAR] < MAX_YEAR)]
-                    selected_data.reset_index(inplace=True, drop=True)
-                    
-                    pmx_txt = f"<p>{TXT_TABLE_NO_LAST_YEAR}</p><table style='width:100%'>"
-                    pmn_txt = f"<p>{TXT_TABLE_NO_LAST_YEAR}</p><table style='width:100%'>"
-                    pm_txt = f"<p>{TXT_TABLE_NO_LAST_YEAR}</p><table style='width:100%'>"
-                                    
-                if TIME_STEP == "TIMESTEP_HOURE":
-                    pass
-                    # # MAX
-                    # pmx_index = df_year["JAM_BARAN"].idxmax(axis=1, skipna=True)
-                    # pmx_value = df.at[pmx_index, 'JAM_BARAN']
-                    # pmx_year = str(df.at[pmx_index, 'YEAR']).zfill(4)
-                    # pmx_month = str(df.at[pmx_index, 'MONTH']).zfill(2)
-                    # pmx_day = str(df.at[pmx_index, 'DAY']).zfill(2)
-                    # pmx_houre = str(df.at[pmx_index, 'HOURE']).zfill(2)
-                    # pmx_minute = str(df.at[pmx_index, 'MINUTE']).zfill(2)
-                    # pmx_txt = pmx_txt + f'''
-                    #         <tr>
-                    #             <td style="text-align: right;">{st_name}</td>
-                    #             <td style="text-align: right; color: red">{pmx_value} میلیمتر</td>
-                    #             <td style="text-align: left; color: green">{pmx_houre}:{pmx_minute}</td>
-                    #             <td style="text-align: left; color: green">{pmx_year}/{pmx_month}/{pmx_day}</td>
-                    #         </tr>
-                    #     ''' 
-                elif TIME_STEP == "TIMESTEP_DAY":
-                    pass
-                elif TIME_STEP == "TIMESTEP_MONTH":
-                    pass
-                elif TIME_STEP == "TIMESTEP_YEAR":
-                    # YEARLY ANALYSIS
-                    for st in selected_data["stationCode"].unique():
-                        df = selected_data[selected_data["stationCode"] == st]
-                        df.reset_index(inplace=True, drop=True)
-                                               
-                        df_year = pd.pivot_table(
-                            df,
-                            values=['JAM_BARAN'],
-                            index=[YEAR],
-                            aggfunc=np.sum
-                        ).reset_index()
-                        
-                        st_name = selected_station.loc[selected_station["stationCode"] == st, "stationName"].values[0]
-                        
-                        # MAX
-                        pmx_index = df_year["JAM_BARAN"].idxmax(axis=1, skipna=True)
-                        pmx_value = round(df_year.at[pmx_index, 'JAM_BARAN'], 1)
-                        pmx_year = str(df_year.at[pmx_index, YEAR])
-                        pmx_txt = pmx_txt + f'''
-                                <tr>
-                                    <td style="text-align: right;">{st_name}</td>
-                                    <td style="text-align: left; color: red">{pmx_value} میلیمتر</td>
-                                    <td style="text-align: left; color: green">{pmx_year}</td>
-                                </tr>
-                        '''
-                        
-                        # MIN
-                        pmn_index = df_year["JAM_BARAN"].idxmin(axis=1, skipna=True)
-                        pmn_value = round(df_year.at[pmn_index, 'JAM_BARAN'], 1)
-                        pmn_year = str(df_year.at[pmn_index, YEAR])
-                        pmn_txt = pmn_txt + f'''
-                                <tr>
-                                    <td style="text-align: right;">{st_name}</td>
-                                    <td style="text-align: left; color: red">{pmn_value} میلیمتر</td>
-                                    <td style="text-align: left; color: green">{pmn_year}</td>
-                                </tr>
-                        '''
-                        
-                        # MEAN
-                        pm_value = round(df_year['JAM_BARAN'].mean(skipna = True), 1)
-                        pm_txt = pm_txt + f'''
-                                <tr>
-                                    <td style="text-align: right;">{st_name}</td>
-                                    <td style="text-align: left; color: red">{pm_value} میلیمتر</td>
-                                </tr>
-                        '''
-                        
-                    pmx_txt = pmx_txt + "</table>"
-                    pmn_txt = pmn_txt + "</table>"
-                    pm_txt = pm_txt + "</table>"
-                    
                     result = [
-                        [{'label': f'استفاده از سال {MAX_YEAR} در محاسبات', 'value': 'LASTYEAR'}],
-                        dash_dangerously_set_inner_html.DangerouslySetInnerHTML(pmx_txt),
-                        dash_dangerously_set_inner_html.DangerouslySetInnerHTML(pmn_txt),
-                        dash_dangerously_set_inner_html.DangerouslySetInnerHTML(pm_txt),
-                    ]
-                    
-                else:
-                    result = [
-                        [{'label': 'استفاده از سال آخر آبی/شمسی در محاسبات', 'value': 'LASTYEAR'}],
+                        "-",
                         "-",
                         "-",
                         "-"
                     ]
-                        
+                
                 return result
-
+                
             except:
                 result = [
-                    [{'label': 'استفاده از سال آخر آبی/شمسی در محاسبات', 'value': 'LASTYEAR'}],
+                    "-",
                     "-",
                     "-",
                     "-"
@@ -708,12 +722,41 @@ def precipitation_callback_tab2(app):
             
         else:
             result = [
-                [{'label': 'استفاده از سال آخر آبی/شمسی در محاسبات', 'value': 'LASTYEAR'}],
+                "-",
                 "-",
                 "-",
                 "-"
             ]
             return result
+
+
+
+                # # TIME SLICING
+                # selected_data = selected_data.loc[(selected_data[YEAR] >= START_YEAR)]
+                # selected_data = selected_data.loc[~((selected_data[YEAR] == START_YEAR) & (selected_data[MONTH] < (MONTH_NAME.index(START_MONTH) + 1)))]
+                # selected_data = selected_data.loc[~((selected_data[YEAR] == START_YEAR) & (selected_data[MONTH] == (MONTH_NAME.index(START_MONTH) + 1)) & (selected_data[DAY] < START_DAY))]
+                # selected_data = selected_data.loc[(selected_data[YEAR] <= END_YEAR)]
+                # selected_data = selected_data.loc[~((selected_data[YEAR] == END_YEAR) & (selected_data[MONTH] > (MONTH_NAME.index(END_MONTH) + 1)))]
+                # selected_data = selected_data.loc[~((selected_data[YEAR] == END_YEAR) & (selected_data[MONTH] == (MONTH_NAME.index(END_MONTH) + 1)) & (selected_data[DAY] > END_DAY))]
+                # selected_data.reset_index(inplace=True, drop=True)
+
+                # # MAX
+                # pmx_index = df_year["JAM_BARAN"].idxmax(axis=1, skipna=True)
+                # pmx_value = df.at[pmx_index, 'JAM_BARAN']
+                # pmx_year = str(df.at[pmx_index, 'YEAR']).zfill(4)
+                # pmx_month = str(df.at[pmx_index, 'MONTH']).zfill(2)
+                # pmx_day = str(df.at[pmx_index, 'DAY']).zfill(2)
+                # pmx_houre = str(df.at[pmx_index, 'HOURE']).zfill(2)
+                # pmx_minute = str(df.at[pmx_index, 'MINUTE']).zfill(2)
+                # pmx_txt = pmx_txt + f'''
+                #         <tr>
+                #             <td style="text-align: right;">{st_name}</td>
+                #             <td style="text-align: right; color: red">{pmx_value} میلیمتر</td>
+                #             <td style="text-align: left; color: green">{pmx_houre}:{pmx_minute}</td>
+                #             <td style="text-align: left; color: green">{pmx_year}/{pmx_month}/{pmx_day}</td>
+                #         </tr>
+                #     ''' 
+
 
 
 #     # -----------------------------------------------------------------------------

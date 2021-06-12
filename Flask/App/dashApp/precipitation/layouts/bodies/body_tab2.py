@@ -28,7 +28,7 @@ TAB2_BODY_CONTENT1 = html.Div(
                             className='float-left',
                             children=[
                                 html.Img(
-                                    src='data:image/png;base64,{}'.format(MAX_LOGO), height=25)
+                                    src='data:image/png;base64,{}'.format(CALENDAR_2_LOGO), height=25)
                             ]
                         ),
                         html.Div(
@@ -36,41 +36,11 @@ TAB2_BODY_CONTENT1 = html.Div(
                             dir="rtl",
                             children=[
                                 html.Span(
-                                    children="بیشینه"
+                                    children="سال جاری"
                                 ),
                                 html.P(
-                                    id="INFO_CARD_MAX_VALUE-TAB2_BODY_CONTENT1",
+                                    id="INFO_CARD_CURRENT_YEAR_VALUE-TAB2_BODY_CONTENT1",
                                     className="text-dark pt-3 mt-1 mb-1 mx-auto"
-                                ),
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark p-2'
-                ),
-            ],
-            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(
-                                    src='data:image/png;base64,{}'.format(MIN_LOGO), height=25)
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right ',
-                            dir="rtl",
-                            children=[
-                                html.Span(
-                                    children="کمینه"
-                                ),
-                                html.P(
-                                    id="INFO_CARD_MIN_VALUE-TAB2_BODY_CONTENT1",
-                                   className="text-dark pt-3 mt-1 mb-1 mx-auto"
                                 ),
                             ]
                         )
@@ -118,7 +88,7 @@ TAB2_BODY_CONTENT1 = html.Div(
                             className='float-left',
                             children=[
                                 html.Img(
-                                    src='data:image/png;base64,{}'.format(DRAINAGE_BASIN_LOGO), height=25)
+                                    src='data:image/png;base64,{}'.format(MAX_LOGO), height=25)
                             ]
                         ),
                         html.Div(
@@ -126,11 +96,41 @@ TAB2_BODY_CONTENT1 = html.Div(
                             dir="rtl",
                             children=[
                                 html.Span(
-                                    children=" حوزه آبریز درجه 2"
+                                    children="بیشینه"
                                 ),
-                                html.H6(
-                                    # id="INFO_CARD_NUMBER_HOZE30-TAB1_SIDEBAR_RIGHT_CARD1",
-                                    className="text-primary pt-3"
+                                html.P(
+                                    id="INFO_CARD_MAX_VALUE-TAB2_BODY_CONTENT1",
+                                    className="text-dark pt-3 mt-1 mb-1 mx-auto"
+                                ),
+                            ]
+                        )
+                    ],
+                    className='card-body text-dark p-2'
+                ),
+            ],
+            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1'
+        ),
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Div(
+                            className='float-left',
+                            children=[
+                                html.Img(
+                                    src='data:image/png;base64,{}'.format(MIN_LOGO), height=25)
+                            ]
+                        ),
+                        html.Div(
+                            className='text-right ',
+                            dir="rtl",
+                            children=[
+                                html.Span(
+                                    children="کمینه"
+                                ),
+                                html.P(
+                                    id="INFO_CARD_MIN_VALUE-TAB2_BODY_CONTENT1",
+                                   className="text-dark pt-3 mt-1 mb-1 mx-auto"
                                 ),
                             ]
                         )
