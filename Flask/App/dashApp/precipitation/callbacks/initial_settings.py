@@ -132,6 +132,22 @@ CALENDAR_LOGO = base64.b64encode(
     open(IMAGES_FOLDER_PATH + 'CALENDAR_LOGO.png', 'rb').read()
 ).decode()
 
+PRECIPITATION_2_LOGO = base64.b64encode(
+    open(IMAGES_FOLDER_PATH + 'PRECIPITATION_2_LOGO.png', 'rb').read()
+).decode()
+
+MAX_LOGO = base64.b64encode(
+    open(IMAGES_FOLDER_PATH + 'MAX_LOGO.png', 'rb').read()
+).decode()
+
+MIN_LOGO = base64.b64encode(
+    open(IMAGES_FOLDER_PATH + 'MIN_LOGO.png', 'rb').read()
+).decode()
+
+MEAN_LOGO = base64.b64encode(
+    open(IMAGES_FOLDER_PATH + 'MEAN_LOGO.png', 'rb').read()
+).decode()
+
 
 # SHAPEFILES
 # --------------------------------------------------------------------------- #

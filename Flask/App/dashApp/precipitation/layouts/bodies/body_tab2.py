@@ -28,7 +28,7 @@ TAB2_BODY_CONTENT1 = html.Div(
                             className='float-left',
                             children=[
                                 html.Img(
-                                    src='data:image/png;base64,{}'.format(DRAINAGE_BASIN_LOGO), height=25)
+                                    src='data:image/png;base64,{}'.format(MAX_LOGO), height=25)
                             ]
                         ),
                         html.Div(
@@ -36,11 +36,11 @@ TAB2_BODY_CONTENT1 = html.Div(
                             dir="rtl",
                             children=[
                                 html.Span(
-                                    children="حوزه آبریز درجه 1"
+                                    children="بیشینه"
                                 ),
-                                html.H6(
-                                    # id="INFO_CARD_NUMBER_HOZE6-TAB1_SIDEBAR_RIGHT_CARD1",
-                                    className="text-primary pt-3"
+                                html.P(
+                                    id="INFO_CARD_MAX_VALUE-TAB2_BODY_CONTENT1",
+                                    className="text-dark pt-3 mt-1 mb-1 mx-auto"
                                 ),
                             ]
                         )
@@ -48,7 +48,67 @@ TAB2_BODY_CONTENT1 = html.Div(
                     className='card-body text-dark p-2'
                 ),
             ],
-            className='col-md-6 col-lg-3 col-xl-2 card border mb-1 bg-light px-1'
+            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1'
+        ),
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Div(
+                            className='float-left',
+                            children=[
+                                html.Img(
+                                    src='data:image/png;base64,{}'.format(MIN_LOGO), height=25)
+                            ]
+                        ),
+                        html.Div(
+                            className='text-right ',
+                            dir="rtl",
+                            children=[
+                                html.Span(
+                                    children="کمینه"
+                                ),
+                                html.P(
+                                    id="INFO_CARD_MIN_VALUE-TAB2_BODY_CONTENT1",
+                                   className="text-dark pt-3 mt-1 mb-1 mx-auto"
+                                ),
+                            ]
+                        )
+                    ],
+                    className='card-body text-dark p-2'
+                ),
+            ],
+            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1 box'
+        ),
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Div(
+                            className='float-left',
+                            children=[
+                                html.Img(
+                                    src='data:image/png;base64,{}'.format(MEAN_LOGO), height=25)
+                            ]
+                        ),
+                        html.Div(
+                            className='text-right ',
+                            dir="rtl",
+                            children=[
+                                html.Span(
+                                    children="متوسط"
+                                ),
+                                html.P(
+                                    id="INFO_CARD_MEAN_VALUE-TAB2_BODY_CONTENT1",
+                                    className="text-dark pt-3 mt-1 mb-1 mx-auto"
+                                ),
+                            ]
+                        )
+                    ],
+                    className='card-body text-dark p-2'
+                ),
+            ],
+            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1 box'
         ),
         html.Div(
             children=[
@@ -78,190 +138,10 @@ TAB2_BODY_CONTENT1 = html.Div(
                     className='card-body text-dark p-2'
                 ),
             ],
-            className='col-md-6 col-lg-3 col-xl-2 card border mb-1 bg-light px-1 box'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(
-                                    src='data:image/png;base64,{}'.format(DRAINAGE_BASIN_LOGO), height=25)
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right ',
-                            dir="rtl",
-                            children=[
-                                html.Span(
-                                    children="حوزه آبریز درجه 1"
-                                ),
-                                html.H6(
-                                    # id="INFO_CARD_NUMBER_HOZE6-TAB1_SIDEBAR_RIGHT_CARD1",
-                                    className="text-primary pt-3"
-                                ),
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark p-2'
-                ),
-            ],
-            className='col-md-6 col-lg-3 col-xl-2 card border mb-1 bg-light px-1'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(
-                                    src='data:image/png;base64,{}'.format(DRAINAGE_BASIN_LOGO), height=25)
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right ',
-                            dir="rtl",
-                            children=[
-                                html.Span(
-                                    children=" حوزه آبریز درجه 2"
-                                ),
-                                html.H6(
-                                    # id="INFO_CARD_NUMBER_HOZE30-TAB1_SIDEBAR_RIGHT_CARD1",
-                                    className="text-primary pt-3"
-                                ),
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark p-2'
-                ),
-            ],
-            className='col-md-6 col-lg-3 col-xl-2 card border mb-1 bg-light px-1 box'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(
-                                    src='data:image/png;base64,{}'.format(DRAINAGE_BASIN_LOGO), height=25)
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right ',
-                            dir="rtl",
-                            children=[
-                                html.Span(
-                                    children="حوزه آبریز درجه 1"
-                                ),
-                                html.H6(
-                                    # id="INFO_CARD_NUMBER_HOZE6-TAB1_SIDEBAR_RIGHT_CARD1",
-                                    className="text-primary pt-3"
-                                ),
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark p-2'
-                ),
-            ],
-            className='col-md-6 col-lg-3 col-xl-2 card border mb-1 bg-light px-1'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(
-                                    src='data:image/png;base64,{}'.format(DRAINAGE_BASIN_LOGO), height=25)
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right ',
-                            dir="rtl",
-                            children=[
-                                html.Span(
-                                    children=" حوزه آبریز درجه 2"
-                                ),
-                                html.H6(
-                                    # id="INFO_CARD_NUMBER_HOZE30-TAB1_SIDEBAR_RIGHT_CARD1",
-                                    className="text-primary pt-3"
-                                ),
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark p-2'
-                ),
-            ],
-            className='col-md-6 col-lg-3 col-xl-2 card border mb-1 bg-light px-1 box'
+            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1 box'
         ),
         html.Div(
             className="w-100 d-none d-xl-block"
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(
-                                    src='data:image/png;base64,{}'.format(DROP_WATER_LOGO), height=25)
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right',
-                            dir="rtl",
-                            children=[
-                                html.Span(
-                                    children="ایستگاه"
-                                ),
-                                html.H6(
-                                    # id="INFO_CARD_NUMBER_STATION-TAB1_SIDEBAR_RIGHT_CARD1",
-                                    className="text-primary pt-3"
-                                ),
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark p-2'
-                ),
-            ],
-            className='col-md-6 col-lg-3 col-xl-2 card border mb-1 bg-light px-1'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(
-                                    src='data:image/png;base64,{}'.format(STUDY_AREA_LOGO), height=25)
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right ',
-                            dir="rtl",
-                            children=[
-                                html.Span(
-                                    children="محدوده مطالعاتی"
-                                ),
-                                html.H6(
-                                    # id="INFO_CARD_NUMBER_MAHDOUDE-TAB1_SIDEBAR_RIGHT_CARD1",
-                                    className="text-primary pt-3"
-                                ),
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark p-2'
-                ),
-            ],
-            className='col-md-6 col-lg-3 col-xl-2 card border mb-1 bg-light px-1'
         ),
         html.Div(
             children=[
@@ -291,7 +171,7 @@ TAB2_BODY_CONTENT1 = html.Div(
                     className='card-body text-dark p-2'
                 ),
             ],
-            className='col-md-6 col-lg-3 col-xl-2 card border mb-1 bg-light px-1'
+            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1'
         ),
         html.Div(
             children=[
@@ -321,7 +201,7 @@ TAB2_BODY_CONTENT1 = html.Div(
                     className='card-body text-dark p-2'
                 ),
             ],
-            className='col-md-6 col-lg-3 col-xl-2 card border mb-1 bg-light px-1'
+            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1'
         ),
         html.Div(
             children=[
@@ -351,7 +231,7 @@ TAB2_BODY_CONTENT1 = html.Div(
                     className='card-body text-dark p-2'
                 ),
             ],
-            className='col-md-6 col-lg-3 col-xl-2 card border mb-1 bg-light px-1'
+            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1'
         ),
         html.Div(
             children=[
@@ -381,7 +261,7 @@ TAB2_BODY_CONTENT1 = html.Div(
                     className='card-body text-dark p-2'
                 ),
             ],
-            className='col-md-6 col-lg-3 col-xl-2 card border mb-1 bg-light px-1'
+            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1'
         )
     ],
     dir="rtl",

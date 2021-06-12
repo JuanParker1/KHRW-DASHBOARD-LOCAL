@@ -34,6 +34,36 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
         html.Div(
             children=[
                 
+                html.Div(
+                    children=[
+                        html.H6(
+                            children=[
+                                "گام زمانی:"
+                            ],
+                            dir="rtl",
+                            className="text-right "
+                        ),
+                        html.Div(
+                            children=[
+                                dcc.RadioItems(
+                                    id="SELECT_TIME_STEP-TAB2_SIDEBAR_LEFT_CARD1",
+                                    options=[
+                                        {'label': 'ساعتی', 'value': 'TIMESTEP_HOURE'},
+                                        {'label': 'روزانه', 'value': 'TIMESTEP_DAY'},
+                                        {'label': 'ماهانه', 'value': 'TIMESTEP_MONTH'},
+                                        {'label': 'سالانه', 'value': 'TIMESTEP_YEAR'},
+                                    ],
+                                    value='TIMESTEP_YEAR',
+                                    labelStyle={'display': 'inline-block'},
+                                    inputClassName="mr-3 ml-1",
+                                )
+                            ],
+                            dir="rtl",
+                            className="text-center align-items-center justify-content-center",
+                        ),
+                    ],
+                    className="form-group mb-4"
+                ),
                 
                 html.Div(
                     children=[
@@ -133,7 +163,23 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                                 )
                             ],
                             dir="rtl",
-                            className="text-right align-items-center justify-content-center",
+                            className="text-center align-items-center justify-content-center",
+                        ),
+                        
+                        html.Div(
+                            children=[
+                                dcc.Checklist(
+                                    id="SELECT_LAST_YEAR-TAB2_SIDEBAR_LEFT_CARD1",
+                                    options=[
+                                        {'label': 'استفاده از سال آخر آبی/شمسی در محاسبات', 'value': 'LASTYEAR'},
+                                    ],
+                                    value=['LASTYEAR'],
+                                    labelStyle={'display': 'inline-block'},
+                                    inputClassName="mr-3 ml-1",
+                                )
+                            ],
+                            dir="rtl",
+                            className="text-right align-items-center justify-content-center mt-3",
                         ),
                         
                         html.Div(
@@ -198,7 +244,9 @@ TAB2_SIDEBAR_LEFT_CARD_1 = html.Div(
                                 )
                             ],
                             dir="rtl",
+                            className="mt-3"
                         ),
+
                     ],
                     className="form-group mb-4"
                 ),

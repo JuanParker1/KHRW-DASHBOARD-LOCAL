@@ -6,6 +6,7 @@
 
 import os
 import sqlite3
+import numpy as np
 import pandas as pd
 import dash_core_components as dcc
 import dash_html_components as html
@@ -14,6 +15,7 @@ from dash.dependencies import Input, Output, State
 import plotly.graph_objects as go
 import plotly.express as px
 from dash.exceptions import PreventUpdate
+import dash_dangerously_set_inner_html
 
 
 from App.dashApp.precipitation.callbacks.initial_settings import *
@@ -393,7 +395,7 @@ def precipitation_callback_tab2(app):
                         all_existed_day = sorted(list(selected_data["DAY"].unique()))
                         
                         END_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1, 32)]
-                        END_DAY_VALUE = max(all_existed_day.unique())
+                        END_DAY_VALUE = max(all_existed_day)
                         return END_DAY_OPTIONS, END_DAY_VALUE
             except:
                 return [], None
@@ -470,6 +472,7 @@ def precipitation_callback_tab2(app):
         else:
             return BASE_MAP_EMPTY
 
+
     # --------------------------------------------------------------------------- #
     #                                                                             #
     #                                  TAB2 - BODY                                #
@@ -478,16 +481,201 @@ def precipitation_callback_tab2(app):
 
     # CONTENT 1 - CARD INFO
     # -----------------------------------------------------------------------------
-    # @app.callback(
-    #     Output('MAP-TAB2_SIDEBAR_LEFT_CARD1', 'figure'),
-    #     Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-    #     Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-    #     Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-    #     Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-    #     Input('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-    # )
-    # def FUNCTION_MAP_TAB2_SIDEBAR_LEFT_CARD1(DATABASE_STATE, HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED):
-    #     pass
+    @app.callback(
+        Output('SELECT_LAST_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'options'),
+        Output('INFO_CARD_MAX_VALUE-TAB2_BODY_CONTENT1', 'children'),
+        Output('INFO_CARD_MIN_VALUE-TAB2_BODY_CONTENT1', 'children'),
+        Output('INFO_CARD_MEAN_VALUE-TAB2_BODY_CONTENT1', 'children'),
+        Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_LAST_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),    
+        Input('SELECT_TIME_STEP-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_END_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    )
+    def FUNCTION_UPDATE_INFO_CARD_TAB2_BODY_CONTENT1(
+        HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, LAST_YEAR, TIME_STEP,
+        START_YEAR, START_MONTH, START_DAY, END_YEAR, END_MONTH, END_DAY
+    ):
+        if (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
+            (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
+                (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
+                    (START_YEAR is not None) and (START_MONTH is not None) and (START_DAY is not None) and\
+                        (END_YEAR is not None) and (END_MONTH is not None) and (END_DAY is not None):
+            try:
+                # LOAD DATA: ----------------------------------------------------------------------
+                
+                # DEFINED VARIABLE
+                if TYPE_YEAR == "WATER_YEAR":
+                    YEAR = "WATERYEAR"
+                    MONTH = "WATERMONTH"
+                    DAY = "DAY"
+                    MONTH_NAME = M_WATERYEAR
+                    TXT_TABLE_LAST_YEAR = f"از {START_DAY} {START_MONTH} تا {END_DAY} {END_MONTH} هر سال آبی"                   
+                    TXT_TABLE_NO_LAST_YEAR = f"از 1 مهر تا 31 شهریور هر سال آبی"
+                else:
+                    YEAR = "YEAR"
+                    MONTH = "MONTH"
+                    DAY = "DAY"
+                    MONTH_NAME = M_SHAMSIYEAR
+                    TXT_TABLE_LAST_YEAR = f"از {START_DAY} {START_MONTH} تا {END_DAY} {END_MONTH} هر سال شمسی"                   
+                    TXT_TABLE_NO_LAST_YEAR = f"از 1 فروردین تا 29 اسفند هر سال شمسی"
+
+                
+                # LOAD STATIONS
+                selected_station = station[
+                    (station["drainageArea30"].isin(HOZE30_SELECTED)) &\
+                        (station["areaStudyName"].isin(MAHDOUDE_SELECTED)) &\
+                            (station["stationName"].isin(STATION_SELECTED))
+                ]
+                
+                # LOAD DATA
+                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]                
+                MAX_YEAR = selected_data[YEAR].max(skipna=True)
+
+                # TIME SLICING
+                selected_data = selected_data.loc[(selected_data[YEAR] >= START_YEAR)]
+                selected_data = selected_data.loc[~((selected_data[YEAR] == START_YEAR) & (selected_data[MONTH] < (MONTH_NAME.index(START_MONTH) + 1)))]
+                selected_data = selected_data.loc[~((selected_data[YEAR] == START_YEAR) & (selected_data[MONTH] == (MONTH_NAME.index(START_MONTH) + 1)) & (selected_data[DAY] < START_DAY))]
+                selected_data = selected_data.loc[(selected_data[YEAR] <= END_YEAR)]
+                selected_data = selected_data.loc[~((selected_data[YEAR] == END_YEAR) & (selected_data[MONTH] > (MONTH_NAME.index(END_MONTH) + 1)))]
+                selected_data = selected_data.loc[~((selected_data[YEAR] == END_YEAR) & (selected_data[MONTH] == (MONTH_NAME.index(END_MONTH) + 1)) & (selected_data[DAY] > END_DAY))]
+                selected_data.reset_index(inplace=True, drop=True)
+                
+                if "LASTYEAR" in LAST_YEAR:
+                    selected_data = selected_data.loc[~((selected_data[MONTH] < (MONTH_NAME.index(START_MONTH) + 1)))]
+                    selected_data = selected_data.loc[~((selected_data[MONTH] == (MONTH_NAME.index(START_MONTH) + 1)) & (selected_data[DAY] < START_DAY))]
+                    selected_data = selected_data.loc[~((selected_data[MONTH] > (MONTH_NAME.index(END_MONTH) + 1)))]
+                    selected_data = selected_data.loc[~((selected_data[MONTH] == (MONTH_NAME.index(END_MONTH) + 1)) & (selected_data[DAY] > END_DAY))]
+                    selected_data.reset_index(inplace=True, drop=True)
+                    
+                    pmx_txt = f"<p>{TXT_TABLE_LAST_YEAR}</p><table style='width:100%'>"
+                    pmn_txt = f"<p>{TXT_TABLE_LAST_YEAR}</p><table style='width:100%'>"
+                    pm_txt = f"<p>{TXT_TABLE_LAST_YEAR}</p><table style='width:100%'>"
+                    
+                    
+                else:
+                    selected_data = selected_data.loc[(selected_data[YEAR] < MAX_YEAR)]
+                    selected_data.reset_index(inplace=True, drop=True)
+                    
+                    pmx_txt = f"<p>{TXT_TABLE_NO_LAST_YEAR}</p><table style='width:100%'>"
+                    pmn_txt = f"<p>{TXT_TABLE_NO_LAST_YEAR}</p><table style='width:100%'>"
+                    pm_txt = f"<p>{TXT_TABLE_NO_LAST_YEAR}</p><table style='width:100%'>"
+                                    
+                if TIME_STEP == "TIMESTEP_HOURE":
+                    pass
+                    # # MAX
+                    # pmx_index = df_year["JAM_BARAN"].idxmax(axis=1, skipna=True)
+                    # pmx_value = df.at[pmx_index, 'JAM_BARAN']
+                    # pmx_year = str(df.at[pmx_index, 'YEAR']).zfill(4)
+                    # pmx_month = str(df.at[pmx_index, 'MONTH']).zfill(2)
+                    # pmx_day = str(df.at[pmx_index, 'DAY']).zfill(2)
+                    # pmx_houre = str(df.at[pmx_index, 'HOURE']).zfill(2)
+                    # pmx_minute = str(df.at[pmx_index, 'MINUTE']).zfill(2)
+                    # pmx_txt = pmx_txt + f'''
+                    #         <tr>
+                    #             <td style="text-align: right;">{st_name}</td>
+                    #             <td style="text-align: right; color: red">{pmx_value} میلیمتر</td>
+                    #             <td style="text-align: left; color: green">{pmx_houre}:{pmx_minute}</td>
+                    #             <td style="text-align: left; color: green">{pmx_year}/{pmx_month}/{pmx_day}</td>
+                    #         </tr>
+                    #     ''' 
+                elif TIME_STEP == "TIMESTEP_DAY":
+                    pass
+                elif TIME_STEP == "TIMESTEP_MONTH":
+                    pass
+                elif TIME_STEP == "TIMESTEP_YEAR":
+                    # YEARLY ANALYSIS
+                    for st in selected_data["stationCode"].unique():
+                        df = selected_data[selected_data["stationCode"] == st]
+                        df.reset_index(inplace=True, drop=True)
+                                               
+                        df_year = pd.pivot_table(
+                            df,
+                            values=['JAM_BARAN'],
+                            index=[YEAR],
+                            aggfunc=np.sum
+                        ).reset_index()
+                        
+                        st_name = selected_station.loc[selected_station["stationCode"] == st, "stationName"].values[0]
+                        
+                        # MAX
+                        pmx_index = df_year["JAM_BARAN"].idxmax(axis=1, skipna=True)
+                        pmx_value = round(df_year.at[pmx_index, 'JAM_BARAN'], 1)
+                        pmx_year = str(df_year.at[pmx_index, YEAR])
+                        pmx_txt = pmx_txt + f'''
+                                <tr>
+                                    <td style="text-align: right;">{st_name}</td>
+                                    <td style="text-align: left; color: red">{pmx_value} میلیمتر</td>
+                                    <td style="text-align: left; color: green">{pmx_year}</td>
+                                </tr>
+                        '''
+                        
+                        # MIN
+                        pmn_index = df_year["JAM_BARAN"].idxmin(axis=1, skipna=True)
+                        pmn_value = round(df_year.at[pmn_index, 'JAM_BARAN'], 1)
+                        pmn_year = str(df_year.at[pmn_index, YEAR])
+                        pmn_txt = pmn_txt + f'''
+                                <tr>
+                                    <td style="text-align: right;">{st_name}</td>
+                                    <td style="text-align: left; color: red">{pmn_value} میلیمتر</td>
+                                    <td style="text-align: left; color: green">{pmn_year}</td>
+                                </tr>
+                        '''
+                        
+                        # MEAN
+                        pm_value = round(df_year['JAM_BARAN'].mean(skipna = True), 1)
+                        pm_txt = pm_txt + f'''
+                                <tr>
+                                    <td style="text-align: right;">{st_name}</td>
+                                    <td style="text-align: left; color: red">{pm_value} میلیمتر</td>
+                                </tr>
+                        '''
+                        
+                    pmx_txt = pmx_txt + "</table>"
+                    pmn_txt = pmn_txt + "</table>"
+                    pm_txt = pm_txt + "</table>"
+                    
+                    result = [
+                        [{'label': f'استفاده از سال {MAX_YEAR} در محاسبات', 'value': 'LASTYEAR'}],
+                        dash_dangerously_set_inner_html.DangerouslySetInnerHTML(pmx_txt),
+                        dash_dangerously_set_inner_html.DangerouslySetInnerHTML(pmn_txt),
+                        dash_dangerously_set_inner_html.DangerouslySetInnerHTML(pm_txt),
+                    ]
+                    
+                else:
+                    result = [
+                        [{'label': 'استفاده از سال آخر آبی/شمسی در محاسبات', 'value': 'LASTYEAR'}],
+                        "-",
+                        "-",
+                        "-"
+                    ]
+                        
+                return result
+
+            except:
+                result = [
+                    [{'label': 'استفاده از سال آخر آبی/شمسی در محاسبات', 'value': 'LASTYEAR'}],
+                    "-",
+                    "-",
+                    "-"
+                ]
+                return result
+            
+        else:
+            result = [
+                [{'label': 'استفاده از سال آخر آبی/شمسی در محاسبات', 'value': 'LASTYEAR'}],
+                "-",
+                "-",
+                "-"
+            ]
+            return result
 
 
 #     # -----------------------------------------------------------------------------

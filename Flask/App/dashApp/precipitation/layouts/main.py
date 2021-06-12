@@ -65,19 +65,24 @@ TAB_PAN = html.Div(
 # Main Layout
 # -----------------------------------------------------------------------------
 
-MAIN_LAYOUT = html.Div(
-    children=[
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        TAB_PAN
-                    ],
-                    className="col"
-                )
-            ],
-            className="row"
-        )
-    ],
-    className="container-fluid"
-)
+
+def SERVER_MAIN_LAYOUT(TAB_PAN=TAB_PAN):
+    MAIN_LAYOUT = html.Div(
+        children=[
+            html.Div(
+                children=[
+                    html.Div(
+                        children=[
+                            TAB_PAN
+                        ],
+                        className="col"
+                    )
+                ],
+                className="row"
+            )
+        ],
+        className="container-fluid"
+    )
+    return MAIN_LAYOUT
+
+

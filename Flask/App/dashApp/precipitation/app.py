@@ -1,7 +1,7 @@
 import dash
 from flask_login.utils import login_required
 
-from App.dashApp.precipitation.layouts.main import MAIN_LAYOUT
+from App.dashApp.precipitation.layouts.main import SERVER_MAIN_LAYOUT
 from App.dashApp.precipitation.callbacks.callback import precipitation_callback
 
 
@@ -25,7 +25,7 @@ def create_precipitation_app(server):
         title='Precipitation Analysis'
     )
 
-    precipitation_app.layout = MAIN_LAYOUT
+    precipitation_app.layout = SERVER_MAIN_LAYOUT
 
     precipitation_callback(app=precipitation_app)
 
