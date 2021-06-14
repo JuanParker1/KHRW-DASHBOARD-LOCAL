@@ -1,8 +1,8 @@
-# --------------------------------------------------------------------------- #
-#                                                                             #
-#                         IMPORT REQUIREMENT MODULE                           #
-#                                                                             #
-# --------------------------------------------------------------------------- #
+# ----------------------------------------------------------------------------------------------- #
+#                                                                                                 #
+#                                    IMPORT REQUIREMENT MODULE                                    #
+#                                                                                                 #
+# ----------------------------------------------------------------------------------------------- #
 
 import os
 import sqlite3
@@ -22,11 +22,11 @@ from App.dashApp.precipitation.callbacks.initial_settings import *
 from App.dashApp.precipitation.layouts.sidebars.sidebar_tab1 import *
 
 
-# --------------------------------------------------------------------------- #
-#                                                                             #
-#                         PRECIPITATION - CALLBACK TAB2                       #
-#                                                                             #
-# --------------------------------------------------------------------------- #
+# ----------------------------------------------------------------------------------------------- #
+#                                                                                                 #
+#                                 PRECIPITATION - CALLBACK TAB2                                   #
+#                                                                                                 #
+# ----------------------------------------------------------------------------------------------- #
 
 def precipitation_callback_tab2(app):
 
@@ -47,7 +47,9 @@ def precipitation_callback_tab2(app):
         if DATABASE_STATE == "DATABASE EXIST":
             selected_station = station[station["stationCode"].isin(
                 data["stationCode"].unique())]
-            return [{"label": i, "value": i} for i in list(selected_station["drainageArea30"].unique())]
+            return [
+                {"label": i, "value": i} for i in list(selected_station["drainageArea30"].unique())
+            ]
         else:
             return []
 
@@ -64,9 +66,12 @@ def precipitation_callback_tab2(app):
                 data["stationCode"].unique())]
             selected_station = selected_station[selected_station["drainageArea30"].isin(
                 HOZE30)]
-            return [{"label": i, "value": i} for i in list(selected_station["areaStudyName"].unique())]
+            return [
+                {"label": i, "value": i} for i in list(selected_station["areaStudyName"].unique())
+            ]
         else:
             return []
+
 
     # SELECT STATION - TAB2 SIDEBAR LEFT CARD1
     # -----------------------------------------------------------------------------
@@ -82,7 +87,9 @@ def precipitation_callback_tab2(app):
                 data["stationCode"].unique())]
             selected_station = selected_station[selected_station["areaStudyName"].isin(
                 MAHDOUDE)]
-            return [{"label": i, "value": i} for i in list(selected_station["stationName"].unique())]
+            return [
+                {"label": i, "value": i} for i in list(selected_station["stationName"].unique())
+            ]
         else:
             return []
 
@@ -103,7 +110,13 @@ def precipitation_callback_tab2(app):
         Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_TYPE_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     )
-    def FUNCTION_SELECT_START_YEAR_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, TYPE_ANALYSIS):
+    def FUNCTION_SELECT_START_YEAR_TAB2_SIDEBAR_LEFT_CARD1(
+        HOZE30_SELECTED,
+        MAHDOUDE_SELECTED,
+        STATION_SELECTED,
+        TYPE_YEAR,
+        TYPE_ANALYSIS
+    ):
         if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
             (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
                 (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0):
@@ -115,7 +128,8 @@ def precipitation_callback_tab2(app):
                             (station["stationName"].isin(STATION_SELECTED))
                 ]
                 
-                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
+                unique_st_code = list(selected_station["stationCode"].unique())                
+                selected_data = data[data["stationCode"].isin(unique_st_code)]
                 
                 # DEFINED VARIABLE
                 if TYPE_YEAR == "WATER_YEAR":
@@ -132,16 +146,24 @@ def precipitation_callback_tab2(app):
                 if TYPE_ANALYSIS == "CURRENTvsPREVIOUS":
                     MAX_YEAR = selected_data[YEAR].max()
                     MIN_YEAR = selected_data[YEAR].min()
-                    START_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in [MAX_YEAR]]
+                    START_YEAR_OPTIONS = [
+                        {
+                            'label': '{}'.format(i),
+                            'value': i
+                        } for i in [MAX_YEAR]
+                    ]
                     START_YEAR_VALUE = MAX_YEAR
-                    START_DURATION_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in sorted(list(selected_data[YEAR].unique()))[:-1]]
+                    START_DURATION_OPTIONS = [
+                        {
+                            'label': '{}'.format(i),
+                            'value': i
+                        } for i in sorted(list(selected_data[YEAR].unique()))[:-1]
+                    ]
                     START_DURATION_VALUE = MIN_YEAR
                     return START_YEAR_OPTIONS, START_YEAR_VALUE, True,\
                         START_DURATION_OPTIONS, START_DURATION_VALUE, False
                 else:
-                    # START_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in sorted(list(selected_data["WATERYEAR"].unique()))]
-                    # START_YEAR_VALUE = min(sorted(list(selected_data["WATERYEAR"].unique())))
-                    # return START_YEAR_OPTIONS, START_YEAR_VALUE, True
+
                     return [], None, True,\
                         [], None, True
 
@@ -170,7 +192,15 @@ def precipitation_callback_tab2(app):
         Input('SELECT_TYPE_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_START_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     )
-    def FUNCTION_SELECT_END_YEAR_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR, TYPE_ANALYSIS, START_DURATION):
+    def FUNCTION_SELECT_END_YEAR_TAB2_SIDEBAR_LEFT_CARD1(
+        HOZE30_SELECTED,
+        MAHDOUDE_SELECTED,
+        STATION_SELECTED,
+        TYPE_YEAR,
+        START_YEAR,
+        TYPE_ANALYSIS,
+        START_DURATION
+    ):
         if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
             (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
                 (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
@@ -183,7 +213,8 @@ def precipitation_callback_tab2(app):
                             (station["stationName"].isin(STATION_SELECTED))
                 ]
                 
-                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
+                unique_st_code = list(selected_station["stationCode"].unique())
+                selected_data = data[data["stationCode"].isin(unique_st_code)]
                 
                 # DEFINED VARIABLE
                 if TYPE_YEAR == "WATER_YEAR":
@@ -199,16 +230,27 @@ def precipitation_callback_tab2(app):
                 
                 if TYPE_ANALYSIS == "CURRENTvsPREVIOUS":
                     MAX_YEAR = selected_data[YEAR].max()
-                    END_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i} for i in [MAX_YEAR]]
+                    END_YEAR_OPTIONS = [
+                        {
+                            'label': '{}'.format(i),
+                            'value': i
+                        } for i in [MAX_YEAR]
+                    ]
                     END_YEAR_VALUE = MAX_YEAR
-                    END_DURATION_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i >= START_DURATION else True} for i in sorted(list(selected_data[YEAR].unique()))[:-1]]
+                    END_DURATION_OPTIONS = [
+                        {
+                            'label': '{}'.format(i),
+                            'value': i,
+                            'disabled': False if i >= START_DURATION else True
+                        } for i in sorted(list(selected_data[YEAR].unique()))[:-1]
+                    ]
                     END_DURATION_VALUE = sorted(list(selected_data[YEAR].unique()))[-2]
+                    
                     return END_YEAR_OPTIONS, END_YEAR_VALUE, True,\
                         END_DURATION_OPTIONS, END_DURATION_VALUE, False
+                        
                 else:
-                    # END_YEAR_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i >= START_YEAR else True} for i in sorted(list(selected_data["YEAR"].unique()))]
-                    # END_YEAR_VALUE = max(sorted(list(selected_data["YEAR"].unique())))
-                    # return END_YEAR_OPTIONS, END_YEAR_VALUE
+                    
                     return [], None, True,\
                         [], None, True
             except:
@@ -231,7 +273,13 @@ def precipitation_callback_tab2(app):
         Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     )
-    def FUNCTION_SELECT_START_MONTH_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR):
+    def FUNCTION_SELECT_START_MONTH_TAB2_SIDEBAR_LEFT_CARD1(
+        HOZE30_SELECTED, 
+        MAHDOUDE_SELECTED, 
+        STATION_SELECTED, 
+        TYPE_YEAR, 
+        START_YEAR
+    ):
         if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
             (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
                 (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
@@ -244,24 +292,45 @@ def precipitation_callback_tab2(app):
                             (station["stationName"].isin(STATION_SELECTED))
                 ]
                 
-                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
+                unique_st_code = list(selected_station["stationCode"].unique())
+                selected_data = data[data["stationCode"].isin(unique_st_code)]
                 
                 if TYPE_YEAR == "WATER_YEAR":
                     selected_data = selected_data[selected_data["WATERYEAR"] == START_YEAR]
                     all_existed_month = sorted(list(selected_data["WATERMONTH"].unique()))
-                    all_existed_month = [M_WATERYEAR[i] for i in [x - 1 for x in all_existed_month]]
+                    all_existed_month = [
+                        M_WATERYEAR[i] for i in [x - 1 for x in all_existed_month]
+                    ]
                     
-                    START_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_WATERYEAR]
+                    START_MONTH_OPTIONS = [
+                        {
+                            'label': '{}'.format(i),
+                            'value': i,
+                            'disabled': False if i in all_existed_month else True
+                        } for i in M_WATERYEAR
+                    ]
                     START_MONTH_VALUE = min(sorted(list(selected_data["WATERMONTH"].unique())))
+                    
                     return START_MONTH_OPTIONS, M_WATERYEAR[START_MONTH_VALUE - 1], False
+                
                 else:
                     selected_data = selected_data[selected_data["YEAR"] == START_YEAR]
                     all_existed_month = sorted(list(selected_data["MONTH"].unique()))
-                    all_existed_month = [M_SHAMSIYEAR[i] for i in [x - 1 for x in all_existed_month]]
+                    all_existed_month = [
+                        M_SHAMSIYEAR[i] for i in [x - 1 for x in all_existed_month]
+                    ]
                     
-                    START_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_SHAMSIYEAR]
+                    START_MONTH_OPTIONS = [
+                        {
+                            'label': '{}'.format(i),
+                            'value': i,
+                            'disabled': False if i in all_existed_month else True
+                        } for i in M_SHAMSIYEAR
+                    ]
                     START_MONTH_VALUE = min(sorted(list(selected_data["MONTH"].unique())))
+                    
                     return START_MONTH_OPTIONS, M_SHAMSIYEAR[START_MONTH_VALUE - 1], False
+                
             except:
                 return [], None, True
         else:
@@ -282,7 +351,15 @@ def precipitation_callback_tab2(app):
         Input('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     )
-    def FUNCTION_SELECT_END_MONTH_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR, START_MONTH, END_YEAR):
+    def FUNCTION_SELECT_END_MONTH_TAB2_SIDEBAR_LEFT_CARD1(
+        HOZE30_SELECTED,
+        MAHDOUDE_SELECTED,
+        STATION_SELECTED, 
+        TYPE_YEAR, 
+        START_YEAR, 
+        START_MONTH, 
+        END_YEAR
+    ):
         if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
             (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
                 (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
@@ -294,44 +371,91 @@ def precipitation_callback_tab2(app):
                             (station["stationName"].isin(STATION_SELECTED))
                 ]
                 
-                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
+                unique_st_code = list(selected_station["stationCode"].unique())
+                selected_data = data[data["stationCode"].isin(unique_st_code)]
                 
                 if TYPE_YEAR == "WATER_YEAR":
                     if END_YEAR == START_YEAR:
                         selected_data = selected_data[selected_data["WATERYEAR"] == END_YEAR]
                         all_existed_month = sorted(list(selected_data["WATERMONTH"].unique()))
-                        all_existed_month = [M_WATERYEAR[i] for i in [x - 1 for x in all_existed_month]]                        
-                        all_existed_month = list(set(all_existed_month).difference(M_WATERYEAR[0:M_WATERYEAR.index(START_MONTH)]))
+                        all_existed_month = [
+                            M_WATERYEAR[i] for i in [x - 1 for x in all_existed_month]
+                        ]                        
+                        all_existed_month = list(
+                            set(all_existed_month).difference(
+                                M_WATERYEAR[0:M_WATERYEAR.index(START_MONTH)]
+                            )
+                        )
                         
-                        END_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_WATERYEAR]
+                        END_MONTH_OPTIONS = [
+                            {
+                                'label': '{}'.format(i),
+                                'value': i,
+                                'disabled': False if i in all_existed_month else True
+                            } for i in M_WATERYEAR
+                        ]
                         END_MONTH_VALUE = max(sorted(list(selected_data["WATERMONTH"].unique())))
+                        
                         return END_MONTH_OPTIONS, M_WATERYEAR[END_MONTH_VALUE - 1], False
+                    
                     else:
                         selected_data = selected_data[selected_data["WATERYEAR"] == END_YEAR]
                         all_existed_month = sorted(list(selected_data["WATERMONTH"].unique()))
-                        all_existed_month = [M_WATERYEAR[i] for i in [x - 1 for x in all_existed_month]]
+                        all_existed_month = [
+                            M_WATERYEAR[i] for i in [x - 1 for x in all_existed_month]
+                        ]
                         
-                        END_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_WATERYEAR]
+                        END_MONTH_OPTIONS = [
+                            {
+                                'label': '{}'.format(i),
+                                'value': i,
+                                'disabled': False if i in all_existed_month else True
+                            } for i in M_WATERYEAR
+                        ]
                         END_MONTH_VALUE = max(sorted(list(selected_data["WATERMONTH"].unique())))
                         return END_MONTH_OPTIONS, M_WATERYEAR[END_MONTH_VALUE - 1], False
                 else:
                     if END_YEAR == START_YEAR:
                         selected_data = selected_data[selected_data["YEAR"] == END_YEAR]
                         all_existed_month = sorted(list(selected_data["MONTH"].unique()))
-                        all_existed_month = [M_SHAMSIYEAR[i] for i in [x - 1 for x in all_existed_month]]                        
-                        all_existed_month = list(set(all_existed_month).difference(M_SHAMSIYEAR[0:M_SHAMSIYEAR.index(START_MONTH)]))
+                        all_existed_month = [
+                            M_SHAMSIYEAR[i] for i in [x - 1 for x in all_existed_month]
+                        ]                        
+                        all_existed_month = list(
+                            set(all_existed_month).difference(
+                                M_SHAMSIYEAR[0:M_SHAMSIYEAR.index(START_MONTH)]
+                            )
+                        )
                         
-                        END_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_SHAMSIYEAR]
+                        END_MONTH_OPTIONS = [
+                            {
+                                'label': '{}'.format(i),
+                                'value': i,
+                                'disabled': False if i in all_existed_month else True
+                            } for i in M_SHAMSIYEAR
+                        ]
                         END_MONTH_VALUE = max(sorted(list(selected_data["MONTH"].unique())))
+                        
                         return END_MONTH_OPTIONS, M_SHAMSIYEAR[END_MONTH_VALUE - 1], False
+                    
                     else:
                         selected_data = selected_data[selected_data["YEAR"] == END_YEAR]
                         all_existed_month = sorted(list(selected_data["MONTH"].unique()))
-                        all_existed_month = [M_SHAMSIYEAR[i] for i in [x - 1 for x in all_existed_month]]
+                        all_existed_month = [
+                            M_SHAMSIYEAR[i] for i in [x - 1 for x in all_existed_month]
+                        ]
                         
-                        END_MONTH_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_month else True} for i in M_SHAMSIYEAR]
+                        END_MONTH_OPTIONS = [
+                            {
+                                'label': '{}'.format(i),
+                                'value': i,
+                                'disabled': False if i in all_existed_month else True
+                            } for i in M_SHAMSIYEAR
+                        ]
                         END_MONTH_VALUE = max(sorted(list(selected_data["MONTH"].unique())))
+                        
                         return END_MONTH_OPTIONS, M_SHAMSIYEAR[END_MONTH_VALUE - 1], False
+                    
             except:
                 return [], None, True
         else:
@@ -352,7 +476,14 @@ def precipitation_callback_tab2(app):
         Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     )
-    def FUNCTION_SELECT_START_DAY_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR, START_MONTH):
+    def FUNCTION_SELECT_START_DAY_TAB2_SIDEBAR_LEFT_CARD1(
+        HOZE30_SELECTED, 
+        MAHDOUDE_SELECTED, 
+        STATION_SELECTED,
+        TYPE_YEAR,
+        START_YEAR, 
+        START_MONTH
+    ):
         if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
             (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
                 (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
@@ -364,24 +495,49 @@ def precipitation_callback_tab2(app):
                             (station["stationName"].isin(STATION_SELECTED))
                 ]
                 
-                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
+                unique_st_code = list(selected_station["stationCode"].unique())
+                selected_data = data[data["stationCode"].isin(unique_st_code)]
                 
                 if TYPE_YEAR == "WATER_YEAR":
-                    selected_data = selected_data[selected_data["WATERYEAR"] == START_YEAR]
-                    selected_data = selected_data[selected_data["WATERMONTH"] == (M_WATERYEAR.index(START_MONTH) + 1)]
+                    selected_data = selected_data[
+                        selected_data["WATERYEAR"] == START_YEAR
+                    ]
+                    selected_data = selected_data[
+                        selected_data["WATERMONTH"] == (M_WATERYEAR.index(START_MONTH) + 1)
+                    ]
                     all_existed_day = sorted(list(selected_data["DAY"].unique()))
                     
-                    START_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1,32)]
+                    START_DAY_OPTIONS = [
+                        {
+                            'label': '{}'.format(i), 
+                            'value': i, 
+                            'disabled': False if i in all_existed_day else True
+                        } for i in range(1,32)
+                    ]
                     START_DAY_VALUE = min(sorted(list(selected_data["DAY"].unique())))
+                    
                     return START_DAY_OPTIONS, START_DAY_VALUE, False
+                
                 else:
-                    selected_data = selected_data[selected_data["YEAR"] == START_YEAR]
-                    selected_data = selected_data[selected_data["MONTH"] == (M_SHAMSIYEAR.index(START_MONTH) + 1)]
+                    selected_data = selected_data[
+                        selected_data["YEAR"] == START_YEAR
+                    ]
+                    selected_data = selected_data[
+                        selected_data["MONTH"] == (M_SHAMSIYEAR.index(START_MONTH) + 1)
+                    ]
                     all_existed_day = sorted(list(selected_data["DAY"].unique()))
                     
-                    START_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1,32)]
+                    START_DAY_OPTIONS = [
+                        {
+                            'label': '{}'.format(i), 
+                            'value': i, 
+                            'disabled': False if i in all_existed_day else True
+                        } for i in range(1,32)
+                    ]
                     START_DAY_VALUE = min(sorted(list(selected_data["DAY"].unique())))
+                    
                     return START_DAY_OPTIONS, START_DAY_VALUE, False
+                
             except:
                 return [], None, True
         else:
@@ -404,7 +560,17 @@ def precipitation_callback_tab2(app):
         Input('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     )
-    def FUNCTION_SELECT_END_DAY_TAB2_SIDEBAR_LEFT_CARD1(HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED, TYPE_YEAR, START_YEAR, START_MONTH, START_DAY, END_YEAR, END_MONTH):
+    def FUNCTION_SELECT_END_DAY_TAB2_SIDEBAR_LEFT_CARD1(
+        HOZE30_SELECTED, 
+        MAHDOUDE_SELECTED,
+        STATION_SELECTED, 
+        TYPE_YEAR, 
+        START_YEAR,
+        START_MONTH, 
+        START_DAY, 
+        END_YEAR, 
+        END_MONTH
+    ):
         if (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
             (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
                 (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
@@ -417,43 +583,111 @@ def precipitation_callback_tab2(app):
                             (station["stationName"].isin(STATION_SELECTED))
                 ]
                 
-                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
+                unique_st_code = list(selected_station["stationCode"].unique())
+                selected_data = data[data["stationCode"].isin(unique_st_code)]
                 
                 if TYPE_YEAR == "WATER_YEAR":
                     if END_YEAR == START_YEAR and START_MONTH == END_MONTH:
-                        selected_data = selected_data[selected_data["WATERYEAR"] == END_YEAR]
-                        selected_data = selected_data[selected_data["WATERMONTH"] == (M_WATERYEAR.index(END_MONTH) + 1)]
-                        all_existed_day = sorted(list(selected_data["DAY"].unique()))
-                        all_existed_day = list(set(all_existed_day).difference(list(range(1, START_DAY))))
+                        selected_data = selected_data[
+                            selected_data["WATERYEAR"] == END_YEAR
+                        ]
+                        selected_data = selected_data[
+                            selected_data["WATERMONTH"] == (M_WATERYEAR.index(END_MONTH) + 1)
+                        ]
+                        all_existed_day = sorted(
+                            list(selected_data["DAY"].unique())
+                        )
+                        all_existed_day = list(
+                            set(all_existed_day).difference(list(range(1, START_DAY)))
+                        )
                         
-                        END_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1, 32)]
-                        END_DAY_VALUE = max(all_existed_day)
+                        END_DAY_OPTIONS = [
+                            {'label': '{}'.format(i),
+                             'value': i, 
+                             'disabled': False if i in all_existed_day else True
+                            } for i in range(1, 32)
+                        ]
+                        END_DAY_VALUE = max(
+                            all_existed_day
+                        )
+                        
                         return END_DAY_OPTIONS, END_DAY_VALUE, False
+                    
                     else:
-                        selected_data = selected_data[selected_data["WATERYEAR"] == END_YEAR]
-                        selected_data = selected_data[selected_data["WATERMONTH"] == (M_WATERYEAR.index(END_MONTH) + 1)]
-                        all_existed_day = sorted(list(selected_data["DAY"].unique())) 
-                        END_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1, 32)]
-                        END_DAY_VALUE = max(all_existed_day)
+                        selected_data = selected_data[
+                            selected_data["WATERYEAR"] == END_YEAR
+                        ]
+                        selected_data = selected_data[
+                            selected_data["WATERMONTH"] == (M_WATERYEAR.index(END_MONTH) + 1)
+                        ]
+                        all_existed_day = sorted(
+                            list(selected_data["DAY"].unique())
+                        ) 
+                        END_DAY_OPTIONS = [
+                            {
+                                'label': '{}'.format(i), 
+                                'value': i, 
+                                'disabled': False if i in all_existed_day else True
+                            } for i in range(1, 32)
+                        ]
+                        END_DAY_VALUE = max(
+                            all_existed_day
+                        )
+                        
                         return END_DAY_OPTIONS, END_DAY_VALUE, False
+                    
                 else:
                     if END_YEAR == START_YEAR and START_MONTH == END_MONTH:
-                        selected_data = selected_data[selected_data["YEAR"] == END_YEAR]
-                        selected_data = selected_data[selected_data["MONTH"] == (M_SHAMSIYEAR.index(END_MONTH) + 1)]
-                        all_existed_day = sorted(list(selected_data["DAY"].unique()))
-                        all_existed_day = list(set(all_existed_day).difference(list(range(1, START_DAY))))
+                        selected_data = selected_data[
+                            selected_data["YEAR"] == END_YEAR
+                        ]
+                        selected_data = selected_data[
+                            selected_data["MONTH"] == (M_SHAMSIYEAR.index(END_MONTH) + 1)
+                        ]
+                        all_existed_day = sorted(
+                            list(selected_data["DAY"].unique())
+                        )
+                        all_existed_day = list(
+                            set(all_existed_day).difference(list(range(1, START_DAY)))
+                        )
                         
-                        END_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1, 32)]
-                        END_DAY_VALUE = max(all_existed_day)
+                        END_DAY_OPTIONS = [
+                            {
+                                'label': '{}'.format(i),
+                                'value': i,
+                                'disabled': False if i in all_existed_day else True
+                            } for i in range(1, 32)
+                        ]
+                        END_DAY_VALUE = max(
+                            all_existed_day
+                        )
+                        
                         return END_DAY_OPTIONS, END_DAY_VALUE, False
+                    
                     else:
-                        selected_data = selected_data[selected_data["YEAR"] == END_YEAR]
-                        selected_data = selected_data[selected_data["MONTH"] == (M_SHAMSIYEAR.index(END_MONTH) + 1)]
-                        all_existed_day = sorted(list(selected_data["DAY"].unique()))
+                        selected_data = selected_data[
+                            selected_data["YEAR"] == END_YEAR
+                        ]
+                        selected_data = selected_data[
+                            selected_data["MONTH"] == (M_SHAMSIYEAR.index(END_MONTH) + 1)
+                        ]
+                        all_existed_day = sorted(
+                            list(selected_data["DAY"].unique())
+                        )
                         
-                        END_DAY_OPTIONS = [{'label': '{}'.format(i), 'value': i, 'disabled': False if i in all_existed_day else True} for i in range(1, 32)]
-                        END_DAY_VALUE = max(all_existed_day)
+                        END_DAY_OPTIONS = [
+                            {
+                                'label': '{}'.format(i),
+                                'value': i, 
+                                'disabled': False if i in all_existed_day else True
+                            } for i in range(1, 32)
+                        ]
+                        END_DAY_VALUE = max(
+                            all_existed_day
+                        )
+                        
                         return END_DAY_OPTIONS, END_DAY_VALUE, False
+                    
             except:
                 return [], None, True
         else:
@@ -469,18 +703,26 @@ def precipitation_callback_tab2(app):
         Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value')
     )
-    def FUNCTION_MAP_TAB2_SIDEBAR_LEFT_CARD1(DATABASE_STATE, HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED):
+    def FUNCTION_MAP_TAB2_SIDEBAR_LEFT_CARD1(
+        DATABASE_STATE, 
+        HOZE30_SELECTED, 
+        MAHDOUDE_SELECTED, 
+        STATION_SELECTED
+    ):
         if (DATABASE_STATE == "DATABASE EXIST") and\
             (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
                 (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
                 (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0):
             try:
-                all_station = station[station["stationCode"].isin(
-                    data["stationCode"].unique())]
-                selected_station = all_station[all_station["stationName"].isin(
-                    STATION_SELECTED)]
+                all_station = station[
+                    station["stationCode"].isin(data["stationCode"].unique())
+                ]
+                selected_station = all_station[
+                    all_station["stationName"].isin(STATION_SELECTED)
+                ]
                 selected_mahdoude = list(
-                    selected_station["areaStudyCode"].unique())
+                    selected_station["areaStudyCode"].unique()
+                )
 
                 geodf, j_file = read_shapfile(
                     shapefile=MAHDOUDE,
@@ -530,52 +772,58 @@ def precipitation_callback_tab2(app):
             return BASE_MAP_EMPTY
 
 
-    # --------------------------------------------------------------------------- #
-    #                                                                             #
-    #                                  TAB2 - BODY                                #
-    #                                                                             #
-    # --------------------------------------------------------------------------- #
+# ----------------------------------------------------------------------------------------------- #
+#                                                                                                 #
+#                                            TAB2 - BODY                                          #
+#                                                                                                 #
+# ----------------------------------------------------------------------------------------------- #
 
     # CONTENT 1 - CARD INFO
     # -----------------------------------------------------------------------------
     @app.callback(
         Output('INFO_CARD_CURRENT_YEAR_VALUE-TAB2_BODY_CONTENT1', 'children'),
+        Output('INFO_CARD_PREVIOUS_YEAR_VALUE-TAB2_BODY_CONTENT1', 'children'),
         Output('INFO_CARD_MEAN_VALUE-TAB2_BODY_CONTENT1', 'children'),
         Output('INFO_CARD_MAX_VALUE-TAB2_BODY_CONTENT1', 'children'),
         Output('INFO_CARD_MIN_VALUE-TAB2_BODY_CONTENT1', 'children'),
-        
         Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-        
         Input('SELECT_TYPE_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_TIME_STEP-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-        
         Input('SELECT_START_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_END_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-        
         Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
-        
         Input('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
         Input('SELECT_END_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
     )
     def FUNCTION_UPDATE_INFO_CARD_TAB2_BODY_CONTENT1(
-        HOZE30_SELECTED, MAHDOUDE_SELECTED, STATION_SELECTED,
-        TYPE_ANALYSIS, TIME_STEP, TYPE_YEAR,
-        START_DURATION, END_DURATION,
-        START_YEAR, START_MONTH, START_DAY,
-        END_YEAR, END_MONTH, END_DAY
+        HOZE30_SELECTED,
+        MAHDOUDE_SELECTED,
+        STATION_SELECTED,
+        TYPE_ANALYSIS,
+        TIME_STEP,
+        TYPE_YEAR,
+        START_DURATION, 
+        END_DURATION,
+        START_YEAR, 
+        START_MONTH,
+        START_DAY,
+        END_YEAR,
+        END_MONTH,
+        END_DAY
     ):
         if (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
             (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
                 (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
                     (START_DURATION is not None) and (END_DURATION is not None) and\
-                        (START_YEAR is not None) and (START_MONTH is not None) and (START_DAY is not None) and\
-                            (END_YEAR is not None) and (END_MONTH is not None) and (END_DAY is not None):
+                        (START_YEAR is not None) and (START_MONTH is not None) and\
+                            (START_DAY is not None) and (END_YEAR is not None) and\
+                                (END_MONTH is not None) and (END_DAY is not None):
             try:
                 # LOAD DATA: ----------------------------------------------------------------------
                 
@@ -599,23 +847,40 @@ def precipitation_callback_tab2(app):
                 ]
                 
                 # LOAD DATA
-                selected_data = data[data["stationCode"].isin(list(selected_station["stationCode"].unique()))]
+                unique_st_code = list(selected_station["stationCode"].unique())
+                selected_data = data[data["stationCode"].isin(unique_st_code)]
                 
                 if "CURRENTvsPREVIOUS" in TYPE_ANALYSIS:
+                    
+                    PREVIOUS_YEAR = sorted(list(selected_data[YEAR].unique()))[-2]
+                    
                     df_cp = selected_data.copy()
-                    df_cp = df_cp.loc[~((df_cp[MONTH] < (MONTH_NAME.index(START_MONTH) + 1)))]
-                    df_cp = df_cp.loc[~((df_cp[MONTH] > (MONTH_NAME.index(END_MONTH) + 1)))]
-                    df_cp = df_cp.loc[~((df_cp[MONTH] == (MONTH_NAME.index(START_MONTH) + 1)) & (df_cp[DAY] < START_DAY))]
-                    df_cp = df_cp.loc[~((df_cp[MONTH] == (MONTH_NAME.index(END_MONTH) + 1)) & (df_cp[DAY] > END_DAY))]
                     
-
-                                     
+                    df_cp = df_cp.loc[
+                        ~((df_cp[MONTH] < (MONTH_NAME.index(START_MONTH) + 1)))
+                    ]
+                    df_cp = df_cp.loc[
+                        ~((df_cp[MONTH] > (MONTH_NAME.index(END_MONTH) + 1)))
+                    ]
+                    df_cp = df_cp.loc[
+                        ~((df_cp[MONTH] == (MONTH_NAME.index(START_MONTH) + 1)) &\
+                            (df_cp[DAY] < START_DAY))
+                    ]
+                    df_cp = df_cp.loc[
+                        ~((df_cp[MONTH] == (MONTH_NAME.index(END_MONTH) + 1)) &\
+                            (df_cp[DAY] > END_DAY))
+                    ]
                     
-                    
-                    pc_txt = "<table style='width:100%'>"
-                    phm_txt = "<table style='width:100%'>"
-                    phmx_txt = "<table style='width:100%'>"
-                    phmn_txt = "<table style='width:100%'>"
+                    pc_txt = f"<p style='text-align:center; margin:0; color:blue;'>\
+                        {START_YEAR}</p><table style='width:100%'>"
+                    pp_txt = f"<p style='text-align:center; margin:0; color:blue;'>\
+                        {PREVIOUS_YEAR}</p><table style='width:100%'>"
+                    phm_txt = f"<p style='text-align:center; margin:0; color:blue;'>\
+                        {END_DURATION}  -  {START_DURATION}</p><table style='width:100%'>"
+                    phmx_txt = f"<p style='text-align:center; margin:0; color:blue;'>\
+                        {END_DURATION}  -  {START_DURATION}</p><table style='width:100%'>"
+                    phmn_txt = f"<p style='text-align:center; margin:0; color:blue;'>\
+                        {END_DURATION}  -  {START_DURATION}</p><table style='width:100%'>"
                     
                     if TIME_STEP == "TIMESTEP_YEAR":
                         # YEARLY ANALYSIS
@@ -630,14 +895,22 @@ def precipitation_callback_tab2(app):
                                 aggfunc=np.sum
                             ).reset_index()
                             
-                            st_name = selected_station.loc[selected_station["stationCode"] == st, "stationName"].values[0]
+                            st_name = selected_station.loc[
+                                selected_station["stationCode"] == st, "stationName"
+                            ].values[0]
                             
                             # CURRENT YEAR DATA
                             current_year_data = df_year[df_year[YEAR] == START_YEAR]
                             current_year_data.reset_index(inplace=True, drop=True)
                             
+                            # PREVIOUS YEAR DATA
+                            previous_year_data = df_year[df_year[YEAR] == PREVIOUS_YEAR]
+                            previous_year_data.reset_index(inplace=True, drop=True)
+                            
                             # HISTORICAL DATA 
-                            historical_data = df_year[(df_year[YEAR] >= START_DURATION) & (df_year[YEAR] <= END_DURATION)]
+                            historical_data = df_year[
+                                (df_year[YEAR] >= START_DURATION) & (df_year[YEAR] <= END_DURATION)
+                            ]
                             historical_data.reset_index(inplace=True, drop=True)
                             
                             # CURRENT YEAR
@@ -646,6 +919,14 @@ def precipitation_callback_tab2(app):
                                     <tr>
                                         <td style="text-align: right;">{st_name}</td>
                                         <td style="text-align: left; color: red">{pc_value} میلیمتر</td>
+                                    </tr>
+                            '''
+                            # PREVIOUS YEAR
+                            pp_value = round(previous_year_data['JAM_BARAN'].mean(skipna = True), 1)
+                            pp_txt = pp_txt + f'''
+                                    <tr>
+                                        <td style="text-align: right;">{st_name}</td>
+                                        <td style="text-align: left; color: red">{pp_value} میلیمتر</td>
                                     </tr>
                             '''
                             
@@ -683,12 +964,14 @@ def precipitation_callback_tab2(app):
                             '''
 
                         pc_txt = pc_txt + "</table>"
+                        pp_txt = pp_txt + "</table>"
                         phm_txt = phm_txt + "</table>"
                         phmx_txt = phmx_txt + "</table>"
                         phmn_txt = phmn_txt + "</table>"
                         
                         result = [
                             dash_dangerously_set_inner_html.DangerouslySetInnerHTML(pc_txt),
+                            dash_dangerously_set_inner_html.DangerouslySetInnerHTML(pp_txt),
                             dash_dangerously_set_inner_html.DangerouslySetInnerHTML(phm_txt),
                             dash_dangerously_set_inner_html.DangerouslySetInnerHTML(phmx_txt),
                             dash_dangerously_set_inner_html.DangerouslySetInnerHTML(phmn_txt),
@@ -699,10 +982,12 @@ def precipitation_callback_tab2(app):
                             "-",
                             "-",
                             "-",
+                            "-",
                             "-"
                         ]
                 else:
                     result = [
+                        "-",
                         "-",
                         "-",
                         "-",
@@ -716,6 +1001,7 @@ def precipitation_callback_tab2(app):
                     "-",
                     "-",
                     "-",
+                    "-",
                     "-"
                 ]
                 return result
@@ -725,11 +1011,285 @@ def precipitation_callback_tab2(app):
                 "-",
                 "-",
                 "-",
+                "-",
                 "-"
             ]
             return result
+        
+    
 
 
+    # CONTENT 2 - PLOT
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output('GRAPH1-TAB2_BODY_CONTENT2', 'figure'),
+        Output('GRAPH2-TAB2_BODY_CONTENT2', 'figure'),
+        Output('GRAPH3-TAB2_BODY_CONTENT2', 'figure'),
+        Input('SELECT_HOZE30-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_MAHDOUDE-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_STATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_TYPE_ANALYSIS-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_TIME_STEP-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_TYPE_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_END_DURATION-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_START_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_END_YEAR-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_END_MONTH-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+        Input('SELECT_END_DAY-TAB2_SIDEBAR_LEFT_CARD1', 'value'),
+    )
+    def FUNCTION_UPDATE_INFO_CARD_TAB2_BODY_CONTENT1(
+        HOZE30_SELECTED,
+        MAHDOUDE_SELECTED,
+        STATION_SELECTED,
+        TYPE_ANALYSIS,
+        TIME_STEP,
+        TYPE_YEAR,
+        START_DURATION, 
+        END_DURATION,
+        START_YEAR, 
+        START_MONTH,
+        START_DAY,
+        END_YEAR,
+        END_MONTH,
+        END_DAY
+    ):
+        if (HOZE30_SELECTED is not None) and (len(HOZE30_SELECTED) != 0) and\
+            (MAHDOUDE_SELECTED is not None) and (len(MAHDOUDE_SELECTED) != 0) and\
+                (STATION_SELECTED is not None) and (len(STATION_SELECTED) != 0) and\
+                    (START_DURATION is not None) and (END_DURATION is not None) and\
+                        (START_YEAR is not None) and (START_MONTH is not None) and\
+                            (START_DAY is not None) and (END_YEAR is not None) and\
+                                (END_MONTH is not None) and (END_DAY is not None):
+            try:
+                # LOAD DATA: ----------------------------------------------------------------------
+                
+                # DEFINED VARIABLE
+                if TYPE_YEAR == "WATER_YEAR":
+                    YEAR = "WATERYEAR"
+                    MONTH = "WATERMONTH"
+                    DAY = "DAY"
+                    MONTH_NAME = M_WATERYEAR
+                else:
+                    YEAR = "YEAR"
+                    MONTH = "MONTH"
+                    DAY = "DAY"
+                    MONTH_NAME = M_SHAMSIYEAR
+
+                # LOAD STATIONS
+                selected_station = station[
+                    (station["drainageArea30"].isin(HOZE30_SELECTED)) &\
+                        (station["areaStudyName"].isin(MAHDOUDE_SELECTED)) &\
+                            (station["stationName"].isin(STATION_SELECTED))
+                ]
+                                
+                # LOAD DATA
+                unique_st_code = list(selected_station["stationCode"].unique())
+                selected_data = data[data["stationCode"].isin(unique_st_code)]
+                
+                if "CURRENTvsPREVIOUS" in TYPE_ANALYSIS:
+                    
+                    PREVIOUS_YEAR = sorted(list(selected_data[YEAR].unique()))[-2]
+                    
+                    df_cp = selected_data.copy()
+                    
+                    df_cp = df_cp.loc[
+                        ~((df_cp[MONTH] < (MONTH_NAME.index(START_MONTH) + 1)))
+                    ]
+                    df_cp = df_cp.loc[
+                        ~((df_cp[MONTH] > (MONTH_NAME.index(END_MONTH) + 1)))
+                    ]
+                    df_cp = df_cp.loc[
+                        ~((df_cp[MONTH] == (MONTH_NAME.index(START_MONTH) + 1)) &\
+                            (df_cp[DAY] < START_DAY))
+                    ]
+                    df_cp = df_cp.loc[
+                        ~((df_cp[MONTH] == (MONTH_NAME.index(END_MONTH) + 1)) &\
+                            (df_cp[DAY] > END_DAY))
+                    ]
+                    
+                    if TIME_STEP == "TIMESTEP_YEAR":
+                        # YEARLY ANALYSIS
+                        df_year = pd.pivot_table(
+                            df_cp,
+                            values=['JAM_BARAN'],
+                            index=["stationCode", YEAR],
+                            aggfunc=np.sum
+                        ).reset_index()
+                        
+                        df_year = df_year.merge(
+                            selected_station[["stationCode", "stationName"]], 
+                            on="stationCode",
+                            how='left'
+                        )
+                        
+                        print(df_year)
+                        
+                        fig_1 = px.box(
+                            df_year,
+                            x="stationName", 
+                            y="JAM_BARAN"
+                        )
+                        
+                        fig_1.update_traces(boxmean=True, selector=dict(type='box'))
+                        
+                        
+#                 fig.update_layout(
+#                     margin={'l': 3, 'r': 3},
+#                     xaxis_title="تاریخ",
+#                     yaxis_title="ارتفاع سطح آب ایستابی - متر",
+#                     autosize=False,
+#                     font=dict(
+#                         family="Tanha-FD",
+#                         size=16,
+#                         color="RebeccaPurple"
+#                     ),
+#                     xaxis=dict(
+#                         tickformat="%Y-%m"
+#                     ),
+#                     legend=dict(
+#                         orientation="h",
+#                         yanchor="bottom",
+#                         y=1.005,
+#                         xanchor="left",
+#                         x=0.000
+#                     ),
+#                     title=dict(
+#                         text='متوسط تراز ماهانه (روز پانزدهم) تعدیل شده سطح آب زیرزمینی در آبخوان',
+#                         yanchor="top",
+#                         y=0.95,
+#                         xanchor="center",
+#                         x=0.500
+#                     )
+#                 )
+                        
+                        
+                        
+                        
+                        
+                        
+                        # for st in df_cp["stationCode"].unique():
+                        #     df = df_cp[df_cp["stationCode"] == st]
+                        #     df.reset_index(inplace=True, drop=True)
+                                                
+                        #     df_year = pd.pivot_table(
+                        #         df,
+                        #         values=['JAM_BARAN'],
+                        #         index=[YEAR],
+                        #         aggfunc=np.sum
+                        #     ).reset_index()
+                            
+                        #     st_name = selected_station.loc[
+                        #         selected_station["stationCode"] == st, "stationName"
+                        #     ].values[0]
+                            
+                        #     # CURRENT YEAR DATA
+                        #     current_year_data = df_year[df_year[YEAR] == START_YEAR]
+                        #     current_year_data.reset_index(inplace=True, drop=True)
+                            
+                        #     # PREVIOUS YEAR DATA
+                        #     previous_year_data = df_year[df_year[YEAR] == PREVIOUS_YEAR]
+                        #     previous_year_data.reset_index(inplace=True, drop=True)
+                            
+                        #     # HISTORICAL DATA 
+                        #     historical_data = df_year[
+                        #         (df_year[YEAR] >= START_DURATION) & (df_year[YEAR] <= END_DURATION)
+                        #     ]
+                        #     historical_data.reset_index(inplace=True, drop=True)
+                            
+                        #     # CURRENT YEAR
+                        #     pc_value = round(current_year_data['JAM_BARAN'].mean(skipna = True), 1)
+                        #     pc_txt = pc_txt + f'''
+                        #             <tr>
+                        #                 <td style="text-align: right;">{st_name}</td>
+                        #                 <td style="text-align: left; color: red">{pc_value} میلیمتر</td>
+                        #             </tr>
+                        #     '''
+                        #     # PREVIOUS YEAR
+                        #     pp_value = round(previous_year_data['JAM_BARAN'].mean(skipna = True), 1)
+                        #     pp_txt = pp_txt + f'''
+                        #             <tr>
+                        #                 <td style="text-align: right;">{st_name}</td>
+                        #                 <td style="text-align: left; color: red">{pp_value} میلیمتر</td>
+                        #             </tr>
+                        #     '''
+                            
+                        #     # HISTORICAL MEAN
+                        #     phm_value = round(historical_data['JAM_BARAN'].mean(skipna = True), 1)
+                        #     phm_txt = phm_txt + f'''
+                        #             <tr>
+                        #                 <td style="text-align: right;">{st_name}</td>
+                        #                 <td style="text-align: left; color: red">{phm_value} میلیمتر</td>
+                        #             </tr>
+                        #     '''
+                             
+                        #     # HISTORICAL MAX
+                        #     phmx_index = historical_data["JAM_BARAN"].idxmax(axis=1, skipna=True)
+                        #     phmx_value = round(historical_data.at[phmx_index, 'JAM_BARAN'], 1)
+                        #     phmx_year = str(historical_data.at[phmx_index, YEAR])
+                        #     phmx_txt = phmx_txt + f'''
+                        #             <tr>
+                        #                 <td style="text-align: right;">{st_name}</td>
+                        #                 <td style="text-align: left; color: red">{phmx_value} میلیمتر</td>
+                        #                 <td style="text-align: left; color: green">{phmx_year}</td>
+                        #             </tr>
+                        #     '''
+                            
+                        #     # HISTORICAL MIN
+                        #     phmn_index = historical_data["JAM_BARAN"].idxmin(axis=1, skipna=True)
+                        #     phmn_value = round(historical_data.at[phmn_index, 'JAM_BARAN'], 1)
+                        #     phmn_year = str(historical_data.at[phmn_index, YEAR])
+                        #     phmn_txt = phmn_txt + f'''
+                        #             <tr>
+                        #                 <td style="text-align: right;">{st_name}</td>
+                        #                 <td style="text-align: left; color: red">{phmn_value} میلیمتر</td>
+                        #                 <td style="text-align: left; color: green">{phmn_year}</td>
+                        #             </tr>
+                        #     '''
+
+                        # pc_txt = pc_txt + "</table>"
+                        # pp_txt = pp_txt + "</table>"
+                        # phm_txt = phm_txt + "</table>"
+                        # phmx_txt = phmx_txt + "</table>"
+                        # phmn_txt = phmn_txt + "</table>"
+                        
+                        result = [
+                            fig_1,
+                            NO_MATCHING_DATA_FOUND,
+                            NO_MATCHING_DATA_FOUND,
+                        ]
+                        
+                    else:
+                        result = [
+                            NO_MATCHING_DATA_FOUND,
+                            NO_MATCHING_DATA_FOUND,
+                            NO_MATCHING_DATA_FOUND,
+                        ]
+                else:
+                    result = [
+                        NO_MATCHING_DATA_FOUND,
+                        NO_MATCHING_DATA_FOUND,
+                        NO_MATCHING_DATA_FOUND,
+                    ]
+                return result
+                
+            except:
+                result = [
+                    NO_MATCHING_DATA_FOUND,
+                    NO_MATCHING_DATA_FOUND,
+                    NO_MATCHING_DATA_FOUND,
+                ]
+                return result
+            
+        else:
+            result = [
+                NO_MATCHING_DATA_FOUND,
+                NO_MATCHING_DATA_FOUND,
+                NO_MATCHING_DATA_FOUND,
+            ]
+            return result
 
                 # # TIME SLICING
                 # selected_data = selected_data.loc[(selected_data[YEAR] >= START_YEAR)]

@@ -58,6 +58,36 @@ TAB2_BODY_CONTENT1 = html.Div(
                             className='float-left',
                             children=[
                                 html.Img(
+                                    src='data:image/png;base64,{}'.format(CALENDAR_2_LOGO), height=25)
+                            ]
+                        ),
+                        html.Div(
+                            className='text-right ',
+                            dir="rtl",
+                            children=[
+                                html.Span(
+                                    children="سال گذشته"
+                                ),
+                                html.P(
+                                    id="INFO_CARD_PREVIOUS_YEAR_VALUE-TAB2_BODY_CONTENT1",
+                                    className="text-dark pt-3 mt-1 mb-1 mx-auto"
+                                ),
+                            ]
+                        )
+                    ],
+                    className='card-body text-dark p-2'
+                ),
+            ],
+            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1 box'
+        ),
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Div(
+                            className='float-left',
+                            children=[
+                                html.Img(
                                     src='data:image/png;base64,{}'.format(MEAN_LOGO), height=25)
                             ]
                         ),
@@ -80,6 +110,11 @@ TAB2_BODY_CONTENT1 = html.Div(
             ],
             className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1 box'
         ),
+
+        html.Div(
+            className="w-100 d-none d-xl-block"
+        ),
+
         html.Div(
             children=[
                 html.Div(
@@ -140,132 +175,52 @@ TAB2_BODY_CONTENT1 = html.Div(
             ],
             className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1 box'
         ),
-        html.Div(
-            className="w-100 d-none d-xl-block"
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(
-                                    src='data:image/png;base64,{}'.format(ALTITUDE_LOGO), height=25)
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right',
-                            dir="rtl",
-                            children=[
-                                html.Span(
-                                    children="پست‌ترین ایستگاه"
-                                ),
-                                html.H6(
-                                    # id="INFO_CARD_LOW_ELEV_STATION-TAB1_SIDEBAR_RIGHT_CARD1",
-                                    className="text-primary pt-3"
-                                ),
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark p-2'
-                ),
-            ],
-            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(
-                                    src='data:image/png;base64,{}'.format(ALTITUDE_LOGO), height=25)
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right',
-                            dir="rtl",
-                            children=[
-                                html.Span(
-                                    children="مرتفع‌ترین ایستگاه"
-                                ),
-                                html.H6(
-                                    # id="INFO_CARD_HIGH_ELEV_STATION-TAB1_SIDEBAR_RIGHT_CARD1",
-                                    className="text-primary pt-3"
-                                ),
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark p-2'
-                ),
-            ],
-            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(
-                                    src='data:image/png;base64,{}'.format(CALENDAR_LOGO), height=25)
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right',
-                            dir="rtl",
-                            children=[
-                                html.Span(
-                                    children="قدیمی‌ترین ایستگاه"
-                                ),
-                                html.H6(
-                                    # id="INFO_CARD_OLD_STATION-TAB1_SIDEBAR_RIGHT_CARD1",
-                                    className="text-primary pt-3"
-                                ),
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark p-2'
-                ),
-            ],
-            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1'
-        ),
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        html.Div(
-                            className='float-left',
-                            children=[
-                                html.Img(
-                                    src='data:image/png;base64,{}'.format(CALENDAR_LOGO), height=25)
-                            ]
-                        ),
-                        html.Div(
-                            className='text-right',
-                            dir="rtl",
-                            children=[
-                                html.Span(
-                                    children="جدیدترین ایستگاه"
-                                ),
-                                html.H6(
-                                    # id="INFO_CARD_NEW_STATION-TAB1_SIDEBAR_RIGHT_CARD1",
-                                    className="text-primary pt-3"
-                                ),
-                            ]
-                        )
-                    ],
-                    className='card-body text-dark p-2'
-                ),
-            ],
-            className='col-sm-12 col-md-6 col-lg-4 col-xl-3 card border mb-1 bg-light px-1'
-        )
     ],
     dir="rtl",
     className="row justify-content-center mt-2"
+)
+
+TAB2_BODY_CONTENT2 = html.Div(
+    children=[
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        dcc.Graph(
+                            id='GRAPH1-TAB2_BODY_CONTENT2',
+                            className="w-100"
+                        )
+                    ],
+                    className="col-sm-12 col-md-6 col-xl-4"
+                ),
+                html.Div(
+                    children=[
+                        dcc.Graph(
+                            id='GRAPH2-TAB2_BODY_CONTENT2',
+                            className="w-100"
+                        )
+                    ],
+                    className="col-sm-12 col-md-6 col-xl-8"
+                ),
+            ],
+            className="row"
+        ),
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        dcc.Graph(
+                            id='GRAPH3-TAB2_BODY_CONTENT2',
+                            className="w-100"
+                        )
+                    ],
+                    className="col-12"
+                ),
+            ],
+            className="row"
+        )
+    ],
+    dir="rtl",
 )
 
 
@@ -279,25 +234,7 @@ TAB_2_BODY = [
 
     html.Hr(),
 
-    # CONTENT2 - CREATE MAP
-    html.Div(
-        children=[
-            # TAB1_BODY_CONTENT2
-        ],
-        className="row my-2",
-    ),
-
-    # CONTENT3 - CREATE TABLE
-    html.Div(
-        children=[
-            html.Div(
-                children=[
-                    # TAB1_BODY_CONTENT3
-                ],
-                className="w-100 h-100"
-            )
-        ],
-        className="row"
-    )
+    # CONTENT2 - GRAPH
+    TAB2_BODY_CONTENT2
 
 ]
