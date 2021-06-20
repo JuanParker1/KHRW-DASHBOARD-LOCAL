@@ -180,6 +180,7 @@ TAB2_BODY_CONTENT1 = html.Div(
     className="row justify-content-center mt-2"
 )
 
+
 TAB2_BODY_CONTENT2 = html.Div(
     children=[
         html.Div(

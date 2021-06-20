@@ -1109,7 +1109,7 @@ def precipitation_callback_tab2(app):
                         ~((df_cp[MONTH] == (MONTH_NAME.index(END_MONTH) + 1)) &\
                             (df_cp[DAY] > END_DAY))
                     ]
-                    
+                  
                     if TIME_STEP == "TIMESTEP_YEAR":
                         # YEARLY ANALYSIS
                         df_year = pd.pivot_table(
@@ -1118,56 +1118,162 @@ def precipitation_callback_tab2(app):
                             index=["stationCode", YEAR],
                             aggfunc=np.sum
                         ).reset_index()
+
                         
                         df_year = df_year.merge(
                             selected_station[["stationCode", "stationName"]], 
                             on="stationCode",
                             how='left'
+                        ).round(1)
+
+
+                        # graph1 -------------------------------------------------------------------
+
+                        graph1 = go.Figure()
+
+                        for st in df_year["stationCode"].unique():
+
+                            df = df_year[df_year["stationCode"] == st]
+
+                            df_duration = df[(df[YEAR] >= START_DURATION) & (df[YEAR] <= END_DURATION)]
+
+                            graph1.add_trace(
+                                go.Box(
+                                    x = df_duration.stationName,
+                                    y = df_duration.JAM_BARAN,
+                                    showlegend=False,
+                                    boxmean=True,
+                                )
+                            )
+
+                        graph1.add_trace(
+                            go.Scatter(
+                                x = df_year.loc[df_year[YEAR] == START_YEAR, "stationName"],
+                                y = df_year.loc[df_year[YEAR] == START_YEAR, "JAM_BARAN"],
+                                marker = dict(size=8, color="blue"),
+                                mode='markers',
+                                showlegend=True,
+                                name=str(START_YEAR),
+                                hovertemplate="%{y}<extra></extra>",
+                            )
+                        )
+
+                        graph1.add_trace(
+                            go.Scatter(
+                                x = df_year.loc[df_year[YEAR] == PREVIOUS_YEAR, "stationName"],
+                                y = df_year.loc[df_year[YEAR] == PREVIOUS_YEAR, "JAM_BARAN"],
+                                marker = dict(size=8, color="red"),
+                                mode='markers',
+                                showlegend=True,
+                                name=str(PREVIOUS_YEAR),
+                                hovertemplate="%{y}<extra></extra>",
+                            )
+                        )
+
+                        graph1.update_layout(
+                            margin={'l': 0, 'r': 0},
+                            xaxis_title="",
+                            yaxis_title="بارندگی - میلیمتر",
+                            autosize=False,
+                            font=dict(
+                                family="Tanha-FD",
+                                size=12,
+                                color="RebeccaPurple"
+                            ),
+                            legend=dict(
+                                orientation="h",
+                                yanchor="bottom",
+                                y=1.005,
+                                xanchor="center",
+                                x=0.500
+                            ),
+                            title=dict(
+                                text='نمودار جعبه‌ای مقدار بارندگی',
+                                yanchor="top",
+                                y=0.95,
+                                xanchor="center",
+                                x=0.500
+                            )
+                        )
+
+
+                        # graph2 -------------------------------------------------------------------
+
+                        df_mean_duration = pd.pivot_table(
+                            df_year[(df_year[YEAR] >= START_DURATION) & (df_year[YEAR] <= END_DURATION)],
+                            values=['JAM_BARAN'],
+                            index=["stationName"],
+                            aggfunc=np.mean
+                        ).reset_index().round(1)
+
+                        graph2 = go.Figure()
+
+
+                        graph2.add_trace(
+                            go.Bar(
+                                x = df_year.loc[df_year[YEAR] == START_YEAR, "stationName"],
+                                y = df_year.loc[df_year[YEAR] == START_YEAR, "JAM_BARAN"],
+                                showlegend=True,
+                                name=str(START_YEAR),
+                                text=df_year.loc[df_year[YEAR] == START_YEAR, "JAM_BARAN"],
+                                textposition='outside',
+                                hovertemplate="%{y} : %{x}<extra></extra>",
+                            )
+                        )
+
+                        graph2.add_trace(
+                            go.Bar(
+                                x = df_year.loc[df_year[YEAR] == PREVIOUS_YEAR, "stationName"],
+                                y = df_year.loc[df_year[YEAR] == PREVIOUS_YEAR, "JAM_BARAN"],
+                                showlegend=True,
+                                name=str(PREVIOUS_YEAR),
+                                text=df_year.loc[df_year[YEAR] == PREVIOUS_YEAR, "JAM_BARAN"],
+                                textposition='outside',
+                                hovertemplate="%{y} : %{x}<extra></extra>",
+                            )
+                        )
+
+                        graph2.add_trace(
+                            go.Bar(
+                                x = df_mean_duration.loc[:, "stationName"],
+                                y = [round(num, 0) for num in df_mean_duration.loc[:, "JAM_BARAN"]],
+                                showlegend=True,
+                                name=f"{START_DURATION} - {END_DURATION}",
+                                text=df_mean_duration.loc[:, "JAM_BARAN"],
+                                textposition='outside',
+                                hovertemplate="%{y} : %{x}<extra></extra>",
+                            )
                         )
                         
-                        print(df_year)
-                        
-                        fig_1 = px.box(
-                            df_year,
-                            x="stationName", 
-                            y="JAM_BARAN"
+
+
+
+                        graph2.update_layout(
+                            margin={'l': 0, 'r': 0},
+                            xaxis_title="",
+                            yaxis_title="بارندگی - میلیمتر",
+                            autosize=False,
+                            font=dict(
+                                family="Tanha-FD",
+                                size=12,
+                                color="RebeccaPurple"
+                            ),
+                            legend=dict(
+                                orientation="h",
+                                yanchor="bottom",
+                                y=1.005,
+                                xanchor="center",
+                                x=0.500
+                            ),
+                            title=dict(
+                                text='نمودار میله‌ای مقدار بارندگی',
+                                yanchor="top",
+                                y=0.95,
+                                xanchor="center",
+                                x=0.500
+                            )
                         )
-                        
-                        fig_1.update_traces(boxmean=True, selector=dict(type='box'))
-                        
-                        
-#                 fig.update_layout(
-#                     margin={'l': 3, 'r': 3},
-#                     xaxis_title="تاریخ",
-#                     yaxis_title="ارتفاع سطح آب ایستابی - متر",
-#                     autosize=False,
-#                     font=dict(
-#                         family="Tanha-FD",
-#                         size=16,
-#                         color="RebeccaPurple"
-#                     ),
-#                     xaxis=dict(
-#                         tickformat="%Y-%m"
-#                     ),
-#                     legend=dict(
-#                         orientation="h",
-#                         yanchor="bottom",
-#                         y=1.005,
-#                         xanchor="left",
-#                         x=0.000
-#                     ),
-#                     title=dict(
-#                         text='متوسط تراز ماهانه (روز پانزدهم) تعدیل شده سطح آب زیرزمینی در آبخوان',
-#                         yanchor="top",
-#                         y=0.95,
-#                         xanchor="center",
-#                         x=0.500
-#                     )
-#                 )
-                        
-                        
-                        
-                        
+                                                
                         
                         
                         # for st in df_cp["stationCode"].unique():
@@ -1256,8 +1362,8 @@ def precipitation_callback_tab2(app):
                         # phmn_txt = phmn_txt + "</table>"
                         
                         result = [
-                            fig_1,
-                            NO_MATCHING_DATA_FOUND,
+                            graph1,
+                            graph2,
                             NO_MATCHING_DATA_FOUND,
                         ]
                         

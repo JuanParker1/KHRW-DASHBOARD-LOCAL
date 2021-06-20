@@ -80,6 +80,28 @@ TAB_1 = html.Div(
             style={
                 'display': 'none'
             }
+        ),
+        html.Div(
+            children=[
+                dcc.Store(
+                    id="DATABASE_DATA-TAB1",
+                    storage_type="session"
+                )
+            ],
+            style={
+                'display': 'none'
+            }
+        ),
+        html.Div(
+            children=[
+                dcc.Store(
+                    id="DATABASE_STATION-TAB1",
+                    storage_type="session"
+                )
+            ],
+            style={
+                'display': 'none'
+            }
         )
     ],
     className="container-fluid p-0",
