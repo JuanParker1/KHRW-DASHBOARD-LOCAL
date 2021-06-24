@@ -1,86 +1,28 @@
 {% extends 'base.html' %} {% block content %}
-
-<!-- Page Content -->
-<div class="container">
-  <!-- Jumbotron Header -->
-  <header class="jumbotron my-3 py-5 transitionCard">
-    <h1 class="display-5 font-weight-bold">داشبورد مدیریتی منابع آب</h1>
-    <p class="lead text-justify mt-4">
-      در اسفند ماه سال 1342 وزارت آب و برق تشکیل شد و به استناد مواد 3 و 4 قانون تاسیس این وزارتخانه سازمان‌های آب و برق
-      منطقه‌ای تشکیل شد. وزارت مذکور در سال 1353 به وزارت نیرو تغییر نام داد. در همین راستا در سال 1355 اداره کل آبیاری
-      خراسان به عنوان شرکت به ثبت رسیده و در سال 1356 سازمان آب مشهد نیز از شهرداری جدا و در شرکت مذکور ادغام شد و تحت
-      پوشش وزارت نیرو قرار گرفت.
-    </p>
-  </header>
-
-  <!-- Page Features -->
-  <div class="row text-center">
-    <div class="col-lg-3 col-md-6 mb-4">
-      <div class="card h-100 transitionCard">
-        <img class="card-img-top" src="{{ url_for('static', filename='images/app_aquifer_hydrograph.jpg') }}" alt="" />
-        <div class="card-body">
-          <h5 class="card-title font-weight-bold">هیدروگراف معرف آبخوان</h5>
-          <hr />
-          <p class="card-text">تهیه هیدروگراف معرف آبخوان‏‌ها با استفاده از روش تیسن.</p>
-        </div>
-        <div class="card-footer">
-          <a href="{{ url_for('hydrograph_route') }}" target="_blank" class="btn btn-outline-success"
-            >ورود به نرم‌افزار</a
-          >
-        </div>
+<div class="row align-items-md-stretch mt-5">
+  <div class="col-md-6">
+    <div class="h-100 p-5 text-white bg-dark rounded-3 transitionCard">
+      <div class="d-inline-flex">
+        <i class="fas fa-database fa-2x"></i>
+        <h3 class="mr-3">مدیریت پایگاه داده</h3>
       </div>
-    </div>
-
-    <div class="col-lg-3 col-md-6 mb-4">
-      <div class="card h-100 transitionCard">
-        <img class="card-img-top" src="{{ url_for('static', filename='images/app_aquifer_chemograph.jpg') }}" alt="" />
-        <div class="card-body">
-          <h5 class="card-title font-weight-bold">کموگراف معرف آبخوان</h5>
-          <hr />
-          <p class="card-text">تهیه کموگراف معرف آبخوان‌ها با استفاده از روش تیسن.</p>
-        </div>
-        <div class="card-footer">
-          <a href="{{ url_for('chemograph_route') }}" target="_blank" class="btn btn-outline-danger"
-            >ورود به نرم‌افزار</a
-          >
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-3 col-md-6 mb-4">
-      <div class="card h-100 transitionCard">
-        <img
-          class="card-img-top"
-          src="{{ url_for('static', filename='images/app_isotopes_precipitation.jpg') }}"
-          alt=""
-        />
-        <div class="card-body">
-          <h5 class="card-title font-weight-bold">ایزوتوپ‌های محیطی بارش</h5>
-          <hr />
-          <p class="card-text">بررسی و تحلیل داده‌های ایزوتوپی بارش محدوده‌های مطالعاتی استان خراسان رضوی.</p>
-        </div>
-        <div class="card-footer">
-          <a href="#" target="_blank" class="btn btn-outline-secondary">ورود به نرم‌افزار</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-3 col-md-6 mb-4">
-      <div class="card h-100 transitionCard">
-        <img class="card-img-top" src="{{ url_for('static', filename='images/app_precipitation.jpg') }}" alt="" />
-        <div class="card-body">
-          <h5 class="card-title font-weight-bold">تحلیل داده‌های بارش</h5>
-          <hr />
-          <p class="card-text">بررسی و تحلیل داده‌های بارش محدوده‌های مطالعاتی استان خراسان رضوی.</p>
-        </div>
-        <div class="card-footer">
-          <a href="{{ url_for('precip') }}" target="_blank" class="btn btn-outline-primary">ورود به نرم‌افزار</a>
-        </div>
+      <p class="mt-3 text-justify">ایجاد، خواندن، بروزرسانی یا ویرایش و حذف اطلاعات پایگاه داده.</p>
+      <div class="text-left">
+        <a href="{{ url_for('precipitation_dashboard') }}" class="btn btn-outline-light btn-lg">ورود</a>
       </div>
     </div>
   </div>
-  <!-- /.row -->
+  <div class="col-md-6">
+    <div class="h-100 p-5 bg-light border rounded-3 transitionCard">
+      <div class="d-inline-flex">
+        <i class="fas fa-chart-area fa-2x"></i>
+        <h3 class="mr-3">آنالیز و مصورسازی داده‌ها</h3>
+      </div>
+      <p class="mt-3 text-justify">تحلیل داده‌ها، مصورسازی داده‌ها و گزارش گیری.</p>
+      <div class="text-left">
+        <a href="{{ url_for('precipitation_route') }}" class="btn btn-outline-dark btn-lg">ورود</a>
+      </div>
+    </div>
+  </div>
 </div>
-<!-- /.container -->
-
 {% endblock content %}
