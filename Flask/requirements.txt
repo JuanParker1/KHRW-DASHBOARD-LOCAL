@@ -18,4 +18,6 @@ dash_daq
 pyarrow
 folium
 altair
+dash-leaflet
+dash-extensions
 
