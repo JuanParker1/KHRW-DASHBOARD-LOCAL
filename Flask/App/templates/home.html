@@ -1,26 +1,42 @@
 {% extends 'base.html' %} {% block content %}
-<div class="row align-items-md-stretch mt-5">
-  <div class="col-md-6">
-    <div class="h-100 p-5 text-white bg-dark rounded-3 transitionCard">
-      <div class="d-inline-flex">
-        <i class="fas fa-database fa-2x"></i>
-        <h3 class="mr-3">مدیریت پایگاه داده</h3>
-      </div>
-      <p class="mt-3 text-justify">ایجاد، خواندن، بروزرسانی یا ویرایش و حذف اطلاعات پایگاه داده.</p>
-      <div class="text-left">
-        <a href="{{ url_for('precipitation_dashboard') }}" class="btn btn-outline-light btn-lg">ورود</a>
-      </div>
+<div class="container">
+
+  <!-- Jumbotron Header -->
+  <div class="row text-center justify-content-center animate__animated animate__fadeInDown">
+    <div class="col-lg-12 col-md-12">
+      <header class="jumbotron my-3 py-3 transitionCard bg-color-LightGray">
+        <h3 class="display-5 font-weight-bold text-center">داشبورد مدیریتی منابع آب</h3>
+        <p class="lead text-justify mt-4">
+          هماهنگی و ارتباط با شرکت مدیریت منابع آب ایران و دریافت اطلاعات کلی مطالعات پایه منابع آب و انجام برنامه‌ریزی لازم در خصوص تأسیس و بهره‌برداری بهینه از حوزه‌های آبریز معرف، احداث و توسعه شبکه هیدرومتری، کلیماتولوژی و پیزومتری دشت‌ها و برنامه‌های اکتشافی، مطالعات لازم در خصوص کمیت و کیفیت آب در محدوده‌های مطالعاتی، تهیه بیلان آب و تلفیق اطلاعات مربوط به مطالعات منابع آب، تشکیل بانک اطلاعاتی، تهیه و تدوین دستورالعمل‌های تعادل در سفره‌های آب زیرزمینی و آب‌های سطحی و تدوین دستورالعمل‌های آماربرداری کمی و کیفی در سطح ادارات امور آب شهرستانها و اعمال نظارت در عملکرد واحدهای صنفی.
+        </p>
+      </header>
     </div>
   </div>
-  <div class="col-md-6">
-    <div class="h-100 p-5 bg-light border rounded-3 transitionCard">
-      <div class="d-inline-flex">
-        <i class="fas fa-chart-area fa-2x"></i>
-        <h3 class="mr-3">آنالیز و مصورسازی داده‌ها</h3>
+
+  <!-- Page Features -->
+  <div class="row align-items-md-stretch justify-content-center my-2">
+    <div class="col-lg-6">
+      <div class="h-100 p-5 text-white bg-dark rounded-3 transitionCard animate__animated animate__fadeInRight">
+        <div class="d-inline-flex">
+          <i class="fas fa-database fa-2x"></i>
+          <h3 class="mr-3">مدیریت پایگاه داده</h3>
+        </div>
+        <p class="mt-3 text-justify">ایجاد، خواندن، بروزرسانی یا ویرایش و حذف اطلاعات پایگاه داده.</p>
+        <div class="text-left">
+          <a href="{{ url_for('precipitation_dashboard') }}" class="btn btn-outline-light btn-lg">ورود</a>
+        </div>
       </div>
-      <p class="mt-3 text-justify">تحلیل داده‌ها، مصورسازی داده‌ها و گزارش گیری.</p>
-      <div class="text-left">
-        <a href="{{ url_for('precipitation_route') }}" class="btn btn-outline-dark btn-lg">ورود</a>
+    </div>
+    <div class="col-lg-6">
+      <div class="h-100 p-5 bg-light border rounded-3 transitionCard  animate__animated animate__fadeInLeft">
+        <div class="d-inline-flex">
+          <i class="fas fa-chart-area fa-2x"></i>
+          <h3 class="mr-3">آنالیز و مصورسازی داده‌ها</h3>
+        </div>
+        <p class="mt-3 text-justify">تحلیل داده‌ها، مصورسازی داده‌ها و گزارش گیری.</p>
+        <div class="text-left">
+          <a href="{{ url_for('data_analysis') }}" class="btn btn-outline-dark btn-lg">ورود</a>
+        </div>
       </div>
     </div>
   </div>

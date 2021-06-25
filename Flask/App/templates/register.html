@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block content %} {% include "form_errors.html" %}
 
-<div class="my-login-page">
+<div id="my-login-page" class="animate__animated animate__flipInX">
   <div class="my-form">
     <form class="register-form" action="" method="POST">
       {{ form.csrf_token }}
@@ -24,7 +24,7 @@
         name="password"
         id="password"
       />
-      <input type="submit" value="تکمیل ثبت نام" class="button" />
+      <input type="submit" value="تکمیل ثبت نام" class="button login_btn_animate animate__animated animate__bounceInDown" />
     </form>
   </div>
 </div>

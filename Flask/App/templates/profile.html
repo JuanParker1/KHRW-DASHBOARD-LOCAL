@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block content %} {% include "form_errors.html" %}
 
-<div class="my-login-page">
+<div id="my-login-page" class="animate__animated animate__flipInX">
   <div class="my-form">
     <form class="register-form" action="" method="POST">
       {{ form.csrf_token }}
@@ -39,7 +39,7 @@
         id="password"
         value="{{ current_user.password }}"
       />
-      <input type="submit" value="به روز رسانی" class="button" />
+      <input type="submit" value="به روز رسانی" class="button login_btn_animate animate__animated animate__bounceInDown" />
     </form>
   </div>
 </div>

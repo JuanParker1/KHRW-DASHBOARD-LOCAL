@@ -81,7 +81,7 @@
 }
 
 body {
-  font-family: "Tanha";
+  font-family: "Sahel-FD";
   padding-top: 56px;
   direction: rtl;
   text-align: right;
@@ -96,10 +96,26 @@ body {
   transition: 0.3s linear all;
 }
 
-.my-login-page {
+#my-login-page {
   width: 360px;
   padding: 8% 0 0;
   margin: auto;
+}
+
+.login_btn_animate {
+  animation-delay:0.2s;
+   -moz-animation-delay:0.2s;
+    -webkit-animation-delay:0.2s; 
+  }
+
+.btn_table {
+    width: 48% !important;
+}
+
+@media only screen and (max-width: 800px) {
+  .btn_table {
+    width: 100% !important;
+  }
 }
 
 .my-form {
@@ -114,7 +130,7 @@ body {
 }
 
 .my-form input {
-  font-family: "Tanha";
+  font-family: "Sahel-FD";
   outline: 0;
   background: #f2f2f2;
   width: 100%;
@@ -126,7 +142,7 @@ body {
 }
 
 .my-form .button {
-  font-family: "Tanha";
+  font-family: "Sahel-FD";
   text-transform: uppercase;
   outline: 0;
   background: #4caf50;
@@ -155,4 +171,7 @@ body {
 .my-form .my-message a {
   color: #4caf50;
   text-decoration: none;
+}
+.bg-color-LightGray {
+  background-color: rgb(237, 234, 234);
 }

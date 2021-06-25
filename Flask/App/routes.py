@@ -128,6 +128,12 @@ def user_management():
     return render_template(template_name_or_list='user_management.html', users=users)
 
 
+@app.route('/data-analysis')
+@login_required
+def data_analysis():
+    return render_template(template_name_or_list='data_analysis.html')
+
+
 # -----------------------------------------------------------------------------
 #
 #
