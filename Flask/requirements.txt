@@ -20,4 +20,5 @@ folium
 altair
 dash-leaflet
 dash-extensions
+jsbeautifier
 

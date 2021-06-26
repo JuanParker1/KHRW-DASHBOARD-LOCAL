@@ -651,19 +651,18 @@ def downloadSampleStationFile ():
 #
 # -----------------------------------------------------------------------------
 
-@app.route('/hydrograph')
+@app.route('/data-analysis/groundwater')
 @login_required
-def hydrograph_route():
+def groundwater():
     return app.index()
 
+@app.route('/data-analysis/surfacewater')
+@login_required
+def surfacewater():
+    return app.index()
 
 @app.route('/chemograph')
 @login_required
 def chemograph_route():
     return app.index()
 
-
-@app.route('/precipitation')
-@login_required
-def precipitation_route():
-    return app.index()

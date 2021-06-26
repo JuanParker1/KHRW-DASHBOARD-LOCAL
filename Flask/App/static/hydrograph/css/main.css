@@ -10,6 +10,12 @@
   src: url("../fonts/Tanha-FD.woff") format("woff"), url("../fonts/Tanha-FD.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "Vazir";
+  src: url("../fonts/vazir.eot");
+  src: url("../fonts/vazir.woff") format("woff"), url("../fonts/vazir.ttf") format("truetype");
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -65,14 +71,18 @@
   font-size: 12px;
 }
 
+.fs-small {
+  font-size: small;
+}
+
 .font_size_14 {
   font-size: 14px;
 }
 
 body {
-  font-family: "Tanha-FD";
-  /* direction: rtl; */
-  /* text-align: right; */
+  font-family: "Vazir";
+  direction: rtl;
+  text-align: right;
   margin-bottom: 60px; /* Margin bottom by footer height */
 }
 
@@ -208,4 +218,12 @@ html {
   color: white;
   background-color: #e74c3c;
   align-items: center;
+}
+
+
+.tab-width{
+  font-size: small;
+  text-align: center;
+  min-width: 10%;
+  max-width: 20%;
 }

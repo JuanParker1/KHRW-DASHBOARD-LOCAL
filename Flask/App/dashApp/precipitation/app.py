@@ -17,12 +17,12 @@ FONT_AWESOME = (
 
 def create_precipitation_app(server):
     precipitation_app = dash.Dash(
-        name="precipitation",
+        name="surfacewater",
         server=server,
-        url_base_pathname="/precipitation/",
+        url_base_pathname="/data-analysis/surfacewater/",
         external_stylesheets=[FONT_AWESOME, BOOTSTRAP_CSS, MAIN_CSS],
         external_scripts=[JQUERY_JS, POPPER_JS, BOOTSTRAP_JS],
-        title='Precipitation Analysis'
+        title='Surface Water Analysis'
     )
 
     precipitation_app.layout = SERVER_MAIN_LAYOUT

@@ -17,12 +17,13 @@ FONT_AWESOME = (
 
 def create_hydrograph_app(server):
     hydrograph_app = dash.Dash(
-        name="hydrograph",
+        name="groundwater",
         server=server,
-        url_base_pathname="/hydrograph/",
+        url_base_pathname="/data-analysis/groundwater/",
         external_stylesheets=[FONT_AWESOME, BOOTSTRAP_CSS, MAIN_CSS],
         external_scripts=[JQUERY_JS, POPPER_JS, BOOTSTRAP_JS],
-        title='Hydrograph Analysis'
+        title='آنالیز آب زیرزمینی',
+        prevent_initial_callbacks=True
     )
     
     hydrograph_app.layout = MAIN_LAYOUT
