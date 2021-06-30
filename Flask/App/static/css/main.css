@@ -87,6 +87,13 @@ body {
   text-align: right;
 }
 
+
+.my-font {
+  font-family: "Sahel-FD";
+  font-size: small;
+}
+
+
 .transitionCard {
   transition: all 0.3s ease-in-out;
 }

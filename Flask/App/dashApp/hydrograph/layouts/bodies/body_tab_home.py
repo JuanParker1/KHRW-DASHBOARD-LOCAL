@@ -9,17 +9,21 @@ import geopandas as gpd
 
 keys = {
     "One": {
+        "url": "",
+        "name": "None"
+    },
+    "Two": {
         "url": "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png",
         "name": "Terrain"
     },
-    "Two": {
+    "Three": {
         "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         "name": "Open Street Map"
     },
-    "Three": {
+    "Four": {
         "url": "http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}",
         "name": "Google Satellite Imagery"
-    }
+    },
 }
 
 
@@ -29,12 +33,14 @@ attribution = '&copy; <a href="http://www.khrw.ir/">Khorasan Regional Water Comp
 # -----------------------------------------------------------------------------
 # SHAPEFILES LOCATION
 # -----------------------------------------------------------------------------
-AQUIFERS = "./assets/Aquifers.geojson"
-MAHDOUDE = "./assets/Mahdoude.geojson"
 HOZEH6 = "./assets/Hozeh6.geojson"
 HOZEH30 = "./assets/Hozeh30.geojson"
+MAHDOUDE = "./assets/Mahdoude.geojson"
+AQUIFERS = "./assets/Aquifers.geojson"
+
 OSTAN = "./assets/Ostan.geojson"
 SHAHRESTAN = "./assets/Shahrestan.geojson"
+BAKHSH = "./assets/Bakhsh.geojson"
 
 
 
@@ -45,18 +51,30 @@ info = html.Div(
         "position": "absolute",
         "bottom": "10px",
         "left": "10px",
-        "zIndex": "1000"
+        "zIndex": "1000",
+        "font-family": "Tanha-FD",
+        "font-size": "small"
     },
     dir="rtl"
 )
 
-
 search_bar = html.Div(
     children=[
+        dcc.RadioItems(
+            options=[
+                {'label': 'Lat/Lon', 'value': 'LatLon'},
+                {'label': 'UTM', 'value': 'UTM'},
+            ],
+            id="select_coordinate",
+            value='LatLon',
+            labelStyle={'display': 'inline-block'},
+            labelClassName="mx-1",
+            className="text-left"
+        ),
         dcc.Input(
-            id="search_lat_lng",
-            type="search",
+            id="search_coordinate",
             placeholder="Lat: 36.30 Lon: 59.60",
+            type="search",
             debounce=True,
             className="form-control"
         )
@@ -70,9 +88,10 @@ search_bar = html.Div(
     dir="ltr"
 )
 
-model = html.Div(
+model1 = html.Div(
     children=[
         dbc.Modal(
+            size="xl",
             id="modal",
             centered=True,
             is_open=False,
@@ -91,6 +110,7 @@ model = html.Div(
 model2 = html.Div(
     children=[
         dbc.Modal(
+            size="xl",
             id="modal2",
             centered=True,
             is_open=False,
@@ -110,7 +130,7 @@ model2 = html.Div(
 model3 = html.Div(
     children=[
         dbc.Modal(
-            # size="xl",
+            size="xl",
             id="modal3",
             centered=True,
             is_open=False,
@@ -120,6 +140,46 @@ model3 = html.Div(
                 ),
                 dbc.ModalBody(
                     id="modal3_body"
+                )
+            ]
+        )
+    ]
+)
+
+
+model4 = html.Div(
+    children=[
+        dbc.Modal(
+            size="xl",
+            id="modal4",
+            centered=True,
+            is_open=False,
+            children=[
+                dbc.ModalHeader(
+                    id="modal4_header"
+                ),
+                dbc.ModalBody(
+                    id="modal4_body"
+                )
+            ]
+        )
+    ]
+)
+
+
+model5 = html.Div(
+    children=[
+        dbc.Modal(
+            size="xl",
+            id="modal5",
+            centered=True,
+            is_open=False,
+            children=[
+                dbc.ModalHeader(
+                    id="modal5_header"
+                ),
+                dbc.ModalBody(
+                    id="modal5_body"
                 )
             ]
         )
@@ -152,7 +212,7 @@ TAB_HOME_BODY = html.Div([
                                     ),
                                 ],
                                 name=key["name"],
-                                checked=key["name"] == "Open Street Map"  
+                                checked=key["name"] == "None"  
                             ) for key in keys.values()                            
                         ] + [
                             dl.Overlay(
@@ -163,56 +223,6 @@ TAB_HOME_BODY = html.Div([
                                 ],
                                 name="click+search",
                                 checked=True
-                            )                            
-                        ] + [
-                            dl.Overlay(
-                                children=[
-                                    dl.GeoJSON(
-                                        id="ostan",
-                                        url=OSTAN,
-#                                         zoomToBounds=True,
-#                                         zoomToBoundsOnClick=True,
-                                        hoverStyle=arrow_function(
-                                            dict(
-                                                weight=5,
-                                                color='#222',
-                                                dashArray=''
-                                            )
-                                        ),
-                                        options={
-                                            "style": {
-                                                "color": "blue"
-                                            }
-                                        }                                       
-                                    )                                    
-                                ],
-                                name="استان",
-                                checked=False
-                            )                            
-                        ] + [
-                            dl.Overlay(
-                                children=[
-                                    dl.GeoJSON(
-                                        id="shahrestan",
-                                        url=SHAHRESTAN,
-#                                         zoomToBounds=True,
-                                        zoomToBoundsOnClick=True,
-                                        hoverStyle=arrow_function(
-                                            dict(
-                                                weight=5,
-                                                color='#222',
-                                                dashArray=''
-                                            )
-                                        ),
-                                        options={
-                                            "style": {
-                                                "color": "#FD8D3C"
-                                            }
-                                        }                                       
-                                    )                                    
-                                ],
-                                name="شهرستان",
-                                checked=False
                             )                            
                         ] + [
                             dl.Overlay(
@@ -289,6 +299,56 @@ TAB_HOME_BODY = html.Div([
                                 name="محدوده مطالعاتی",
                                 checked=True
                             )                            
+                        ] + [
+                            dl.Overlay(
+                                children=[
+                                    dl.GeoJSON(
+                                        id="ostan",
+                                        url=OSTAN,
+#                                         zoomToBounds=True,
+#                                         zoomToBoundsOnClick=True,
+                                        hoverStyle=arrow_function(
+                                            dict(
+                                                weight=5,
+                                                color='#222',
+                                                dashArray=''
+                                            )
+                                        ),
+                                        options={
+                                            "style": {
+                                                "color": "blue"
+                                            }
+                                        }                                       
+                                    )                                    
+                                ],
+                                name="استان",
+                                checked=False
+                            )                            
+                        ] + [
+                            dl.Overlay(
+                                children=[
+                                    dl.GeoJSON(
+                                        id="shahrestan",
+                                        url=SHAHRESTAN,
+#                                         zoomToBounds=True,
+                                        zoomToBoundsOnClick=True,
+                                        hoverStyle=arrow_function(
+                                            dict(
+                                                weight=5,
+                                                color='#222',
+                                                dashArray=''
+                                            )
+                                        ),
+                                        options={
+                                            "style": {
+                                                "color": "#FD8D3C"
+                                            }
+                                        }                                       
+                                    )                                    
+                                ],
+                                name="شهرستان",
+                                checked=False
+                            )                            
                         ]
                     ),
                     dl.LocateControl(
@@ -307,9 +367,11 @@ TAB_HOME_BODY = html.Div([
                     ),
                     search_bar,
                     info,
-                    model,
+                    model1,
                     model2,
                     model3,
+                    model4,
+                    model5,
                 ],
                 style={
                     'height': '85vh'

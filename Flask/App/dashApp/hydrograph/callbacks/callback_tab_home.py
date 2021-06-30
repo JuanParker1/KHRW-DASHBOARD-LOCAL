@@ -4,9 +4,11 @@ import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
+from dash_html_components.Hr import Hr
 import dash_leaflet as dl
 import dash_leaflet.express as dlx
 from dash_extensions.javascript import arrow_function
+import pyproj
 
 import pandas as pd
 import plotly.express as px
@@ -34,52 +36,70 @@ def hydrograph_callback_tab_home(app):
         else:
             return False
 
-
+    @app.callback(
+        Output("search_coordinate", "placeholder"),
+        Input("select_coordinate", "value"),
+    )
+    def search_coordinate_placeholder(coordinate):    
+        if coordinate == "LatLon":
+            return "Lat: 36.30 Lon: 59.60"
+        else:
+            return "40S 433967 4016252"
 
     @app.callback(
         Output("layer", "children"),
-        Output("search_lat_lng", "value"),
+        Output("search_coordinate", "value"),
         Output("map", "center"),
         Input("map", "dbl_click_lat_lng"),
-        Input("search_lat_lng", "value")
+        Input("select_coordinate", "value"),
+        Input("search_coordinate", "value")
     )
-    def map_dbl_click(dbl_click_lat_lng, search_lat_lng):
-        print(search_lat_lng)
-    
-        if search_lat_lng is None or search_lat_lng == "" and dbl_click_lat_lng:
+    def map_dbl_click(dbl_click_lat_lng, coordinate, search):    
+        if search is None or search == "" and dbl_click_lat_lng:
             result = dl.Marker(
                 children=dl.Tooltip(
                     "({:.3f}, {:.3f})".format(*dbl_click_lat_lng)
                 ),
                 position=dbl_click_lat_lng
             )
-
-            return [result], "", dbl_click_lat_lng
-        
-        else:
-            
-            search_lat_lng = list(
+            return [result], "", dbl_click_lat_lng      
+        else:  
+            search = list(
                 filter(
                     ("").__ne__,
-                    search_lat_lng.split(" ")
+                    search.split(" ")
                 )
             )
-            
-            if len(search_lat_lng) == 2:
-            
-                search_lat_lng = [float(x) for x in search_lat_lng]
-
-                result = dl.Marker(
-                    children=dl.Tooltip(
-                        "({:.2f}, {:.2f})".format(*search_lat_lng)
-                    ),
-                    position=search_lat_lng
-                )
-
-                return [result], "", search_lat_lng
+            print("1: ", search)            
+            if coordinate == "LatLon":
+                try:
+                    search_lat_lng = [float(x) for x in search]
+                    result = dl.Marker(
+                        children=dl.Tooltip(
+                            "({:.2f}, {:.2f})".format(*search_lat_lng)
+                        ),
+                        position=search_lat_lng
+                    )
+                    return [result], "", search_lat_lng
+                except:
+                    raise PreventUpdate
+            elif coordinate == "UTM":
+                try:
+                    p = pyproj.Proj(proj='utm', ellps='WGS84', zone=int(search[0][0:2]))
+                    p = p(float(search[1]), float(search[2]), inverse=True)
+                    print(p)
+                    result = dl.Marker(
+                        children=dl.Tooltip(
+                            "({:.2f}, {:.2f})".format(p[1], p[0])
+                        ),
+                        position=(p[1], p[0])
+                    )
+                    return [result], "", (p[1], p[0])
+                except:
+                    raise PreventUpdate
             else:
                 raise PreventUpdate
-        
+                
 
     # @app.callback(
     #     Output("out1", "children"), 
@@ -91,34 +111,92 @@ def hydrograph_callback_tab_home(app):
         
     @app.callback(
         Output("info", "children"), 
-        Input("ostan", "hover_feature"),
+        Input("hozeh6", "hover_feature"),
+        Input("hozeh30", "hover_feature"),
         Input("mahdoude", "hover_feature"),
+        Input("ostan", "hover_feature"),
+        Input("shahrestan", "hover_feature"),
     )
-    def ostan_click(feature_ostan, feature_mahdoude):
-        header = [
-            html.H4(
-                ""
-            )
-        ]
-        
-        if feature_ostan:
-            return header + [
-                html.B(feature_ostan["properties"]["ostn_name"]),
+    def ostan_click(
+        f_hozeh6,
+        f_hozeh30,
+        f_mahdoude,
+        f_ostan,
+        f_shahrestan
+    ):
+
+        if f_hozeh6:
+            return [
+                html.Span("حوزه آبریز درجه یک"),
+                html.H6(f_hozeh6['properties']['FULL_NAME']),
+                html.Hr(className="mt-0 mb-1 py-0"),
+                html.Span("کد حوزه آبریز: "),
+                html.Span(f_hozeh6['properties']['CODE'], className="text-info"),
                 html.Br(),
-                "{:.1f} ha".format(feature_ostan["properties"]["AREA"] / 10000)
+                html.Span("مساحت: "),
+                html.Span(f"{int(round(f_hozeh6['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
+                html.Br(),
+                html.Span("محیط: "),
+                html.Span(f"{int(round(f_hozeh6['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
             ]
-        elif feature_mahdoude:
-            return header + [
-                html.B(f"نام محدوده مطالعاتی: {feature_mahdoude['properties']['MahName']}"),
+        elif f_hozeh30:
+            return [
+                html.Span("حوزه آبریز درجه دو"),
+                html.H6(f_hozeh30['properties']['FULL_NAME']),
+                html.Hr(className="mt-0 mb-1 py-0"),
+                html.Span("کد حوزه آبریز: "),
+                html.Span(f_hozeh30['properties']['CODE'], className="text-info"),
                 html.Br(),
-                html.B(f"کد محدوده مطالعاتی: {feature_mahdoude['properties']['MahCode']}"),
+                html.Span("مساحت: "),
+                html.Span(f"{int(round(f_hozeh30['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
                 html.Br(),
-                html.B(f"حوزه درجه دو: {feature_mahdoude['properties']['Hoze30Name']}"),
+                html.Span("محیط: "),
+                html.Span(f"{int(round(f_hozeh30['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
+            ]
+        elif f_mahdoude:
+            return [
+                html.Span("محدوده مطالعاتی"),
+                html.H6(f_mahdoude['properties']['NAME']),
+                html.Hr(className="mt-0 mb-1 py-0"),
+                html.Span("کد محدوده مطالعاتی: "),
+                html.Span(f_mahdoude['properties']['CODE'], className="text-info"),
                 html.Br(),
-                html.B(f"حوزه درجه یک: {feature_mahdoude['properties']['Hoze6Name']}"),
+                html.Span("امور: "),
+                html.Span(f_mahdoude['properties']['OMOR'], className="text-info"),
+                html.Br(),
+                html.Span("مساحت: "),
+                html.Span(f"{int(round(f_mahdoude['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
+                html.Br(),
+                html.Span("محیط: "),
+                html.Span(f"{int(round(f_mahdoude['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
+            ]
+        elif f_ostan:
+            return [
+                html.Span("استان"),
+                html.H6(f_ostan['properties']['NAME']),
+                html.Hr(className="mt-0 mb-1 py-0"),
+                html.Span("مساحت: "),
+                html.Span(f"{int(round(f_ostan['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
+                html.Br(),
+                html.Span("محیط: "),
+                html.Span(f"{int(round(f_ostan['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
+            ]
+        elif f_shahrestan:
+            return [
+                html.Span("شهرستان"),
+                html.H6(f_shahrestan['properties']['NAME']),
+                html.Hr(className="mt-0 mb-1 py-0"),
+                html.Span("استان: "),
+                html.Span(f_shahrestan['properties']['OSTAN'], className="text-info"),
+                html.Br(),
+                html.Span("مساحت: "),
+                html.Span(f"{int(round(f_shahrestan['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
+                html.Br(),
+                html.Span("محیط: "),
+                html.Span(f"{int(round(f_shahrestan['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
             ]
         else:
-            return header + ["موس را روی یک محدوده نگه دارید"]
+            return html.Span("موس را روی یک عارضه نگه دارید")
 
 
     @app.callback(
@@ -162,49 +240,49 @@ def hydrograph_callback_tab_home(app):
         style_table={'overflowX': 'auto', 'maxWidth': '600px'}
     )
 
-    @app.callback(
-        Output("modal", "is_open"),
-        Output("modal_header", "children"),
-        Output("modal_body", "children"),
-        Input("ostan", "click_feature"),
-        Input("mahdoude", "click_feature"),
-        State("modal", "is_open"),
-    )
-    def toggle_modal(feature_ostan, feature_mahdoude, is_open):
-        if feature_ostan is not None:
-            return not is_open, f"{feature_ostan['properties']['ostn_name']}", html.Div([dcc.Graph(id='life', figure=fig)])
+    # @app.callback(
+    #     Output("modal", "is_open"),
+    #     Output("modal_header", "children"),
+    #     Output("modal_body", "children"),
+    #     Input("ostan", "click_feature"),
+    #     Input("mahdoude", "click_feature"),
+    #     State("modal", "is_open"),
+    # )
+    # def toggle_modal(feature_ostan, feature_mahdoude, is_open):
+    #     if feature_ostan is not None:
+    #         return not is_open, f"{feature_ostan['properties']['ostn_name']}", html.Div([dcc.Graph(id='life', figure=fig)])
 
-        elif feature_mahdoude is not None:
-            return not is_open, f"{feature_mahdoude['properties']['MahName']}", html.Div([dcc.Graph(id='life', figure=fig2)])
-        else:
-            raise PreventUpdate
+    #     elif feature_mahdoude is not None:
+    #         return not is_open, f"{feature_mahdoude['properties']['MahName']}", html.Div([dcc.Graph(id='life', figure=fig2)])
+    #     else:
+    #         raise PreventUpdate
 
 
-    @app.callback(
-        Output("modal2", "is_open"),
-        Output("modal2_header", "children"),
-        Output("modal2_body", "children"),
-        Input("hozeh30", "click_feature"),
-        State("modal2", "is_open"),
-    )
-    def toggle_modal2(feature_hozeh30, is_open):
+    # @app.callback(
+    #     Output("modal2", "is_open"),
+    #     Output("modal2_header", "children"),
+    #     Output("modal2_body", "children"),
+    #     Input("hozeh30", "click_feature"),
+    #     State("modal2", "is_open"),
+    # )
+    # def toggle_modal2(feature_hozeh30, is_open):
 
-        if feature_hozeh30 is not None:
-            return not is_open, f"{feature_hozeh30['properties']['Hoze30Name']}", html.Div([dcc.Graph(id='life2', figure=fig3)])
-        else:
-            raise PreventUpdate
+    #     if feature_hozeh30 is not None:
+    #         return not is_open, f"{feature_hozeh30['properties']['Hoze30Name']}", html.Div([dcc.Graph(id='life2', figure=fig3)])
+    #     else:
+    #         raise PreventUpdate
     
 
-    @app.callback(
-        Output("modal3", "is_open"),
-        Output("modal3_header", "children"),
-        Output("modal3_body", "children"),
-        Input("hozeh6", "click_feature"),
-        State("modal3", "is_open"),
-    )
-    def toggle_modal3(feature_hozeh6, is_open):
+    # @app.callback(
+    #     Output("modal3", "is_open"),
+    #     Output("modal3_header", "children"),
+    #     Output("modal3_body", "children"),
+    #     Input("hozeh6", "click_feature"),
+    #     State("modal3", "is_open"),
+    # )
+    # def toggle_modal3(feature_hozeh6, is_open):
 
-        if feature_hozeh6 is not None:
-            return not is_open, f"{feature_hozeh6['properties']['Hoze6Name']}", html.Div(fig4)
-        else:
-            raise PreventUpdate
+    #     if feature_hozeh6 is not None:
+    #         return not is_open, f"{feature_hozeh6['properties']['Hoze6Name']}", html.Div(fig4)
+    #     else:
+    #         raise PreventUpdate
