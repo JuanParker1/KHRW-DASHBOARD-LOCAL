@@ -386,31 +386,31 @@ def read_shapfile(
 # -----------------------------------------------------------------------------
 # LOAD DATA
 # -----------------------------------------------------------------------------
-db_path = './App/dashApp/hydrograph/hydrographs.sqlite'
+# db_path = './App/dashApp/hydrograph/hydrographs.sqlite'
 
-TOKEN_PATH = "./App/static/.mapbox_token"
-token = open(TOKEN_PATH).read()
+# TOKEN_PATH = "./App/static/.mapbox_token"
+# token = open(TOKEN_PATH).read()
 
-db = sqlite3.connect(db_path)
-table_name = pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", db)
+# db = sqlite3.connect(db_path)
+# table_name = pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", db)
 
 
-try:
-    if table_name['name'].str.contains('RawDATA').any():
-        RawDATA = pd.read_sql_query(sql="SELECT * FROM RawDATA", con=db)
-        GeoInfoData = extract_geo_info_dataset(RawDATA)
-    else:
-        print("ERROR: RawDATA TABLE NOT EXIST")
-except:
-    print("ERROR: DATABASE NOT EXIST")
+# try:
+#     if table_name['name'].str.contains('RawDATA').any():
+#         RawDATA = pd.read_sql_query(sql="SELECT * FROM RawDATA", con=db)
+#         GeoInfoData = extract_geo_info_dataset(RawDATA)
+#     else:
+#         print("ERROR: RawDATA TABLE NOT EXIST")
+# except:
+#     print("ERROR: DATABASE NOT EXIST")
 
-try:
-    if table_name['name'].str.contains('AquiferDATA').any():
-        AquiferDATA = pd.read_sql_query(sql="SELECT * FROM AquiferDATA", con=db)
-    else:
-        print("ERROR: AquiferDATA TABLE NOT EXIST")
-except:
-    print("ERROR: DATABASE NOT EXIST")
+# try:
+#     if table_name['name'].str.contains('AquiferDATA').any():
+#         AquiferDATA = pd.read_sql_query(sql="SELECT * FROM AquiferDATA", con=db)
+#     else:
+#         print("ERROR: AquiferDATA TABLE NOT EXIST")
+# except:
+#     print("ERROR: DATABASE NOT EXIST")
 
 
 

@@ -10,6 +10,7 @@ MAIN_CSS = "/static/hydrograph/css/main.css"
 JQUERY_JS = "/static/hydrograph/js/jquery-3.6.0.min.js"
 BOOTSTRAP_JS = "/static/hydrograph/js/bootstrap-4.5.2.min.js"
 POPPER_JS = "/static/hydrograph/js/popper.min.js"
+ANIMATE_CSS = "/static/css/animate.min.css"
 FONT_AWESOME = (
     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
 )
@@ -20,7 +21,7 @@ def create_hydrograph_app(server):
         name="groundwater",
         server=server,
         url_base_pathname="/data-analysis/groundwater/",
-        external_stylesheets=[FONT_AWESOME, BOOTSTRAP_CSS, MAIN_CSS],
+        external_stylesheets=[FONT_AWESOME, BOOTSTRAP_CSS, MAIN_CSS, ANIMATE_CSS],
         external_scripts=[JQUERY_JS, POPPER_JS, BOOTSTRAP_JS],
         title='آنالیز آب زیرزمینی',
         prevent_initial_callbacks=True

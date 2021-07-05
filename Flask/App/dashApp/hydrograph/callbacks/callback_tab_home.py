@@ -1,3 +1,6 @@
+import os
+import sqlite3
+import pandas as pd
 import dash
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
@@ -14,6 +17,9 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import dash_table
+
+
+from App.dashApp.hydrograph.callbacks.data_analysis import *
 
 
 def hydrograph_callback_tab_home(app):
@@ -100,14 +106,6 @@ def hydrograph_callback_tab_home(app):
             else:
                 raise PreventUpdate
                 
-
-    # @app.callback(
-    #     Output("out1", "children"), 
-    #     Input("ostan", "click_feature")
-    # )
-    # def ostan_click(feature):
-    #     if feature is not None:
-    #         return f"شما {feature['properties']['ostn_name']}"
         
     @app.callback(
         Output("info", "children"), 
@@ -286,3 +284,115 @@ def hydrograph_callback_tab_home(app):
     #         return not is_open, f"{feature_hozeh6['properties']['Hoze6Name']}", html.Div(fig4)
     #     else:
     #         raise PreventUpdate
+
+
+    # -----------------------------------------------------------------------------
+    # CONNECT TO SERVER DATABASE - COLLAPSE 1
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output("CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "n_clicks"),    
+        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "is_open"),
+        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "icon"),
+        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "header"),    
+        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "children"),
+        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "headerClassName"),
+        Input("CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "n_clicks")
+    )
+    def FUNCTION_CONNECT_TO_SERVER_DATABASE_TAB_HOME_COLLAPSE1(n):
+        if n != 0:
+            result = [
+                0,
+                True,
+                None,
+                "اطلاعات",
+                "این بخش در حال تکمیل می‌باشد.",
+                "popup-notification-header-info"            
+            ]
+            return result
+        else:
+            result = [
+                0,
+                False,
+                None,
+                None,
+                None,
+                None          
+            ]
+            return result
+
+
+    # -----------------------------------------------------------------------------
+    # CONNECT TO SPREADSHEET FILE AND CREATE DATABASE - COLLAPSE 1
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output("CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1", "n_clicks"),
+        Output("FILENAME_SPREADSHEET-TAB_HOME_COLLAPSE1", "children"),
+        Output("FILENAME_SPREADSHEET-TAB_HOME_COLLAPSE1", "className"),
+        Output("POPUP_CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1", "is_open"),
+        Output("POPUP_CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1", "icon"),
+        Output("POPUP_CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1", "header"),
+        Output("POPUP_CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1", "children"),
+        Output("POPUP_CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1", "headerClassName"),
+        Input('CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1', 'n_clicks'),    
+        Input('CHOOSE_SPREADSHEET-TAB_HOME_COLLAPSE1', 'contents'), 
+        State('CHOOSE_SPREADSHEET-TAB_HOME_COLLAPSE1', 'filename')
+    )
+    def FUNCTION_CONNECT_TO_SPREADSHEET_TAB_HOME_COLLAPSE1(n, content, filename):
+        if n != 0 and content is None:
+            result = [
+                0,
+                "فایلی انتخاب نشده است!",
+                "text-danger",
+                True,
+                None,
+                "هشدار",
+                "فایل صفحه گسترده‌ای انتخاب نشده است.",
+                "popup-notification-header-warning"            
+            ]
+            return result
+        elif n == 0 and content is not None:
+            result = [
+                0,
+                "فایل انتخابی شما: " + filename,
+                "text-success",
+                False,
+                None,
+                None,
+                None,
+                None           
+            ]
+            return result
+        elif n != 0 and content is not None:
+            raw_data = read_spreadsheet(contents=content, filename=filename)
+            data, data_aquifer = data_cleansing(
+                well_info_data_all=raw_data['Info'],
+                dtw_data_all=raw_data['Depth_To_Water'],
+                thiessen_data_all=raw_data['Thiessen'],
+                sc_data_all=raw_data['Storage_Coefficient']
+            )
+            db = sqlite3.connect(database="groundwater.sqlite")
+            data.to_sql(name="RawAquiferDATA", con=db, if_exists="replace")
+            data_aquifer.to_sql(name="AquiferDATA", con=db, if_exists="replace")
+            result = [
+                1,
+                "فایل انتخابی شما: " + filename,
+                "text-success",
+                True,
+                None,
+                "موفقیت آمیز",
+                "پایگاه داده با موفقیت ایجاد شد.",
+                "popup-notification-header-success"            
+            ]
+            return result    
+        else:
+            result = [
+                0,
+                "فایلی انتخاب نشده است!",
+                "text-danger",
+                False,
+                None,
+                None,
+                None,
+                None           
+            ]
+            return result

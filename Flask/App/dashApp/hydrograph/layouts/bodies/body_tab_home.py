@@ -77,7 +77,66 @@ search_bar = html.Div(
             type="search",
             debounce=True,
             className="form-control"
-        )
+        ),
+        dbc.Tooltip(
+            target="search_coordinate",
+            autohide=True,
+            placement="right",
+            hide_arrow=True,
+            delay={ "show": 0, "hide": 10 },
+            children=[
+                html.Div(
+                    children=[
+                        html.P(
+                            "- سرچ براساس درجه:",
+                            className="text-right my-0 py-0"
+                        ),
+                        html.P(
+                            "به ترتیب عرض و طول جغرافیایی وارد شود، مانند:",
+                            className="text-nowrap text-right my-0 py-0 mr-4"
+                        ),
+                        html.P(
+                            "> 36.3 59.6",
+                            className="text-left my-0 py-0",
+                            dir="ltr"
+                        ),
+                        html.Hr(className="my-1 py-1"),
+                        html.P(
+                            "- سرچ براساس درجه/دقیقه/ثانیه:",
+                            className="text-right my-0 py-0"
+                        ),
+                        html.P(
+                            "به ترتیب عرض و طول جغرافیایی وارد شود، مانند:",
+                            className="text-nowrap text-right my-0 py-0 mr-4"
+                        ),
+                        html.P(
+                            "> 36 17 59 59 36 5",
+                            className="text-left my-0 py-0",
+                            dir="ltr"
+                        ),
+                        html.Hr(className="my-1 py-1"),
+                        html.P(
+                            "- سرچ براساس UTM:",
+                            className="text-right my-0 py-0"
+                        ),
+                        html.P(
+                            "به ترتیب زون، عرض و طول جغرافیایی وارد شود، مانند:",
+                            className="text-nowrap text-right my-0 py-0 mr-4"
+                        ),
+                        html.P(
+                            "> 40S 4020360 733465",
+                            className="text-left my-0 py-0",
+                            dir="ltr"
+                        )
+                    ],
+                    dir="rtl"
+                )
+            ],
+            style = {
+                "maxWidth": "40rem",
+                "width": "25rem"
+            }
+        ),
     ],
     style={
         "position": "absolute",
@@ -203,7 +262,10 @@ TAB_HOME_BODY = html.Div([
                 zoom=5,
                 children=[
                     dl.LayersControl(
+                        position="topleft",
+                        collapsed=False,
                         children=[
+                            # html.Div("انتخاب نقشه پس زمینه:"),
                             dl.BaseLayer(
                                 children=[
                                     dl.TileLayer(
@@ -213,8 +275,12 @@ TAB_HOME_BODY = html.Div([
                                 ],
                                 name=key["name"],
                                 checked=key["name"] == "None"  
-                            ) for key in keys.values()                            
-                        ] + [
+                            ) for key in keys.values()
+                        ]
+                    ), 
+                    dl.LayersControl(
+                        collapsed=False,
+                        children=[
                             dl.Overlay(
                                 children=[
                                     dl.LayerGroup(
@@ -374,7 +440,9 @@ TAB_HOME_BODY = html.Div([
                     model5,
                 ],
                 style={
-                    'height': '85vh'
+                    'height': '85vh',
+                    "font-family": "Tanha-FD",
+                    "font-size": "medium"
                 },
             ),
         ],

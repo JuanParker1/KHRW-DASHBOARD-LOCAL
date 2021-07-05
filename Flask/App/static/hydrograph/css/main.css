@@ -53,7 +53,7 @@
 }
 
 .upload-button {
-  width: 50%;
+  width: 100%;
   height: 40px;
   line-height: 40px;
   border-width: 1px;
@@ -73,6 +73,14 @@
 
 .fs-small {
   font-size: small;
+}
+
+.fs-medium {
+  font-size: medium;
+}
+
+.fs-large {
+  font-size: large;
 }
 
 .font_size_14 {
@@ -180,15 +188,16 @@ html {
 /* POPUP NOTIFICATIONS ------------------------------------------------------*/
 .popup-notification {
   position: fixed;
-  top: 65px;
-  left: 25px;
-  width: 280px;
+  top: 1%;
+  left: 1%;
+  width: 100%;
   direction: rtl;
   text-align: right;
   background-color: white;
   border-radius: 5px;
   border-width: 10px;
   border-color: rgba(190, 190, 190, 0.5);
+  z-index: 1;
 }
 
 .popup-notification-header-info {
@@ -226,4 +235,12 @@ html {
   text-align: center;
   min-width: 10%;
   max-width: 20%;
+}
+
+
+
+
+.card-transition:hover {
+  box-shadow: 3px 3px 12px #8c8c8c;
+  transition: 0.1s linear all;
 }

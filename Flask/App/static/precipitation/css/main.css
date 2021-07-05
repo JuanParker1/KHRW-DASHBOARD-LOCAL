@@ -10,10 +10,9 @@
   src: url("../fonts/Tanha-FD.woff") format("woff"), url("../fonts/Tanha-FD.ttf") format("truetype");
 }
 
-html {
-  font-size: small;
+html, * {
+  font-size: medium;
 }
-
 
 * {
   margin: 0;
