@@ -268,7 +268,7 @@ def precipitation_dashboard_add_station_csv():
 
         # CONECT TO DATABASE
         try:
-            db_path = 'App/dashApp/precipitation/precipitation.sqlite'
+            db_path = 'App/dashApps/precipitation/precipitation.sqlite'
             db_new = sqlite3.connect(db_path, check_same_thread=False)
             exist_station_data = pd.read_sql_query(sql="SELECT * FROM station", con=db_new)
             exist_station_data_columns = list(exist_station_data.columns)
@@ -367,7 +367,7 @@ def precipitation_dashboard_add_precipitation_data_csv():
 
         # CONECT TO DATABASE
         try:
-            db_path = 'App/dashApp/precipitation/precipitation.sqlite'
+            db_path = 'App/dashApps/precipitation/precipitation.sqlite'
             db_new = sqlite3.connect(db_path, check_same_thread=False)
             exist_precipitation_data = pd.read_sql_query(sql="SELECT * FROM precipitation", con=db_new)
             exist_precipitation_data_columns = list(exist_precipitation_data.columns)
@@ -633,13 +633,13 @@ def precipitation_dashboard():
 
 @app.route('/downloadSampleDataFile')
 def downloadSampleDataFile ():
-    path = "dashApp/precipitation/assets/database/data.csv"
+    path = "dashApps/precipitation/assets/database/data.csv"
     return send_file(path, as_attachment=True)
 
 
 @app.route('/downloadSampleStationFile')
 def downloadSampleStationFile ():
-    path = "dashApp/precipitation/assets/database/station.csv"
+    path = "dashApps/precipitation/assets/database/station.csv"
     return send_file(path, as_attachment=True)
 
 

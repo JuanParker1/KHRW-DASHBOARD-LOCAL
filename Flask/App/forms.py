@@ -77,7 +77,7 @@ class UserManagementForm(FlaskForm):
 
 
 
-info = pd.read_csv("App/dashApp/precipitation/assets/database/Info.csv")
+info = pd.read_csv("App/dashApps/precipitation/assets/database/Info.csv")
 info_khorasan_razavi = info[info["OstanMotevali"] == "خراسان رضوی"]
 
 Hoze6Name = list(info_khorasan_razavi["Hoze6Name"].unique())

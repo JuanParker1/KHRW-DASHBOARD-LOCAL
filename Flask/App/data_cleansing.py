@@ -2,7 +2,7 @@ import pandas as pd
 import datetime
 import sqlite3
 
-db_path_precipitation = 'App/dashApp/precipitation/precipitation.sqlite'
+db_path_precipitation = 'App/dashApps/precipitation/precipitation.sqlite'
 dateBankPath = "App/static/assets/myDate.parquet.gzip"
 
 
