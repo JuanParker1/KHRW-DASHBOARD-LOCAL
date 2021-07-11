@@ -13,6 +13,8 @@ from App.dashApps.Groundwater.app import create_groundwater_app
 
 app = Flask(import_name=__name__, static_folder='static')
 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 app.config["DEBUG"] = True
 # app.config['GOOGLEMAPS_KEY'] = "AIzaSyAHzR-Pu6GlvFtxS6Xz813bdGqUjUjM1w8"
 # Bootstrap(app)
