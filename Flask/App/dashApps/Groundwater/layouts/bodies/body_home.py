@@ -10,19 +10,19 @@ import geopandas as gpd
 keys = {
     "One": {
         "url": "",
-        "name": "None"
+        "name": "بدون نقشه"
     },
     "Two": {
         "url": "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png",
-        "name": "Terrain"
+        "name": "نقشه عوارض زمین"
     },
     "Three": {
         "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        "name": "Open Street Map"
+        "name": "اوپن‌استریت‌مپ"
     },
     "Four": {
         "url": "http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}",
-        "name": "Google Satellite Imagery"
+        "name": "نقشه تصاویر ماهواره‌ای گوگل"
     },
 }
 
@@ -60,23 +60,12 @@ info = html.Div(
 
 search_bar = html.Div(
     children=[
-        dcc.RadioItems(
-            options=[
-                {'label': 'Lat/Lon', 'value': 'LatLon'},
-                {'label': 'UTM', 'value': 'UTM'},
-            ],
-            id="select_coordinate",
-            value='LatLon',
-            labelStyle={'display': 'inline-block'},
-            labelClassName="mx-1",
-            className="text-left"
-        ),
         dcc.Input(
             id="search_coordinate",
-            placeholder="Lat: 36.30 Lon: 59.60",
+            placeholder="جستجو",
             type="search",
             debounce=True,
-            className="form-control"
+            className="searchicon text-right"
         ),
         dbc.Tooltip(
             target="search_coordinate",
@@ -96,7 +85,7 @@ search_bar = html.Div(
                             className="text-nowrap text-right my-0 py-0 mr-4"
                         ),
                         html.P(
-                            "> 36.3 59.6",
+                            "> 36.3 59.0",
                             className="text-left my-0 py-0",
                             dir="ltr"
                         ),
@@ -110,7 +99,7 @@ search_bar = html.Div(
                             className="text-nowrap text-right my-0 py-0 mr-4"
                         ),
                         html.P(
-                            "> 36 17 59 59 36 5",
+                            "> 36 17 48 59 36 0",
                             className="text-left my-0 py-0",
                             dir="ltr"
                         ),
@@ -120,11 +109,11 @@ search_bar = html.Div(
                             className="text-right my-0 py-0"
                         ),
                         html.P(
-                            "به ترتیب زون، عرض و طول جغرافیایی وارد شود، مانند:",
+                            "به ترتیب زون، مولفه شرقی و مولفه شمالی وارد شود، مانند:",
                             className="text-nowrap text-right my-0 py-0 mr-4"
                         ),
                         html.P(
-                            "> 40S 4020360 733465",
+                            "> 40S 733465 4020360",
                             className="text-left my-0 py-0",
                             dir="ltr"
                         )
@@ -133,8 +122,8 @@ search_bar = html.Div(
                 )
             ],
             style = {
-                "maxWidth": "40rem",
-                "width": "25rem"
+                "maxWidth": "50rem",
+                "width": "30rem"
             }
         ),
     ],
@@ -263,7 +252,7 @@ TAB_HOME_BODY = html.Div([
                 children=[
                     dl.LayersControl(
                         position="topleft",
-                        collapsed=False,
+                        collapsed=True,
                         children=[
                             # html.Div("انتخاب نقشه پس زمینه:"),
                             dl.BaseLayer(
@@ -280,6 +269,7 @@ TAB_HOME_BODY = html.Div([
                     ), 
                     dl.LayersControl(
                         collapsed=False,
+                        # className="control-map-layers",
                         children=[
                             dl.Overlay(
                                 children=[

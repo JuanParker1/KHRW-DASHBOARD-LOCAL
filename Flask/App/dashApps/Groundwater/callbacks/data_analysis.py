@@ -20,6 +20,23 @@ AREASTUDIES = "./App/static/shapefiles/AreaStudies/AreaStudies.shp"
 
 
 
+
+# -----------------------------------------------------------------------------
+# CHECK USER INPUT
+# -----------------------------------------------------------------------------
+def check_user_input(x):
+    try:
+        x = int(x)
+        return x
+    except ValueError:
+        try:
+            x = float(x)
+            return x
+        except ValueError:
+            return x
+
+
+
 # -----------------------------------------------------------------------------
 # READ CONNECTED SPREADSHEET File
 # -----------------------------------------------------------------------------
@@ -238,6 +255,8 @@ def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_
                                                                                             on=['ID', 'Date_Gregorian',
                                                                                                 'Date_Persian']).sort_values(
             ['ID', 'Date_Gregorian'])
+
+        data.to_csv(f"{aquifer}.csv")
 
         # Calculate Aquifer Storage Coefficient:------------------------------------
         data['Unit_Aquifer_Storage_Coefficient'] = (data['Storage_Coefficient'] * data['Area']) / data['Aquifer_Area']

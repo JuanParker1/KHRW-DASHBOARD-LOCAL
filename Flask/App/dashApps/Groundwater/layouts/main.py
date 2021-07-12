@@ -19,13 +19,13 @@ TAB_PAN = html.Div(
                             <a class="nav-link active" data-toggle="tab" href="#Home">خانه</a>
                         </li>
                         <li class="nav-item tab-width">
-                            <a class="nav-link" data-toggle="tab" href="#Tab_1">ورود داده‌ها</a>
+                            <a class="nav-link" data-toggle="tab" href="#Tab_1">چاه مشاهده‌ای</a>
                         </li>
                         <li class="nav-item tab-width">
-                            <a class="nav-link" data-toggle="tab" href="#Tab_2">چاه‌های مشاهده‌ای</a>
+                            <a class="nav-link" data-toggle="tab" href="#Tab_2">انتخابی کمی</a>
                         </li>
                         <li class="nav-item tab-width">
-                            <a class="nav-link" data-toggle="tab" href="#Tab_3">هیدروگراف آبخوان</a>
+                            <a class="nav-link" data-toggle="tab" href="#Tab_3">انتخابی کیفی</a>
                         </li>
                     </ul>
             """

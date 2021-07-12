@@ -57,10 +57,9 @@ def groundwater_callback_home(app):
         Output("search_coordinate", "value"),
         Output("map", "center"),
         Input("map", "dbl_click_lat_lng"),
-        Input("select_coordinate", "value"),
         Input("search_coordinate", "value")
     )
-    def map_dbl_click(dbl_click_lat_lng, coordinate, search):    
+    def map_dbl_click_or_search(dbl_click_lat_lng, search):    
         if search is None or search == "" and dbl_click_lat_lng:
             result = dl.Marker(
                 children=dl.Tooltip(
@@ -69,17 +68,22 @@ def groundwater_callback_home(app):
                 position=dbl_click_lat_lng
             )
             return [result], "", dbl_click_lat_lng      
-        else:  
+        else:
             search = list(
                 filter(
                     ("").__ne__,
                     search.split(" ")
                 )
             )
-            print("1: ", search)            
-            if coordinate == "LatLon":
+
+            search = [check_user_input(x) for x in search]
+
+            print("1: ", search)
+
+            if len(search) == 2 and all([isinstance(x, (int, float)) for x in search]):
                 try:
                     search_lat_lng = [float(x) for x in search]
+                    print("2: ", search_lat_lng)
                     result = dl.Marker(
                         children=dl.Tooltip(
                             "({:.2f}, {:.2f})".format(*search_lat_lng)
@@ -89,11 +93,46 @@ def groundwater_callback_home(app):
                     return [result], "", search_lat_lng
                 except:
                     raise PreventUpdate
-            elif coordinate == "UTM":
+            elif (len(search) == 4 or len(search) == 6) and all([isinstance(x, (int)) for x in search]):
+                if len(search) == 6:
+                    try:
+                        lat = search[0] + (search[1]/60) + (search[2]/3600)
+                        lng = search[3] + (search[4]/60) + (search[5]/3600)
+                        search_lat_lng = [lat, lng]
+                        print("3: ", search_lat_lng)
+                        result = dl.Marker(
+                            children=dl.Tooltip(
+                                "({:.2f}, {:.2f})".format(*search_lat_lng)
+                            ),
+                            position=search_lat_lng
+                        )
+                        return [result], "", search_lat_lng
+                    except:
+                        raise PreventUpdate
+                elif len(search) == 4:
+                    try:
+                        lat = search[0] + (search[1]/60)
+                        lng = search[2] + (search[3]/60)
+                        search_lat_lng = [lat, lng]
+                        print("4: ", search_lat_lng)
+                        result = dl.Marker(
+                            children=dl.Tooltip(
+                                "({:.2f}, {:.2f})".format(*search_lat_lng)
+                            ),
+                            position=search_lat_lng
+                        )
+                        return [result], "", search_lat_lng
+                    except:
+                        raise PreventUpdate
+                else:
+                    raise PreventUpdate
+            elif len(search) == 3 and isinstance(search[0], (str)) and\
+                all([isinstance(x, (int, float)) for x in search[1:3]]) and\
+                    len(str(int(search[1]))) == 6 and len(str(int(search[2]))) == 7:
                 try:
                     p = pyproj.Proj(proj='utm', ellps='WGS84', zone=int(search[0][0:2]))
                     p = p(float(search[1]), float(search[2]), inverse=True)
-                    print(p)
+                    print("5: ", p)
                     result = dl.Marker(
                         children=dl.Tooltip(
                             "({:.2f}, {:.2f})".format(p[1], p[0])
