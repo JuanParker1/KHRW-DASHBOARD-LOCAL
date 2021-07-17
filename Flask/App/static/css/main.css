@@ -88,11 +88,6 @@ body {
 }
 
 
-.my-font {
-  font-family: "Sahel-FD";
-  font-size: small;
-}
-
 
 .transitionCard {
   transition: all 0.3s ease-in-out;
@@ -102,6 +97,7 @@ body {
   box-shadow: 4px 4px 20px #000;
   transition: 0.3s linear all;
 }
+
 
 #my-login-page {
   width: 360px;
@@ -181,4 +177,50 @@ body {
 }
 .bg-color-LightGray {
   background-color: rgb(237, 234, 234);
+}
+
+
+
+
+
+.w-90 {
+  width: 90%;
+}
+
+
+.link-hover:hover {
+  color:orange !important;
+}
+
+.btn-secondary-hover:hover {
+  color: #007bff;
+  background-color: #fff;
+  border-color: #007bff;
+  border-width: 1px;
+  border-radius: 25px;
+  transform: scale(1.1);
+}
+.btn-success-hover:hover {
+  color: #28a745;
+  background-color: #fff;
+  border-color: #28a745;
+  border-width: 1px;
+  border-radius: 25px;
+  transform: scale(1.1);
+}
+.btn-danger-hover:hover {
+  color: #dc3545;
+  background-color: #fff;
+  border-color: #dc3545;
+  border-width: 1px;
+  border-radius: 25px;
+  transform: scale(1.1);
+}
+.btn-dark-hover:hover {
+  color: #343a40;
+  background-color: #fff;
+  border-color: #343a40;
+  border-width: 1px;
+  border-radius: 25px;
+  transform: scale(1.1);
 }

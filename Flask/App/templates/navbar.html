@@ -1,15 +1,15 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-  <div class="container">
+  <div class="container-fluid w-90">
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto pr-4">
         {% if current_user.is_authenticated %}
 
         <li class="nav-item active">
-          <a class="nav-link" href="{{ url_for('home') }}">خانه</a>
+          <a class="nav-link navbar-brand link-hover" href="{{ url_for('home') }}">خانه</a>
         </li>
         <li class="nav-item dropdown active">
           <a
-            class="nav-link dropdown-toggle"
+            class="nav-link dropdown-toggle navbar-brand link-hover"
             data-toggle="dropdown"
             href="#"
             role="button"
@@ -17,20 +17,20 @@
             aria-expanded="false"
             >پنل مدیریتی</a
           >
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="{{ url_for('register') }}">ثبت نام</a>
-            <a class="dropdown-item" href="{{ url_for('profile') }}">به روزرسانی</a>
-            <a class="dropdown-item" href="{{ url_for('user_management') }}">مدیریت کاربرها</a>
+          <div class="dropdown-menu text-right">
+            <a class="dropdown-item link-hover" href="{{ url_for('register') }}">ثبت نام</a>
+            <a class="dropdown-item link-hover" href="{{ url_for('profile') }}">به روزرسانی</a>
+            <a class="dropdown-item link-hover" href="{{ url_for('user_management') }}">مدیریت کاربرها</a>
           </div>
         </li>
         <li class="nav-item active">
-          <a class="nav-link" href="{{ url_for('logout') }}">خروج</a>
+          <a class="nav-link navbar-brand link-hover" href="{{ url_for('logout') }}">خروج</a>
         </li>
 
         {% else %}
 
         <li class="nav-item active">
-          <a class="nav-link" href="{{ url_for('login') }}">ورود</a>
+          <a class="nav-link navbar-brand link-hover" href="{{ url_for('login') }}">ورود</a>
         </li>
         {% endif %}
       </ul>

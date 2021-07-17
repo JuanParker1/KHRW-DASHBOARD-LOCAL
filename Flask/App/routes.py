@@ -154,8 +154,8 @@ def precip():
 # -----------------------------------------------------------------------------
 # STATION MANAGMENT
 # -----------------------------------------------------------------------------
-@app.route('/precipitation/dashboard/station_managment', methods=['GET', 'POST'], defaults={"page": 1})
-@app.route('/precipitation/dashboard/station_managment/<int:page>', methods=['GET', 'POST'])
+@app.route('/database-management/station_managment', methods=['GET', 'POST'], defaults={"page": 1})
+@app.route('/database-management/station_managment/<int:page>', methods=['GET', 'POST'])
 @login_required
 def precipitation_dashboard_station_management(page):
     page = page
@@ -173,7 +173,7 @@ def precipitation_dashboard_station_management(page):
 # -----------------------------------------------------------------------------
 # ADD STATION MANUALY
 # -----------------------------------------------------------------------------
-@app.route('/precipitation/dashboard/add_station', methods=["GET", "POST"])
+@app.route('/database-management/add_station', methods=["GET", "POST"])
 @login_required
 def precipitation_dashboard_add_station():
     form = StationForm()
@@ -207,7 +207,7 @@ def precipitation_dashboard_add_station():
 # -----------------------------------------------------------------------------
 # UPDATE STATION MANUALY
 # -----------------------------------------------------------------------------
-@app.route('/precipitation/dashboard/station_managment/<int:stationCode>/update', methods=['GET', 'POST'])
+@app.route('/database-management/station_managment/<int:stationCode>/update', methods=['GET', 'POST'])
 @login_required
 def precipitation_dashboard_station_managment_update(stationCode):
     station = Station.query.get_or_404(stationCode)    
@@ -252,7 +252,7 @@ def precipitation_dashboard_station_managment_update(stationCode):
 # -----------------------------------------------------------------------------
 # ADD STATION - IMPORT CSV
 # -----------------------------------------------------------------------------
-@app.route('/precipitation/dashboard/add_station_csv', methods=['POST', 'GET'])
+@app.route('/database-management/add_station_csv', methods=['POST', 'GET'])
 @login_required
 def precipitation_dashboard_add_station_csv():
     if request.method == "POST":
@@ -336,7 +336,7 @@ def precipitation_dashboard_add_station_csv():
 # -----------------------------------------------------------------------------
 # DELETE STATION
 # -----------------------------------------------------------------------------
-@app.route('/precipitation/dashboard/station_managment/<int:stationCode>/delete', methods=['GET', 'POST'])
+@app.route('/database-management/station_managment/<int:stationCode>/delete', methods=['GET', 'POST'])
 @login_required
 def precipitation_dashboard_station_managment_delete(stationCode):
     station = Station.query.get_or_404(stationCode)    
@@ -351,7 +351,7 @@ def precipitation_dashboard_station_managment_delete(stationCode):
 # -----------------------------------------------------------------------------
 # ADD PRECIPITATION DATA - IMPORT CSV
 # -----------------------------------------------------------------------------
-@app.route('/precipitation/dashboard/add_precipitation_data_csv', methods=['POST', 'GET'])
+@app.route('/database-management/add_precipitation_data_csv', methods=['POST', 'GET'])
 @login_required
 def precipitation_dashboard_add_precipitation_data_csv():
     if request.method == "POST":
@@ -443,8 +443,8 @@ def precipitation_dashboard_add_precipitation_data_csv():
     )
 
 
-@app.route('/precipitation/dashboard/precipitation_data_managment', methods=['GET', 'POST'], defaults={"page": 1})
-@app.route('/precipitation/dashboard/precipitation_data_managment/<int:page>', methods=['GET', 'POST'])
+@app.route('/database-management/precipitation_data_managment', methods=['GET', 'POST'], defaults={"page": 1})
+@app.route('/database-management/precipitation_data_managment/<int:page>', methods=['GET', 'POST'])
 @login_required
 def precipitation_dashboard_precipitation_data_management(page):
     page = page
@@ -459,7 +459,7 @@ def precipitation_dashboard_precipitation_data_management(page):
     return render_template(template_name_or_list='precipitation_flask/precipitation_data_management.html', data=data)
 
 
-@app.route('/precipitation/dashboard/add_precipitation_data', methods=['GET', 'POST'])
+@app.route('/database-management/add_precipitation_data', methods=['GET', 'POST'])
 @login_required
 def precipitation_dashboard_add_precipitation_data():
     form = PrecipitationDataForm()
@@ -559,9 +559,9 @@ def precipitation_dashboard_add_precipitation_data():
     )
 
 
-@app.route('/precipitation/dashboard')
+@app.route('/database-management')
 @login_required
-def precipitation_dashboard():  
+def database_management():  
     
     try:
         db_precipitation = sqlite3.connect(db_path_precipitation, check_same_thread=False)
@@ -651,18 +651,18 @@ def downloadSampleStationFile ():
 #
 # -----------------------------------------------------------------------------
 
-@app.route('/data-analysis/groundwater')
+@app.route('/groundwater')
 @login_required
 def groundwater():
     return app.index()
 
-@app.route('/data-analysis/surfacewater')
+@app.route('/surfacewater')
 @login_required
 def surfacewater():
     return app.index()
 
-@app.route('/chemograph')
+@app.route('/waterquality')
 @login_required
-def chemograph_route():
+def waterquality():
     return app.index()
 

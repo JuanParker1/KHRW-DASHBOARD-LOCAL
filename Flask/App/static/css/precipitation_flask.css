@@ -39,3 +39,8 @@
 hr.class-1 {
   border-top: 2px dashed #8c8b8b;
 }
+
+.bp {
+  border: 2px solid rgba(0,0,0,0.2);
+  background-clip: padding-box;
+}

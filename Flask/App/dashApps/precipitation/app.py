@@ -19,10 +19,10 @@ def create_precipitation_app(server):
     precipitation_app = dash.Dash(
         name="surfacewater",
         server=server,
-        url_base_pathname="/data-analysis/surfacewater/",
+        url_base_pathname="/surfacewater/",
         external_stylesheets=[FONT_AWESOME, BOOTSTRAP_CSS, MAIN_CSS],
         external_scripts=[JQUERY_JS, POPPER_JS, BOOTSTRAP_JS],
-        title='Surface Water Analysis'
+        title='آب سطحی'
     )
 
     precipitation_app.layout = SERVER_MAIN_LAYOUT

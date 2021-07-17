@@ -26,7 +26,7 @@ def create_groundwater_app(server):
     groundwater_app = dash.Dash(
         name="groundwater",
         server=server,
-        url_base_pathname="/data-analysis/groundwater/",
+        url_base_pathname="/groundwater/",
         external_stylesheets=external_stylesheets,
         external_scripts=external_scripts,
         title='آب زیرزمینی',
