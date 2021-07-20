@@ -22,3 +22,4 @@ dash-leaflet
 dash-extensions
 jsbeautifier
 utm
+scipy
