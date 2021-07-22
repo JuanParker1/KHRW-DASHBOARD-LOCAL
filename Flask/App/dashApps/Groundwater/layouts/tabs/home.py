@@ -16,38 +16,18 @@ from App.dashApps.Groundwater.layouts.footers.footer import *
 HOME = html.Div(
     children=[
 
-        # Collapse ----------------------------
-        html.Div(
-            children=[
-                TAB_HOME_COLLAPSE
-            ],
-            className='row'
+        # Store State Sidebar ---------
+        dcc.Store(
+            id="SIDEBAR_STATE-TAB_HOME"
         ),
 
-        # Body ------------------------------------
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        TAB_HOME_BODY
-                    ],
-                    className="col-12 p-0 my-1"
-                )
-            ],
-            className='row m-0'
-        ),
+        # Sidebar ---------------------
+        SIDEBAR_TAB_HOME,
 
-        # Hidden Div For Store Data--------------------------------------------
-        html.Div(
-            children=[
-                html.Div(
-                    id="DATA-TAB_HOME",
-                )
-            ],
-            style={
-                'display': 'none'
-            }
-        )
+
+        # Body ------------------------
+        BODY_TAB_HOME
+
     ],
-    className="container-fluid p-0"
+    className="container-fluid p-0 m-0"
 )

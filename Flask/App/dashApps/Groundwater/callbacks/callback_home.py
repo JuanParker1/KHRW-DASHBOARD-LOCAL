@@ -22,25 +22,146 @@ import dash_table
 from App.dashApps.Groundwater.callbacks.data_analysis import *
 
 
+
+
 def groundwater_callback_home(app):
 
+
     @app.callback(
-        Output("COLLAPSE-TAB_HOME_COLLAPSE_1", "is_open"),
-        Input("BUTTON_COLLAPSE-TAB_HOME_COLLAPSE_1", "n_clicks"),
-        State("COLLAPSE-TAB_HOME_COLLAPSE_1", "is_open")
+        Output("SIDEBAR-TAB_HOME", "className"),
+        Output("BODY-TAB_HOME", "className"),
+        Output("SIDEBAR_STATE-TAB_HOME", "data"),
+        Output("SIDEBAR_BUTTON-TAB_HOME_BODY", "className"),
+        Input("SIDEBAR_BUTTON-TAB_HOME_BODY", "n_clicks"),
+        State("SIDEBAR_STATE-TAB_HOME", "data")
     )
-    def toggle_accordion(n1, is_open1):
+    def FUNCTION_TOGGLE_SIDEBAR_TAB_HOME_SIDEBAR(n, nclick):
+        if n:
+            if nclick == "SHOW":
+                sidebar_style = "SIDEBAR-HIDEN"
+                content_style = "CONTENT-WITHOUT-SIDEBAR"
+                cur_nclick = "HIDDEN"
+                btn_classname = "fas fa-align-justify fa-2x BTN-SIDEBAR-CLOSE",
+            else:
+                sidebar_style = "SIDEBAR-SHOW"
+                content_style = "CONTENT-WITH-SIDEBAR"
+                cur_nclick = "SHOW"
+                btn_classname = "fas fa-angle-double-right fa-3x BTN-SIDEBAR-OPEN",
+        else:
+            sidebar_style = "SIDEBAR-HIDEN"
+            content_style = "CONTENT-WITHOUT-SIDEBAR"
+            cur_nclick = 'HIDDEN'
+            btn_classname = "fas fa-align-justify fa-2x BTN-SIDEBAR-CLOSE",
+                
+
+        return sidebar_style, content_style, cur_nclick, btn_classname
+
+
+    @app.callback(
+        Output("COLLAPSE_BODY-TAB_HOME_SIDEBAR_COLLAPSE_BASE_MAP", "is_open"),
+        Output("ARROW-TAB_HOME_SIDEBAR_COLLAPSE_BASE_MAP", "className"),
+        Output("COLLAPSE_BODY-TAB_HOME_SIDEBAR_COLLAPSE_POLITICAL_MAP", "is_open"),
+        Output("ARROW-TAB_HOME_SIDEBAR_COLLAPSE_POLITICAL_MAP", "className"),
+        Output("COLLAPSE_BODY-TAB_HOME_SIDEBAR_COLLAPSE_WATER_MAP", "is_open"),
+        Output("ARROW-TAB_HOME_SIDEBAR_COLLAPSE_WATER_MAP", "className"),
+        
+        Input("OPEN_CLOSE-TAB_HOME_SIDEBAR_COLLAPSE_BASE_MAP", "n_clicks"),
+        Input("OPEN_CLOSE-TAB_HOME_SIDEBAR_COLLAPSE_POLITICAL_MAP", "n_clicks"),
+        Input("OPEN_CLOSE-TAB_HOME_SIDEBAR_COLLAPSE_WATER_MAP", "n_clicks"),
+        State("COLLAPSE_BODY-TAB_HOME_SIDEBAR_COLLAPSE_BASE_MAP", "is_open"),
+        State("COLLAPSE_BODY-TAB_HOME_SIDEBAR_COLLAPSE_POLITICAL_MAP", "is_open"),
+        State("COLLAPSE_BODY-TAB_HOME_SIDEBAR_COLLAPSE_WATER_MAP", "is_open"),
+    )
+    def FUNCTION_TOGGLE_ACCORDION_TAB_HOME_SIDEBAR(
+        n_bace_map, n_political_map, n_water_map,
+        state_base_map, state_political_map, state_water_map,
+    ):
         ctx = dash.callback_context
 
         if not ctx.triggered:
-            return False
+            return False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2"
+
         else:
             button_id = ctx.triggered[0]["prop_id"].split(".")[0]
+            
+            if button_id == "OPEN_CLOSE-TAB_HOME_SIDEBAR_COLLAPSE_BASE_MAP" and n_bace_map:
+                if not state_base_map:
+                    return True, "fas fa-caret-down ml-2", False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2"
+                else:
+                    return False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2"
 
-        if button_id == "BUTTON_COLLAPSE-TAB_HOME_COLLAPSE_1" and n1:
-            return not is_open1
+            elif button_id == "OPEN_CLOSE-TAB_HOME_SIDEBAR_COLLAPSE_POLITICAL_MAP" and n_political_map:
+                if not state_political_map:
+                    return False, "fas fa-caret-left ml-2", True, "fas fa-caret-down ml-2", False, "fas fa-caret-left ml-2"
+                else:
+                    return False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2"
+
+            elif button_id == "OPEN_CLOSE-TAB_HOME_SIDEBAR_COLLAPSE_WATER_MAP" and n_water_map:
+                if not state_water_map:
+                    return False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2", True, "fas fa-caret-down ml-2"
+                else:
+                    return False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2"
+
+            else:
+                return False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2"
+
+
+
+    @app.callback(
+        Output("BASE_MAP-TAB_HOME_BODY", "url"),
+
+        Output("NONEBASEMAP_BASE_MAP-TAB_HOME_BODY", "style"),
+        Output("STREETS_BASE_MAP-TAB_HOME_BODY", "style"),
+        Output("IMAGERY_BASE_MAP-TAB_HOME_BODY", "style"),
+        Output("TERRAIN_BASE_MAP-TAB_HOME_BODY", "style"),
+        Output("TOPOGRAPHIC_BASE_MAP-TAB_HOME_BODY", "style"),
+        Output("DARK_BASE_MAP-TAB_HOME_BODY", "style"),
+
+        Input("NONEBASEMAP_BASE_MAP-TAB_HOME_BODY", "n_clicks"),
+        Input("STREETS_BASE_MAP-TAB_HOME_BODY", "n_clicks"),
+        Input("IMAGERY_BASE_MAP-TAB_HOME_BODY", "n_clicks"),
+        Input("TERRAIN_BASE_MAP-TAB_HOME_BODY", "n_clicks"),
+        Input("TOPOGRAPHIC_BASE_MAP-TAB_HOME_BODY", "n_clicks"),
+        Input("DARK_BASE_MAP-TAB_HOME_BODY", "n_clicks"),
+    )
+    def FUNCTION_UPDATE_BASE_MAP_TAB_HOME_BODY(
+        n_nonebasemap, n_streets, n_imagery, n_terrain, n_topo, n_dark
+    ):
+        ctx = dash.callback_context
+        if not ctx.triggered:
+            raise PreventUpdate
         else:
-            return False
+            button_id = ctx.triggered[0]["prop_id"].split(".")[0]
+            if button_id == "NONEBASEMAP_BASE_MAP-TAB_HOME_BODY" and n_nonebasemap:
+                return NONEBASEMAP_URL, BASE_MAP_SELECTED_STYLE, None, None, None, None, None
+            elif button_id == "STREETS_BASE_MAP-TAB_HOME_BODY" and n_streets:
+                return STREETS_URL, None, BASE_MAP_SELECTED_STYLE, None, None, None, None
+            elif button_id == "IMAGERY_BASE_MAP-TAB_HOME_BODY" and n_imagery:
+                return IMAGERY_URL, None, None, BASE_MAP_SELECTED_STYLE, None, None, None
+            elif button_id == "TERRAIN_BASE_MAP-TAB_HOME_BODY" and n_terrain:
+                return TERRAIN_URL, None, None, None, BASE_MAP_SELECTED_STYLE, None, None
+            elif button_id == "TOPOGRAPHIC_BASE_MAP-TAB_HOME_BODY" and n_topo:
+                return TOPOGRAPHIC_URL, None, None, None, None, BASE_MAP_SELECTED_STYLE, None
+            elif button_id == "DARK_BASE_MAP-TAB_HOME_BODY" and n_dark:
+                return DARK_URL, None, None, None, None, None, BASE_MAP_SELECTED_STYLE
+            else:
+                raise PreventUpdate
+
+
+    @app.callback(
+        Output("BASE_MAP-TAB_HOME_BODY", "opacity"),
+        Output("BADGE_OPACITY_BASE_MAP-TAB_HOME_SIDEBAR", "children"),
+        Input("OPACITY_BASE_MAP-TAB_HOME_SIDEBAR", "value"),
+    )
+    def FUNCTION_UPDATE_OPACITY_BASE_MAP_TAB_HOME_BODY(
+        opacity
+    ):
+        opacity = int(opacity)
+        return opacity / 100, f"{str(opacity)}%"
+
+
+
+
 
     @app.callback(
         Output("search_coordinate", "placeholder"),

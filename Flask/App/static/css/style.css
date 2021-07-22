@@ -339,3 +339,145 @@ html {
   width: 30px !important;
   height: 30px !important;
 }
+
+
+
+
+/* 
+------------------------------------------------------------------------------
+GroundWater App
+------------------------------------------------------------------------------
+*/
+
+
+/* 
+---------------------------------------
+GENERAL
+---------------------------------------
+*/
+
+
+/* 
+---------------------------------------
+TAB HOME
+---------------------------------------
+*/
+
+
+/* 
+-------------------
+SDEBAR
+-------------------
+*/
+
+.SIDEBAR-SHOW {
+  position: fixed;
+  top: 45px;
+  right: 0px;
+  bottom: 0px;
+  width: 25rem;
+  height: 93vh;
+  z-index: 1;
+  overflow-x: hidden;
+  transition: "all 0.2s";
+  padding: 0px;
+  background-color: #fff;
+}
+
+.SIDEBAR-HIDEN {
+  position: fixed;
+  top: 45px;
+  right: -25rem;
+  bottom: 0px;
+  width: 25rem;
+  height: 93vh;
+  z-index: 1;
+  overflow-x: hidden;
+  transition: "all 0.2s";
+  padding: 0px;
+  background-color: #fff;
+}
+
+.CONTENT-WITH-SIDEBAR {
+  transition: "margin-right 0.2s";
+  margin: 0px;
+  margin-right: 25rem;
+  background-color: #fff;
+}
+
+.CONTENT-WITHOUT-SIDEBAR {
+  transition: "margin-right 0.2s";
+  margin: 0px;
+  background-color: #fff;
+}
+
+.COLLAPSE-CARD {
+  font-size: 1rem;
+  padding: 0px;
+}
+
+.COLLAPSE-CARD-HEADER {
+  font-size: 1rem;
+  padding: 1.25rem 1.25rem;
+  margin-bottom: 0;
+  background-color: #f5f5f0;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.COLLAPSE-CARD-HEADER:hover {
+  background-color: #ebebe0;
+  transition: 0.1s linear all;
+}
+
+.THUMBNAIL{
+  cursor: pointer;
+  margin: 4px 4px !important;
+  border-radius: 4px;
+  border: 0.5px solid rgba(0,0,0,0.2) !important;
+  background-clip: padding-box !important;
+}
+
+
+
+/* 
+-------------------
+BODY
+-------------------
+*/
+
+.BTN-SIDEBAR-CLOSE {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  margin: 0px;
+  padding: 5px;
+  color: black;
+  background-color: white;
+  border: 2px solid rgba(0,0,0,0.2);
+  background-clip: padding-box;
+}
+
+.BTN-SIDEBAR-CLOSE:hover {
+  -webkit-animation: pulse 2s;
+  animation: pulse 2s;
+  color: gray;
+}
+
+.BTN-SIDEBAR-OPEN {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  color: black;
+  background-clip: padding-box;
+}
+
+.BTN-SIDEBAR-OPEN:hover {
+  -webkit-animation: pulse 2s;
+  animation: pulse 2s;
+  color: gray;
+}
+
+

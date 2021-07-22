@@ -83,11 +83,11 @@ MAIN_LAYOUT = html.Div(
                     children=[
                         TAB_PAN
                     ],
-                    className="col"
+                    className="col m-0 p-0"
                 )
             ],
-            className="row"
+            className="row m-0 p-0"
         )
     ],
-    className="container-fluid"
+    className="container-fluid m-0 p-0"
 )

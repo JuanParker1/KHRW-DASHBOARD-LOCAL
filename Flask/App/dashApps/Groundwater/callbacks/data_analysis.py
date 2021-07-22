@@ -19,6 +19,69 @@ AQUIFERS = "./App/static/shapefiles/Aquifers/Aquifers.shp"
 AREASTUDIES = "./App/static/shapefiles/AreaStudies/AreaStudies.shp"
 
 
+# -----------------------------------------------------------------------------
+# IMAGE LOCATION
+# -----------------------------------------------------------------------------
+
+
+# ATTRIBUTION
+ATTRIBUTION = '&copy; <a href="http://www.khrw.ir/">Khorasan Regional Water Company</a>'
+
+
+# BASE MAP SELECTED STYLE
+BASE_MAP_SELECTED_STYLE = {
+    "background-color": "#337ab7",
+    "color":"#fff"
+}
+
+
+# NONE BASE MAP
+NONEBASEMAP = base64.b64encode(
+    open("./App/static/images/base_map/None.png", 'rb').read()
+).decode()
+
+NONEBASEMAP_URL = ""
+
+
+# IMAGERY BASE MAP
+IMAGERY = base64.b64encode(
+    open("./App/static/images/base_map/Imagery.png", 'rb').read()
+).decode()
+
+IMAGERY_URL = "http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}"
+
+
+# OPEN STREET MAP
+STREETS = base64.b64encode(
+    open("./App/static/images/base_map/Streets.png", 'rb').read()
+).decode()
+
+STREETS_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+
+
+# TERRAIN BASE MAP
+TERRAIN = base64.b64encode(
+    open("./App/static/images/base_map/Terrain.png", 'rb').read()
+).decode()
+
+TERRAIN_URL = "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png"
+
+
+# TOPOGRAPHIC BASE MAP
+TOPOGRAPHIC = base64.b64encode(
+    open("./App/static/images/base_map/Topographic.png", 'rb').read()
+).decode()
+
+TOPOGRAPHIC_URL = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
+
+DARK = base64.b64encode(
+    open("./App/static/images/base_map/Dark.png", 'rb').read()
+).decode()
+
+DARK_URL = 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png'
+
+
+
 
 
 # -----------------------------------------------------------------------------

@@ -6,6 +6,7 @@ import dash_leaflet.express as dlx
 from dash_extensions.javascript import arrow_function
 import geopandas as gpd
 
+from App.dashApps.Groundwater.callbacks.data_analysis import *
 
 keys = {
     "One": {
@@ -27,7 +28,7 @@ keys = {
 }
 
 
-attribution = '&copy; <a href="http://www.khrw.ir/">Khorasan Regional Water Company</a> '
+
 
 
 # -----------------------------------------------------------------------------
@@ -44,6 +45,25 @@ BAKHSH = "./Assets/Bakhsh.geojson"
 
 
 
+# -----------------------------------------------------------------------------
+# ELEMAN ON MAP
+# -----------------------------------------------------------------------------
+
+# BUTTON SIDEBAR
+SIDEBAR_BUTTON = html.Div(
+    children=[
+        html.I(
+            className="fas fa-align-justify fa-2x BTN-SIDEBAR-CLOSE",
+            id="SIDEBAR_BUTTON-TAB_HOME_BODY"
+        )
+    ]
+)
+
+
+
+
+
+
 info = html.Div(
     id="info",
     className="info",
@@ -57,6 +77,8 @@ info = html.Div(
     },
     dir="rtl"
 )
+
+
 
 search_bar = html.Div(
     children=[
@@ -136,321 +158,63 @@ search_bar = html.Div(
     dir="ltr"
 )
 
-model1 = html.Div(
-    children=[
-        dbc.Modal(
-            size="xl",
-            id="modal",
-            centered=True,
-            is_open=False,
-            children=[
-                dbc.ModalHeader(
-                    id="modal_header"
-                ),
-                dbc.ModalBody(
-                    id="modal_body"
-                )
-            ]
-        )
-    ]
-)
-
-model2 = html.Div(
-    children=[
-        dbc.Modal(
-            size="xl",
-            id="modal2",
-            centered=True,
-            is_open=False,
-            children=[
-                dbc.ModalHeader(
-                    id="modal2_header"
-                ),
-                dbc.ModalBody(
-                    id="modal2_body"
-                )
-            ]
-        )
-    ]
-)
-
-
-model3 = html.Div(
-    children=[
-        dbc.Modal(
-            size="xl",
-            id="modal3",
-            centered=True,
-            is_open=False,
-            children=[
-                dbc.ModalHeader(
-                    id="modal3_header"
-                ),
-                dbc.ModalBody(
-                    id="modal3_body"
-                )
-            ]
-        )
-    ]
-)
-
-
-model4 = html.Div(
-    children=[
-        dbc.Modal(
-            size="xl",
-            id="modal4",
-            centered=True,
-            is_open=False,
-            children=[
-                dbc.ModalHeader(
-                    id="modal4_header"
-                ),
-                dbc.ModalBody(
-                    id="modal4_body"
-                )
-            ]
-        )
-    ]
-)
-
-
-model5 = html.Div(
-    children=[
-        dbc.Modal(
-            size="xl",
-            id="modal5",
-            centered=True,
-            is_open=False,
-            children=[
-                dbc.ModalHeader(
-                    id="modal5_header"
-                ),
-                dbc.ModalBody(
-                    id="modal5_body"
-                )
-            ]
-        )
-    ]
-)
-
 
 # -------------------------------------------------------------------------------------------------
 # TAB HOME - BODY
 # -------------------------------------------------------------------------------------------------
 
-
-TAB_HOME_BODY = html.Div([
-    
-    html.Div(
-        children=[
-            
-            dl.Map(
-                id="map",
-#                 center=[36.30, 59.60],
-                zoom=5,
-                children=[
-                    dl.LayersControl(
-                        position="topleft",
-                        collapsed=True,
-                        children=[
-                            # html.Div("انتخاب نقشه پس زمینه:"),
-                            dl.BaseLayer(
-                                children=[
-                                    dl.TileLayer(
-                                        url=key["url"],
-                                        attribution=attribution
-                                    ),
-                                ],
-                                name=key["name"],
-                                checked=key["name"] == "None"  
-                            ) for key in keys.values()
-                        ]
-                    ), 
-                    dl.LayersControl(
-                        collapsed=False,
-                        # className="control-map-layers",
-                        children=[
-                            dl.Overlay(
-                                children=[
-                                    dl.LayerGroup(
-                                        id="layer"
-                                    )                                    
-                                ],
-                                name="click+search",
-                                checked=True
-                            )                            
-                        ] + [
-                            dl.Overlay(
-                                children=[
-                                    dl.GeoJSON(
-                                        id="hozeh6",
-                                        url=HOZEH6,
-#                                         zoomToBounds=True,
-#                                         zoomToBoundsOnClick=True,
-                                        hoverStyle=arrow_function(
-                                            dict(
-                                                weight=5,
-                                                color='#222',
-                                                dashArray=''
-                                            )
-                                        ),
-                                        options={
-                                            "style": {
-                                                "color": "red"
-                                            }
-                                        },
-                                    )                                    
-                                ],
-                                name="حوضه درجه یک",
-                                checked=False
-                            )                            
-                        ] + [
-                            dl.Overlay(
-                                children=[
-                                    dl.GeoJSON(
-                                        id="hozeh30",
-                                        url=HOZEH30,
-#                                         zoomToBounds=True,
-#                                         zoomToBoundsOnClick=True,
-                                        hoverStyle=arrow_function(
-                                            dict(
-                                                weight=5,
-                                                color='#222',
-                                                dashArray=''
-                                            )
-                                        ),
-                                        options={
-                                            "style": {
-                                                "color": "green"
-                                            }
-                                        }                                       
-                                    )                                    
-                                ],
-                                name="حوضه درجه دو",
-                                checked=False
-                            )                            
-                        ] + [
-                            dl.Overlay(
-                                children=[
-                                    dl.GeoJSON(
-                                        id="mahdoude",
-                                        url=MAHDOUDE,
-                                        zoomToBounds=True,
-                                        zoomToBoundsOnClick=True,
-                                        hoverStyle=arrow_function(
-                                            dict(
-                                                weight=5,
-                                                color='#222',
-                                                dashArray=''
-                                            )
-                                        ),
-                                        options={
-                                            "style": {
-                                                "color": "tomato"
-                                            }
-                                        }                                       
-                                    )                                    
-                                ],
-                                name="محدوده مطالعاتی",
-                                checked=True
-                            )                            
-                        ] + [
-                            dl.Overlay(
-                                children=[
-                                    dl.GeoJSON(
-                                        id="ostan",
-                                        url=OSTAN,
-#                                         zoomToBounds=True,
-#                                         zoomToBoundsOnClick=True,
-                                        hoverStyle=arrow_function(
-                                            dict(
-                                                weight=5,
-                                                color='#222',
-                                                dashArray=''
-                                            )
-                                        ),
-                                        options={
-                                            "style": {
-                                                "color": "blue"
-                                            }
-                                        }                                       
-                                    )                                    
-                                ],
-                                name="استان",
-                                checked=False
-                            )                            
-                        ] + [
-                            dl.Overlay(
-                                children=[
-                                    dl.GeoJSON(
-                                        id="shahrestan",
-                                        url=SHAHRESTAN,
-#                                         zoomToBounds=True,
-                                        zoomToBoundsOnClick=True,
-                                        hoverStyle=arrow_function(
-                                            dict(
-                                                weight=5,
-                                                color='#222',
-                                                dashArray=''
-                                            )
-                                        ),
-                                        options={
-                                            "style": {
-                                                "color": "#FD8D3C"
-                                            }
-                                        }                                       
-                                    )                                    
-                                ],
-                                name="شهرستان",
-                                checked=False
-                            )                            
-                        ]
-                    ),
-                    dl.LocateControl(
-                        options={
-                            'locateOptions': {
-                                'enableHighAccuracy': True
-                            }
-                        }
-                    ),
-                    dl.MeasureControl(
-                        position="topleft",
-                        primaryLengthUnit="kilometers",
-                        primaryAreaUnit="hectares",
-                        activeColor="#214097",
-                        completedColor="#972158"
-                    ),
-                    search_bar,
-                    info,
-                    model1,
-                    model2,
-                    model3,
-                    model4,
-                    model5,
-                ],
-                style={
-                    'height': '85vh',
-                    "font-family": "Tanha-FD",
-                    "font-size": "medium"
-                },
-            ),
-        ],
-        dir="rtl"
-    ),
-    html.Div(
-        children=[
-            html.Div(
-                id="out1",
-                className="col-6"
-            ),
-            html.Div(
-                id="out2",
-                className="col-6"
-            )
-        ],
-        className="row"
-    )
-])
+BODY_TAB_HOME = html.Div(
+    children=[
+        html.Div(
+            children=[
+                
+                dl.Map(
+                    id="MAP-TAB_HOME_BODY",
+                    center=[36.30, 59.60],
+                    zoom=6,
+                    children=[
+                        dl.TileLayer(
+                            url="",
+                            opacity=1,
+                            attribution=ATTRIBUTION,
+                            id="BASE_MAP-TAB_HOME_BODY"
+                        ),
+                        dl.MeasureControl(
+                            position="topleft",
+                            primaryLengthUnit="kilometers",
+                            primaryAreaUnit="hectares",
+                            activeColor="#214097",
+                            completedColor="#972158"
+                        ),
+                        SIDEBAR_BUTTON,
+                        search_bar,
+                        info
+                    ],
+                    style={
+                        'height': '93vh',
+                        "font-family": "Tanha-FD",
+                        "font-size": "medium"
+                    },
+                ),
+            ],
+            dir="rtl"
+        ),
+        html.Div(
+            children=[
+                html.Div(
+                    id="out1",
+                    className="col-6"
+                ),
+                html.Div(
+                    id="out2",
+                    className="col-6"
+                )
+            ],
+            className="row"
+        )
+    ],
+    id="BODY-TAB_HOME",
+    className="CONTENT-WITH-SIDEBAR"
+)
 
 
