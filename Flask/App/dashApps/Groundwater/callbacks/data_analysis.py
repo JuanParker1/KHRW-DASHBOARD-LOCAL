@@ -20,6 +20,21 @@ AREASTUDIES = "./App/static/shapefiles/AreaStudies/AreaStudies.shp"
 
 
 # -----------------------------------------------------------------------------
+# GEOJSON LOCATION
+# -----------------------------------------------------------------------------
+GEOJSON_LOCATION = {
+    "BASIN1" : "./Assets/GeoJson/Basin1.geojson",
+    "BASIN2" : "./Assets/GeoJson/Basin2.geojson",
+    "MAHDOUDE" : "./Assets/GeoJson/Mahdoude.geojson",
+    "AQUIFER" : "./Assets/GeoJson/Aquifer.geojson",
+    "COUNTRY" : "./Assets/GeoJson/Country.geojson",
+    "PROVINCE" : "./Assets/GeoJson/Province.geojson",
+    "COUNTY" : "./Assets/GeoJson/County.geojson",
+    "DISTRICT" : "./Assets/GeoJson/District.geojson",
+}
+
+
+# -----------------------------------------------------------------------------
 # IMAGE LOCATION
 # -----------------------------------------------------------------------------
 

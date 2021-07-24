@@ -17,6 +17,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import dash_table
+import geojson
 
 
 from App.dashApps.Groundwater.callbacks.data_analysis import *
@@ -41,17 +42,17 @@ def groundwater_callback_home(app):
                 sidebar_style = "SIDEBAR-HIDEN"
                 content_style = "CONTENT-WITHOUT-SIDEBAR"
                 cur_nclick = "HIDDEN"
-                btn_classname = "fas fa-align-justify fa-2x BTN-SIDEBAR-CLOSE",
+                btn_classname = "fas fa-align-justify fa-2x BTN-SIDEBAR-CLOSE"
             else:
                 sidebar_style = "SIDEBAR-SHOW"
                 content_style = "CONTENT-WITH-SIDEBAR"
                 cur_nclick = "SHOW"
-                btn_classname = "fas fa-angle-double-right fa-3x BTN-SIDEBAR-OPEN",
+                btn_classname = "fas fa-angle-double-right fa-3x BTN-SIDEBAR-OPEN"
         else:
             sidebar_style = "SIDEBAR-HIDEN"
             content_style = "CONTENT-WITHOUT-SIDEBAR"
             cur_nclick = 'HIDDEN'
-            btn_classname = "fas fa-align-justify fa-2x BTN-SIDEBAR-CLOSE",
+            btn_classname = "fas fa-align-justify fa-2x BTN-SIDEBAR-CLOSE"
                 
 
         return sidebar_style, content_style, cur_nclick, btn_classname
@@ -158,6 +159,60 @@ def groundwater_callback_home(app):
     ):
         opacity = int(opacity)
         return opacity / 100, f"{str(opacity)}%"
+
+
+
+    @app.callback(
+        Output("MAP-TAB_HOME_BODY", "children"),   
+        Input("ADD_POLITICAL_MAP-TAB_HOME_SIDEBAR", "value"),
+        Input("ADD_WATER_MAP-TAB_HOME_SIDEBAR", "value"),
+        State("MAP-TAB_HOME_BODY", "children"),
+        State("ADD_WATER_MAP-TAB_HOME_SIDEBAR", "value"),
+    )
+    def FUNCTION_ADD_SELECTED_GEOJSON_MAP_TAB_HOME_SIDEBAR(
+        political_map_value, water_map_value,
+        map_children_state, water_map_state
+    ):
+
+        if (not political_map_value) & (not water_map_value):
+            map_value = None
+        elif (not political_map_value):
+            map_value = water_map_value
+        elif (not water_map_value):
+            map_value = political_map_value
+        else:
+            map_value = political_map_value + water_map_value
+
+        if not map_value:
+            result = map_children_state[:4]
+            return result
+        
+        result = map_children_state[:4]
+
+        for i in map_value:
+
+            with open(GEOJSON_LOCATION[i]) as f:
+                data = geojson.load(f)
+
+            data = dlx.geojson_to_geobuf(data)
+
+            ID = f"{i}_MAP-TAB_HOME_BODY"
+
+            result = result + [dl.GeoJSON(data=data, id=ID, format="geobuf")]
+
+        return result
+
+
+        
+        
+
+
+
+
+
+
+
+
 
 
 

@@ -183,7 +183,29 @@ COLLAPSE_POLITICAL_MAP = html.Div(
             className="inline COLLAPSE-CARD-HEADER"
         ),
         dbc.Collapse(
-            html.Div(f"This is the content of group 1..."),
+            children=[
+                html.Div(
+                    children=[
+                        html.Ul(
+                            children=[
+                                dcc.Checklist(
+                                    options=[
+                                        {'label': 'کشور', 'value': 'COUNTRY'},
+                                        {'label': 'استان', 'value': 'PROVINCE'},
+                                        {'label': 'شهرستان', 'value': 'COUNTY'},
+                                        {'label': 'بخش', 'value': 'DISTRICT'}
+                                    ],
+                                    id="ADD_POLITICAL_MAP-TAB_HOME_SIDEBAR",
+                                    labelClassName  ="list-group-item p-0 m-0 py-2",
+                                    inputClassName="mx-2"
+                                )
+                            ],
+                            className="list-group list-group-flush"
+                        )
+                    ],
+                    className="card"
+                )
+            ],
             id="COLLAPSE_BODY-TAB_HOME_SIDEBAR_COLLAPSE_POLITICAL_MAP",
             is_open=False,
         )
@@ -208,7 +230,29 @@ COLLAPSE_WATER_MAP = html.Div(
             className="inline COLLAPSE-CARD-HEADER"
         ),
         dbc.Collapse(
-            html.Div(f"This is the content of group 1..."),
+            children=[
+                html.Div(
+                    children=[
+                        html.Ul(
+                            children=[
+                                dcc.Checklist(
+                                    options=[
+                                        {'label': 'حوضه‌های درجه یک', 'value': 'BASIN1'},
+                                        {'label': 'حوضه‌های درجه دو', 'value': 'BASIN2'},
+                                        {'label': 'محدوده‌های مطالعاتی', 'value': 'MAHDOUDE'},
+                                        {'label': 'آبخوان‌ها', 'value': 'AQUIFER'},
+                                    ],
+                                    id="ADD_WATER_MAP-TAB_HOME_SIDEBAR",
+                                    labelClassName  ="list-group-item p-0 m-0 py-2",
+                                    inputClassName="mx-2"
+                                )
+                            ],
+                            className="list-group list-group-flush"
+                        )
+                    ],
+                    className="card"
+                )
+            ],
             id="COLLAPSE_BODY-TAB_HOME_SIDEBAR_COLLAPSE_WATER_MAP",
             is_open=False,
         )
@@ -224,13 +268,14 @@ COLLAPSE_WATER_MAP = html.Div(
 # ------------------------------------------------------------------------
 
 SIDEBAR_TAB_HOME = html.Div(
+
     children=[
         COLLAPSE_BASE_MAP,
         COLLAPSE_POLITICAL_MAP,
         COLLAPSE_WATER_MAP
     ],
     id="SIDEBAR-TAB_HOME",
-    className="SIDEBAR-SHOW"
+    className="SIDEBAR-HIDEN"
 )
 
 

@@ -23,3 +23,5 @@ dash-extensions
 jsbeautifier
 utm
 scipy
+geojson
+geobuf

@@ -375,7 +375,7 @@ SDEBAR
   top: 45px;
   right: 0px;
   bottom: 0px;
-  width: 25rem;
+  width: 20rem;
   height: 93vh;
   z-index: 1;
   overflow-x: hidden;
@@ -387,9 +387,9 @@ SDEBAR
 .SIDEBAR-HIDEN {
   position: fixed;
   top: 45px;
-  right: -25rem;
+  right: -20rem;
   bottom: 0px;
-  width: 25rem;
+  width: 20rem;
   height: 93vh;
   z-index: 1;
   overflow-x: hidden;
@@ -401,7 +401,7 @@ SDEBAR
 .CONTENT-WITH-SIDEBAR {
   transition: "margin-right 0.2s";
   margin: 0px;
-  margin-right: 25rem;
+  margin-right: 20rem;
   background-color: #fff;
 }
 
@@ -438,6 +438,9 @@ SDEBAR
   background-clip: padding-box !important;
 }
 
+input[type="checkbox"] {
+  zoom: 1.5;
+}
 
 
 /* 
@@ -448,7 +451,7 @@ BODY
 
 .BTN-SIDEBAR-CLOSE {
   position: absolute;
-  top: 10px;
+  top: 60px;
   right: 10px;
   z-index: 1000;
   margin: 0px;
@@ -467,8 +470,8 @@ BODY
 
 .BTN-SIDEBAR-OPEN {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 60px;
+  right: 20rem;
   z-index: 1000;
   color: black;
   background-clip: padding-box;

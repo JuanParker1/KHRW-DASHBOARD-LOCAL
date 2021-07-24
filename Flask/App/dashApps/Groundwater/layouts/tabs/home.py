@@ -18,7 +18,8 @@ HOME = html.Div(
 
         # Store State Sidebar ---------
         dcc.Store(
-            id="SIDEBAR_STATE-TAB_HOME"
+            id="SIDEBAR_STATE-TAB_HOME",
+            data="HIDDEN"
         ),
 
         # Sidebar ---------------------

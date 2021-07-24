@@ -28,24 +28,7 @@ keys = {
 }
 
 
-
-
-
-# -----------------------------------------------------------------------------
-# SHAPEFILES LOCATION
-# -----------------------------------------------------------------------------
-HOZEH6 = "./Assets/Hozeh6.geojson"
-HOZEH30 = "./Assets/Hozeh30.geojson"
-MAHDOUDE = "./Assets/Mahdoude.geojson"
-AQUIFERS = "./Assets/Aquifers.geojson"
-
-OSTAN = "./Assets/Ostan.geojson"
-SHAHRESTAN = "./Assets/Shahrestan.geojson"
-BAKHSH = "./Assets/Bakhsh.geojson"
-
-
-
-# -----------------------------------------------------------------------------
+5# -----------------------------------------------------------------------------
 # ELEMAN ON MAP
 # -----------------------------------------------------------------------------
 
@@ -167,7 +150,7 @@ BODY_TAB_HOME = html.Div(
     children=[
         html.Div(
             children=[
-                
+                SIDEBAR_BUTTON,
                 dl.Map(
                     id="MAP-TAB_HOME_BODY",
                     center=[36.30, 59.60],
@@ -186,7 +169,7 @@ BODY_TAB_HOME = html.Div(
                             activeColor="#214097",
                             completedColor="#972158"
                         ),
-                        SIDEBAR_BUTTON,
+                        # SIDEBAR_BUTTON,
                         search_bar,
                         info
                     ],
@@ -214,7 +197,7 @@ BODY_TAB_HOME = html.Div(
         )
     ],
     id="BODY-TAB_HOME",
-    className="CONTENT-WITH-SIDEBAR"
+    className="CONTENT-WITHOUT-SIDEBAR"
 )
 
 
