@@ -23,14 +23,72 @@ AREASTUDIES = "./App/static/shapefiles/AreaStudies/AreaStudies.shp"
 # GEOJSON LOCATION
 # -----------------------------------------------------------------------------
 GEOJSON_LOCATION = {
-    "BASIN1" : "./Assets/GeoJson/Basin1.geojson",
-    "BASIN2" : "./Assets/GeoJson/Basin2.geojson",
-    "MAHDOUDE" : "./Assets/GeoJson/Mahdoude.geojson",
-    "AQUIFER" : "./Assets/GeoJson/Aquifer.geojson",
-    "COUNTRY" : "./Assets/GeoJson/Country.geojson",
-    "PROVINCE" : "./Assets/GeoJson/Province.geojson",
-    "COUNTY" : "./Assets/GeoJson/County.geojson",
-    "DISTRICT" : "./Assets/GeoJson/District.geojson",
+    "BASIN1" : {
+        "url": "./Assets/GeoJson/Basin1.geojson",
+        "options": {
+            "color": "red",
+            "fillColor": "None",
+        }
+    },
+    "BASIN2" : {
+        "url": "./Assets/GeoJson/Basin2.geojson",
+        "options": {
+            "color": "green",
+            "fillColor": "None",
+        }
+    },
+    "MAHDOUDE" : {
+        "url": "./Assets/GeoJson/Mahdoude.geojson",
+        "options": {
+            "color": "gray",
+            "fillColor": "None",
+        }
+    },
+    "AQUIFER" : {
+        "url": "./Assets/GeoJson/Aquifer.geojson",
+        "options": {
+            "color": "red",
+            "fillColor": "None",
+        }
+    },
+    "COUNTRY" : {
+        "url": "./Assets/GeoJson/Country.geojson",
+        "options": {
+            "weight": "3",
+            "dashArray": "10, 10",
+            "dashOffset": "10",
+            "color": "black",
+            "opacity": "1",
+            "fillColor": "black",
+            "fillOpacity": "0.01",
+        }
+    },
+    "PROVINCE" : {
+        "url": "./Assets/GeoJson/Province.geojson",
+        "options": {
+            "weight": "3",
+            "dashArray": "10, 10",
+            "dashOffset": "10",
+            "color": "blue",
+            "opacity": "1",
+            "fillColor": "blue",
+            "fillOpacity": "0.01",
+        }
+    },
+    "COUNTY" : {
+        "url": "./Assets/GeoJson/County.geojson",
+        "options": {
+            "color": "#f9f9f9",
+            "fillColor": "None",
+        }
+    },
+    "DISTRICT" : {
+        "url": "./Assets/GeoJson/District.geojson",
+        "options": {
+            "color": "#e2e2e2",
+            "fillColor": "None",
+        }
+    },
 }
 
 

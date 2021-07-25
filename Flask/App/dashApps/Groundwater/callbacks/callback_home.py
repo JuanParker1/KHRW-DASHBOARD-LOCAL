@@ -191,14 +191,31 @@ def groundwater_callback_home(app):
 
         for i in map_value:
 
-            with open(GEOJSON_LOCATION[i]) as f:
+            print(GEOJSON_LOCATION[i]["url"])
+
+            with open(GEOJSON_LOCATION[i]["url"]) as f:
                 data = geojson.load(f)
 
             data = dlx.geojson_to_geobuf(data)
 
+            print(data)
+
             ID = f"{i}_MAP-TAB_HOME_BODY"
 
-            result = result + [dl.GeoJSON(data=data, id=ID, format="geobuf")]
+            result = result + [dl.GeoJSON(
+                data=data,
+                id=ID,
+                format="geobuf",
+                hoverStyle=arrow_function(
+                    dict(
+                        weight=5,
+                        color='#222',
+                        dashArray=''
+                    )
+                ),
+                options=GEOJSON_LOCATION[i]["options"],
+                )
+            ]
 
         return result
 

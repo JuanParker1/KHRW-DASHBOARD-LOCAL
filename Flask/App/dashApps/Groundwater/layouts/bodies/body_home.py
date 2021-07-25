@@ -8,27 +8,8 @@ import geopandas as gpd
 
 from App.dashApps.Groundwater.callbacks.data_analysis import *
 
-keys = {
-    "One": {
-        "url": "",
-        "name": "بدون نقشه"
-    },
-    "Two": {
-        "url": "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png",
-        "name": "نقشه عوارض زمین"
-    },
-    "Three": {
-        "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        "name": "اوپن‌استریت‌مپ"
-    },
-    "Four": {
-        "url": "http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}",
-        "name": "نقشه تصاویر ماهواره‌ای گوگل"
-    },
-}
 
-
-5# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # ELEMAN ON MAP
 # -----------------------------------------------------------------------------
 
@@ -157,7 +138,7 @@ BODY_TAB_HOME = html.Div(
                     zoom=6,
                     children=[
                         dl.TileLayer(
-                            url="",
+                            url=STREETS_URL,
                             opacity=1,
                             attribution=ATTRIBUTION,
                             id="BASE_MAP-TAB_HOME_BODY"

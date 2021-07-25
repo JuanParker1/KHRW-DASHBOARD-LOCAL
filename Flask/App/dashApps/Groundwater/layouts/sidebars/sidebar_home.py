@@ -42,7 +42,8 @@ COLLAPSE_BASE_MAP = html.Div(
                                 )
                             ],
                             id="STREETS_BASE_MAP-TAB_HOME_BODY",
-                            className="THUMBNAIL card"
+                            className="THUMBNAIL card", 
+                            style=BASE_MAP_SELECTED_STYLE
                         ),
                         html.Div(
                             children=[
@@ -90,7 +91,6 @@ COLLAPSE_BASE_MAP = html.Div(
                             ],
                             id="NONEBASEMAP_BASE_MAP-TAB_HOME_BODY",
                             className="THUMBNAIL card",
-                            style=BASE_MAP_SELECTED_STYLE
                         ),
                         html.Div(
                             children=[
