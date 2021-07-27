@@ -107,7 +107,6 @@ def groundwater_callback_home(app):
                 return False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2", False, "fas fa-caret-left ml-2"
 
 
-
     @app.callback(
         Output("BASE_MAP-TAB_HOME_BODY", "url"),
 
@@ -161,7 +160,6 @@ def groundwater_callback_home(app):
         return opacity / 100, f"{str(opacity)}%"
 
 
-
     @app.callback(
         Output("MAP-TAB_HOME_BODY", "children"),   
         Input("ADD_POLITICAL_MAP-TAB_HOME_SIDEBAR", "value"),
@@ -206,10 +204,11 @@ def groundwater_callback_home(app):
                 data=data,
                 id=ID,
                 format="geobuf",
+                zoomToBounds=True,
                 hoverStyle=arrow_function(
                     dict(
-                        weight=5,
-                        color='#222',
+                        weight=10,
+                        color="green",
                         dashArray=''
                     )
                 ),

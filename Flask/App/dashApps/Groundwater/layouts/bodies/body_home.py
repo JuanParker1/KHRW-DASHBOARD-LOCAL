@@ -148,7 +148,7 @@ BODY_TAB_HOME = html.Div(
                             primaryLengthUnit="kilometers",
                             primaryAreaUnit="hectares",
                             activeColor="#214097",
-                            completedColor="#972158"
+                            completedColor="#972158",
                         ),
                         # SIDEBAR_BUTTON,
                         search_bar,

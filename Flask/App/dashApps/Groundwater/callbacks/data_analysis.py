@@ -26,37 +26,57 @@ GEOJSON_LOCATION = {
     "BASIN1" : {
         "url": "./Assets/GeoJson/Basin1.geojson",
         "options": {
-            "color": "red",
-            "fillColor": "None",
+            "weight": "5",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "blue",
+            "opacity": "1",
+            "fillColor": "blue",
+            "fillOpacity": "0.01",
         }
     },
     "BASIN2" : {
         "url": "./Assets/GeoJson/Basin2.geojson",
         "options": {
-            "color": "green",
-            "fillColor": "None",
+            "weight": "5",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "blue",
+            "opacity": "1",
+            "fillColor": "blue",
+            "fillOpacity": "0.01",
         }
     },
     "MAHDOUDE" : {
         "url": "./Assets/GeoJson/Mahdoude.geojson",
         "options": {
-            "color": "gray",
-            "fillColor": "None",
+            "weight": "5",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "blue",
+            "opacity": "1",
+            "fillColor": "blue",
+            "fillOpacity": "0.01",
         }
     },
     "AQUIFER" : {
         "url": "./Assets/GeoJson/Aquifer.geojson",
         "options": {
-            "color": "red",
-            "fillColor": "None",
+            "weight": "5",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "blue",
+            "opacity": "1",
+            "fillColor": "blue",
+            "fillOpacity": "0.01",
         }
     },
     "COUNTRY" : {
         "url": "./Assets/GeoJson/Country.geojson",
         "options": {
-            "weight": "3",
-            "dashArray": "10, 10",
-            "dashOffset": "10",
+            "weight": "1",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
             "color": "black",
             "opacity": "1",
             "fillColor": "black",
@@ -66,27 +86,37 @@ GEOJSON_LOCATION = {
     "PROVINCE" : {
         "url": "./Assets/GeoJson/Province.geojson",
         "options": {
-            "weight": "3",
-            "dashArray": "10, 10",
-            "dashOffset": "10",
-            "color": "blue",
+            "weight": "1",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "black",
             "opacity": "1",
-            "fillColor": "blue",
+            "fillColor": "black",
             "fillOpacity": "0.01",
         }
     },
     "COUNTY" : {
         "url": "./Assets/GeoJson/County.geojson",
         "options": {
-            "color": "#f9f9f9",
-            "fillColor": "None",
+            "weight": "1",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "black",
+            "opacity": "1",
+            "fillColor": "black",
+            "fillOpacity": "0.01",
         }
     },
     "DISTRICT" : {
         "url": "./Assets/GeoJson/District.geojson",
         "options": {
-            "color": "#e2e2e2",
-            "fillColor": "None",
+            "weight": "1",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "black",
+            "opacity": "1",
+            "fillColor": "black",
+            "fillOpacity": "0.01",
         }
     },
 }
