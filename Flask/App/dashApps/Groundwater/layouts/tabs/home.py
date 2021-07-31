@@ -22,12 +22,26 @@ HOME = html.Div(
             data="HIDDEN"
         ),
 
+        dcc.Store(
+            id="MAP_ITEM-TAB_HOME_BODY",
+        ),
+
+        dcc.Interval(
+            id='interval-component',
+            interval=1*1000, # in milliseconds
+            n_intervals=0
+        ),
+
+        html.H1(
+            id="test",
+            className="text-left"
+        ),
+
         # Sidebar ---------------------
         SIDEBAR_TAB_HOME,
 
-
         # Body ------------------------
-        BODY_TAB_HOME
+        BODY_TAB_HOME        
 
     ],
     className="container-fluid p-0 m-0"

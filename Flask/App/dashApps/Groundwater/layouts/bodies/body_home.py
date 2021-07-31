@@ -28,8 +28,8 @@ SIDEBAR_BUTTON = html.Div(
 
 
 
-info = html.Div(
-    id="info",
+MAP_INFO = html.Div(
+    id="MAP_INFO-TAB_HOME_BODY",
     className="info",
     style={
         "position": "absolute",
@@ -152,7 +152,7 @@ BODY_TAB_HOME = html.Div(
                         ),
                         # SIDEBAR_BUTTON,
                         search_bar,
-                        info
+                        MAP_INFO
                     ],
                     style={
                         'height': '93vh',

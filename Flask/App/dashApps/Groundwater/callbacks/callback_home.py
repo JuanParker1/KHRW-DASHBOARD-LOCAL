@@ -18,6 +18,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import dash_table
 import geojson
+import ast
 
 
 from App.dashApps.Groundwater.callbacks.data_analysis import *
@@ -53,7 +54,6 @@ def groundwater_callback_home(app):
             content_style = "CONTENT-WITHOUT-SIDEBAR"
             cur_nclick = 'HIDDEN'
             btn_classname = "fas fa-align-justify fa-2x BTN-SIDEBAR-CLOSE"
-                
 
         return sidebar_style, content_style, cur_nclick, btn_classname
 
@@ -161,7 +161,8 @@ def groundwater_callback_home(app):
 
 
     @app.callback(
-        Output("MAP-TAB_HOME_BODY", "children"),   
+        Output("MAP-TAB_HOME_BODY", "children"),
+        Output("MAP_ITEM-TAB_HOME_BODY", "data"),
         Input("ADD_POLITICAL_MAP-TAB_HOME_SIDEBAR", "value"),
         Input("ADD_WATER_MAP-TAB_HOME_SIDEBAR", "value"),
         State("MAP-TAB_HOME_BODY", "children"),
@@ -171,32 +172,30 @@ def groundwater_callback_home(app):
         political_map_value, water_map_value,
         map_children_state, water_map_state
     ):
+        global inputs_callback
 
         if (not political_map_value) & (not water_map_value):
-            map_value = None
+            map_items = []
         elif (not political_map_value):
-            map_value = water_map_value
+            map_items = water_map_value
         elif (not water_map_value):
-            map_value = political_map_value
+            map_items = political_map_value
         else:
-            map_value = political_map_value + water_map_value
+            map_items = political_map_value + water_map_value
 
-        if not map_value:
+        if not map_items:
             result = map_children_state[:4]
-            return result
+            inputs_callback = [Input(f"{i}_MAP-TAB_HOME_BODY", "hover_feature") for i in map_items]
+            return result, map_items
         
         result = map_children_state[:4]
 
-        for i in map_value:
-
-            print(GEOJSON_LOCATION[i]["url"])
+        for i in map_items:
 
             with open(GEOJSON_LOCATION[i]["url"]) as f:
                 data = geojson.load(f)
 
             data = dlx.geojson_to_geobuf(data)
-
-            print(data)
 
             ID = f"{i}_MAP-TAB_HOME_BODY"
 
@@ -207,21 +206,124 @@ def groundwater_callback_home(app):
                 zoomToBounds=True,
                 hoverStyle=arrow_function(
                     dict(
-                        weight=10,
                         color="green",
-                        dashArray=''
+                        weight=10,
+                        fillColor="green",
+                        fillOpacity=0.2,
                     )
                 ),
                 options=GEOJSON_LOCATION[i]["options"],
                 )
             ]
+        inputs_callback = [Input(f"{i}_MAP-TAB_HOME_BODY", "hover_feature") for i in map_items]
+        return result, map_items
 
-        return result
+
+    
+
+    @app.callback(
+        Output("test", "children"),
+        # Input('interval-component', 'n_intervals'),
+        inputs_callback,
+    )
+    def FUNCTION_MAP_INFO_TAB_HOME_BODY(
+        *args
+    ):
+        for i in args:
+            print("inja:", i)
+        return "inputs_callback"
 
 
+
+
+    
         
         
+    # @app.callback(
+    #     Output("MAP_INFO-TAB_HOME_BODY", "children"),
+    #     Input('interval-component', 'n_intervals'),
+    #     Input('MAP_ITEM-TAB_HOME_BODY', 'data'),
+    # )
+    # def FUNCTION_MAP_INFO_TAB_HOME_BODY(
+    #     n, A,
+    # ):
+    #     print(A)
+    #     return html.Span("موس را روی یک عارضه نگه دارید")
 
+        # if BASIN1:
+        #     return [
+        #         html.Span("حوزه آبریز درجه یک"),
+        #         html.H6(BASIN1['properties']['FULL_NAME']),
+        #         html.Hr(className="mt-0 mb-1 py-0"),
+        #         html.Span("کد حوزه آبریز: "),
+        #         html.Span(BASIN1['properties']['CODE'], className="text-info"),
+        #         html.Br(),
+        #         html.Span("مساحت: "),
+        #         html.Span(f"{int(round(BASIN1['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
+        #         html.Br(),
+        #         html.Span("محیط: "),
+        #         html.Span(f"{int(round(BASIN1['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
+        #     ]
+        # elif BASIN2:
+        #     return [
+        #         html.Span("حوزه آبریز درجه دو"),
+        #         html.H6(BASIN2['properties']['FULL_NAME']),
+        #         html.Hr(className="mt-0 mb-1 py-0"),
+        #         html.Span("کد حوزه آبریز: "),
+        #         html.Span(BASIN2['properties']['CODE'], className="text-info"),
+        #         html.Br(),
+        #         html.Span("مساحت: "),
+        #         html.Span(f"{int(round(BASIN2['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
+        #         html.Br(),
+        #         html.Span("محیط: "),
+        #         html.Span(f"{int(round(BASIN2['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
+        #     ]
+        # else:
+        #     return html.Span("موس را روی یک عارضه نگه دارید")
+
+        # elif f_mahdoude:
+        #     return [
+        #         html.Span("محدوده مطالعاتی"),
+        #         html.H6(f_mahdoude['properties']['NAME']),
+        #         html.Hr(className="mt-0 mb-1 py-0"),
+        #         html.Span("کد محدوده مطالعاتی: "),
+        #         html.Span(f_mahdoude['properties']['CODE'], className="text-info"),
+        #         html.Br(),
+        #         html.Span("امور: "),
+        #         html.Span(f_mahdoude['properties']['OMOR'], className="text-info"),
+        #         html.Br(),
+        #         html.Span("مساحت: "),
+        #         html.Span(f"{int(round(f_mahdoude['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
+        #         html.Br(),
+        #         html.Span("محیط: "),
+        #         html.Span(f"{int(round(f_mahdoude['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
+        #     ]
+        # elif f_ostan:
+        #     return [
+        #         html.Span("استان"),
+        #         html.H6(f_ostan['properties']['NAME']),
+        #         html.Hr(className="mt-0 mb-1 py-0"),
+        #         html.Span("مساحت: "),
+        #         html.Span(f"{int(round(f_ostan['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
+        #         html.Br(),
+        #         html.Span("محیط: "),
+        #         html.Span(f"{int(round(f_ostan['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
+        #     ]
+        # elif f_shahrestan:
+        #     return [
+        #         html.Span("شهرستان"),
+        #         html.H6(f_shahrestan['properties']['NAME']),
+        #         html.Hr(className="mt-0 mb-1 py-0"),
+        #         html.Span("استان: "),
+        #         html.Span(f_shahrestan['properties']['OSTAN'], className="text-info"),
+        #         html.Br(),
+        #         html.Span("مساحت: "),
+        #         html.Span(f"{int(round(f_shahrestan['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
+        #         html.Br(),
+        #         html.Span("محیط: "),
+        #         html.Span(f"{int(round(f_shahrestan['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
+        #     ]
+        # 
 
 
 
@@ -338,94 +440,7 @@ def groundwater_callback_home(app):
                 raise PreventUpdate
                 
         
-    @app.callback(
-        Output("info", "children"), 
-        Input("hozeh6", "hover_feature"),
-        Input("hozeh30", "hover_feature"),
-        Input("mahdoude", "hover_feature"),
-        Input("ostan", "hover_feature"),
-        Input("shahrestan", "hover_feature"),
-    )
-    def ostan_click(
-        f_hozeh6,
-        f_hozeh30,
-        f_mahdoude,
-        f_ostan,
-        f_shahrestan
-    ):
 
-        if f_hozeh6:
-            return [
-                html.Span("حوزه آبریز درجه یک"),
-                html.H6(f_hozeh6['properties']['FULL_NAME']),
-                html.Hr(className="mt-0 mb-1 py-0"),
-                html.Span("کد حوزه آبریز: "),
-                html.Span(f_hozeh6['properties']['CODE'], className="text-info"),
-                html.Br(),
-                html.Span("مساحت: "),
-                html.Span(f"{int(round(f_hozeh6['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
-                html.Br(),
-                html.Span("محیط: "),
-                html.Span(f"{int(round(f_hozeh6['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
-            ]
-        elif f_hozeh30:
-            return [
-                html.Span("حوزه آبریز درجه دو"),
-                html.H6(f_hozeh30['properties']['FULL_NAME']),
-                html.Hr(className="mt-0 mb-1 py-0"),
-                html.Span("کد حوزه آبریز: "),
-                html.Span(f_hozeh30['properties']['CODE'], className="text-info"),
-                html.Br(),
-                html.Span("مساحت: "),
-                html.Span(f"{int(round(f_hozeh30['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
-                html.Br(),
-                html.Span("محیط: "),
-                html.Span(f"{int(round(f_hozeh30['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
-            ]
-        elif f_mahdoude:
-            return [
-                html.Span("محدوده مطالعاتی"),
-                html.H6(f_mahdoude['properties']['NAME']),
-                html.Hr(className="mt-0 mb-1 py-0"),
-                html.Span("کد محدوده مطالعاتی: "),
-                html.Span(f_mahdoude['properties']['CODE'], className="text-info"),
-                html.Br(),
-                html.Span("امور: "),
-                html.Span(f_mahdoude['properties']['OMOR'], className="text-info"),
-                html.Br(),
-                html.Span("مساحت: "),
-                html.Span(f"{int(round(f_mahdoude['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
-                html.Br(),
-                html.Span("محیط: "),
-                html.Span(f"{int(round(f_mahdoude['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
-            ]
-        elif f_ostan:
-            return [
-                html.Span("استان"),
-                html.H6(f_ostan['properties']['NAME']),
-                html.Hr(className="mt-0 mb-1 py-0"),
-                html.Span("مساحت: "),
-                html.Span(f"{int(round(f_ostan['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
-                html.Br(),
-                html.Span("محیط: "),
-                html.Span(f"{int(round(f_ostan['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
-            ]
-        elif f_shahrestan:
-            return [
-                html.Span("شهرستان"),
-                html.H6(f_shahrestan['properties']['NAME']),
-                html.Hr(className="mt-0 mb-1 py-0"),
-                html.Span("استان: "),
-                html.Span(f_shahrestan['properties']['OSTAN'], className="text-info"),
-                html.Br(),
-                html.Span("مساحت: "),
-                html.Span(f"{int(round(f_shahrestan['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
-                html.Br(),
-                html.Span("محیط: "),
-                html.Span(f"{int(round(f_shahrestan['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
-            ]
-        else:
-            return html.Span("موس را روی یک عارضه نگه دارید")
 
 
     @app.callback(

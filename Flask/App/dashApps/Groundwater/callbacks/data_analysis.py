@@ -10,67 +10,13 @@ import statistics
 import Assets.jalali as jalali
 import json
 import sqlite3
-
-
-# -----------------------------------------------------------------------------
-# SHAPEFILES LOCATION
-# -----------------------------------------------------------------------------
-AQUIFERS = "./App/static/shapefiles/Aquifers/Aquifers.shp"
-AREASTUDIES = "./App/static/shapefiles/AreaStudies/AreaStudies.shp"
+from dash.dependencies import Input, Output, State
 
 
 # -----------------------------------------------------------------------------
 # GEOJSON LOCATION
 # -----------------------------------------------------------------------------
 GEOJSON_LOCATION = {
-    "BASIN1" : {
-        "url": "./Assets/GeoJson/Basin1.geojson",
-        "options": {
-            "weight": "5",
-            # "dashArray": "10, 10",
-            # "dashOffset": "10",
-            "color": "blue",
-            "opacity": "1",
-            "fillColor": "blue",
-            "fillOpacity": "0.01",
-        }
-    },
-    "BASIN2" : {
-        "url": "./Assets/GeoJson/Basin2.geojson",
-        "options": {
-            "weight": "5",
-            # "dashArray": "10, 10",
-            # "dashOffset": "10",
-            "color": "blue",
-            "opacity": "1",
-            "fillColor": "blue",
-            "fillOpacity": "0.01",
-        }
-    },
-    "MAHDOUDE" : {
-        "url": "./Assets/GeoJson/Mahdoude.geojson",
-        "options": {
-            "weight": "5",
-            # "dashArray": "10, 10",
-            # "dashOffset": "10",
-            "color": "blue",
-            "opacity": "1",
-            "fillColor": "blue",
-            "fillOpacity": "0.01",
-        }
-    },
-    "AQUIFER" : {
-        "url": "./Assets/GeoJson/Aquifer.geojson",
-        "options": {
-            "weight": "5",
-            # "dashArray": "10, 10",
-            # "dashOffset": "10",
-            "color": "blue",
-            "opacity": "1",
-            "fillColor": "blue",
-            "fillOpacity": "0.01",
-        }
-    },
     "COUNTRY" : {
         "url": "./Assets/GeoJson/Country.geojson",
         "options": {
@@ -119,8 +65,57 @@ GEOJSON_LOCATION = {
             "fillOpacity": "0.01",
         }
     },
+    "BASIN1" : {
+        "url": "./Assets/GeoJson/Basin1.geojson",
+        "options": {
+            "weight": "5",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "blue",
+            "opacity": "1",
+            "fillColor": "blue",
+            "fillOpacity": "0.01",
+        }
+    },
+    "BASIN2" : {
+        "url": "./Assets/GeoJson/Basin2.geojson",
+        "options": {
+            "weight": "5",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "blue",
+            "opacity": "1",
+            "fillColor": "blue",
+            "fillOpacity": "0.01",
+        }
+    },
+    "MAHDOUDE" : {
+        "url": "./Assets/GeoJson/Mahdoude.geojson",
+        "options": {
+            "weight": "5",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "blue",
+            "opacity": "1",
+            "fillColor": "blue",
+            "fillOpacity": "0.01",
+        }
+    },
+    "AQUIFER" : {
+        "url": "./Assets/GeoJson/Aquifer.geojson",
+        "options": {
+            "weight": "5",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "blue",
+            "opacity": "1",
+            "fillColor": "blue",
+            "fillOpacity": "0.01",
+        }
+    },
 }
 
+inputs_callback = [Input(f"AQUIFER_MAP-TAB_HOME_BODY", "hover_feature")]
 
 # -----------------------------------------------------------------------------
 # IMAGE LOCATION
@@ -177,6 +172,8 @@ TOPOGRAPHIC = base64.b64encode(
 
 TOPOGRAPHIC_URL = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
 
+
+# DARK BASE MAP
 DARK = base64.b64encode(
     open("./App/static/images/base_map/Dark.png", 'rb').read()
 ).decode()
@@ -546,23 +543,23 @@ def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_
 
 
 
-# -----------------------------------------------------------------------------
-# READ SHAPEFILES
-# -----------------------------------------------------------------------------
-# EDITPATH
-def read_shapfile(
-        file_path = AREASTUDIES,
-        mah_code = None
-):
-    if mah_code is not None:
-        geodf = gpd.read_file(file_path, encoding='windows-1256')
-        geodf = geodf[geodf['Mah_Code'].isin(mah_code)]
-        j_file = json.loads(geodf.to_json())
+# # -----------------------------------------------------------------------------
+# # READ SHAPEFILES
+# # -----------------------------------------------------------------------------
+# # EDITPATH
+# def read_shapfile(
+#         file_path = AREASTUDIES,
+#         mah_code = None
+# ):
+#     if mah_code is not None:
+#         geodf = gpd.read_file(file_path, encoding='windows-1256')
+#         geodf = geodf[geodf['Mah_Code'].isin(mah_code)]
+#         j_file = json.loads(geodf.to_json())
 
-        for feature in j_file["features"]:
-            feature['id'] = feature['properties']['Mah_Code']
+#         for feature in j_file["features"]:
+#             feature['id'] = feature['properties']['Mah_Code']
 
-        return geodf, j_file
+#         return geodf, j_file
 
 
 

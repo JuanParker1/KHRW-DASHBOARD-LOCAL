@@ -175,8 +175,7 @@ COLLAPSE_POLITICAL_MAP = html.Div(
                     className="fas fa-caret-left ml-2",
                     id="ARROW-TAB_HOME_SIDEBAR_COLLAPSE_POLITICAL_MAP"
                 ),
-                "مرزهای سیاسی",
-          
+                "مرزهای سیاسی",        
             ],
             id="OPEN_CLOSE-TAB_HOME_SIDEBAR_COLLAPSE_POLITICAL_MAP",
             n_clicks=0,

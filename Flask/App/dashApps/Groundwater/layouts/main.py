@@ -75,19 +75,20 @@ TAB_PAN = html.Div(
 # Main Layout
 # -----------------------------------------------------------------------------
 
-MAIN_LAYOUT = html.Div(
-    children=[
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        TAB_PAN
-                    ],
-                    className="col m-0 p-0"
-                )
-            ],
-            className="row m-0 p-0"
-        )
-    ],
-    className="container-fluid m-0 p-0"
-)
+def MAIN_LAYOUT():
+    return html.Div(
+        children=[
+            html.Div(
+                children=[
+                    html.Div(
+                        children=[
+                            TAB_PAN
+                        ],
+                        className="col m-0 p-0"
+                    )
+                ],
+                className="row m-0 p-0"
+            )
+        ],
+        className="container-fluid m-0 p-0"
+    )

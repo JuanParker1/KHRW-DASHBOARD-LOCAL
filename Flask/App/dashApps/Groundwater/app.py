@@ -33,7 +33,7 @@ def create_groundwater_app(server):
         prevent_initial_callbacks=True
     )
     
-    groundwater_app.layout = MAIN_LAYOUT
+    groundwater_app.layout = MAIN_LAYOUT()
     
     groundwater_callback(app=groundwater_app)
 
