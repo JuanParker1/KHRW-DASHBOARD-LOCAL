@@ -27,14 +27,10 @@ HOME = html.Div(
         ),
 
         dcc.Interval(
-            id='interval-component',
-            interval=1*1000, # in milliseconds
-            n_intervals=0
-        ),
-
-        html.H1(
-            id="test",
-            className="text-left"
+            id='INTERVAL_COMPONENT-TAB_HOME_BODY',
+            interval=1 * 1000,
+            n_intervals=0,
+            max_intervals=5
         ),
 
         # Sidebar ---------------------

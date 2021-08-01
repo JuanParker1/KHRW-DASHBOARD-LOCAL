@@ -13,7 +13,6 @@ from App.dashApps.Groundwater.callbacks.data_analysis import *
 # ELEMAN ON MAP
 # -----------------------------------------------------------------------------
 
-# BUTTON SIDEBAR
 SIDEBAR_BUTTON = html.Div(
     children=[
         html.I(
@@ -24,10 +23,6 @@ SIDEBAR_BUTTON = html.Div(
 )
 
 
-
-
-
-
 MAP_INFO = html.Div(
     id="MAP_INFO-TAB_HOME_BODY",
     className="info",
@@ -36,25 +31,42 @@ MAP_INFO = html.Div(
         "bottom": "10px",
         "left": "10px",
         "zIndex": "1000",
-        "font-family": "Tanha-FD",
-        "font-size": "small"
+        "font-family": "Vazir",
+        "font-size": "small",
+        "line-height": "1.5"
     },
     dir="rtl"
 )
 
 
+SHOW_COORDINATE = html.Div(
+    id="SHOW_COORDINATE_INFO-TAB_HOME_BODY",
+    className="info",
+    style={
+        "position": "absolute",
+        "bottom": "10px",
+        "left": "50%",
+        "transform": "translateX(-50%)",
+        "zIndex": "1000",
+        "font-family": "Vazir",
+        "font-size": "small",
+        "line-height": "1.5"
+    },
+    dir="rtl"
+)
 
-search_bar = html.Div(
+
+SEARCH_BAR = html.Div(
     children=[
         dcc.Input(
-            id="search_coordinate",
+            id="SEARCH-TAB_HOME_BODY",
             placeholder="جستجو",
             type="search",
             debounce=True,
-            className="searchicon text-right"
+            className="searchicon text-center"
         ),
         dbc.Tooltip(
-            target="search_coordinate",
+            target="SEARCH-TAB_HOME_BODY",
             autohide=True,
             placement="right",
             hide_arrow=True,
@@ -109,8 +121,8 @@ search_bar = html.Div(
             ],
             style = {
                 "maxWidth": "50rem",
-                "width": "30rem"
-            }
+                "width": "30rem",
+            },
         ),
     ],
     style={
@@ -143,6 +155,16 @@ BODY_TAB_HOME = html.Div(
                             attribution=ATTRIBUTION,
                             id="BASE_MAP-TAB_HOME_BODY"
                         ),
+                        dl.LayerGroup(
+                            id="CLICK_LAYER-TAB_HOME_BODY"
+                        ),
+                        dl.LocateControl(
+                            options={
+                                'locateOptions': {
+                                    'enableHighAccuracy': True
+                                }
+                            }
+                        ),
                         dl.MeasureControl(
                             position="topleft",
                             primaryLengthUnit="kilometers",
@@ -150,9 +172,15 @@ BODY_TAB_HOME = html.Div(
                             activeColor="#214097",
                             completedColor="#972158",
                         ),
+                        dl.FeatureGroup([
+                            dl.EditControl(id="edit_control"),
+                            
+                        ]),
+
                         # SIDEBAR_BUTTON,
-                        search_bar,
-                        MAP_INFO
+                        SEARCH_BAR,
+                        MAP_INFO,
+                        # SHOW_COORDINATE
                     ],
                     style={
                         'height': '93vh',

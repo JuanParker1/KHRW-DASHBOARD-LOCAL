@@ -30,7 +30,8 @@ def create_groundwater_app(server):
         external_stylesheets=external_stylesheets,
         external_scripts=external_scripts,
         title='آب زیرزمینی',
-        prevent_initial_callbacks=True
+        prevent_initial_callbacks=True,
+        suppress_callback_exceptions=True
     )
     
     groundwater_app.layout = MAIN_LAYOUT()

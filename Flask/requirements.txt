@@ -18,7 +18,7 @@ dash_daq
 pyarrow
 folium
 altair
-dash-leaflet
+dash-leaflet == 0.1.16
 dash-extensions
 jsbeautifier
 utm

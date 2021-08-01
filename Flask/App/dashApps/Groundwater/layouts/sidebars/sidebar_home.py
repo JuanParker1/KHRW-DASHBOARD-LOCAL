@@ -241,6 +241,7 @@ COLLAPSE_WATER_MAP = html.Div(
                                         {'label': 'محدوده‌های مطالعاتی', 'value': 'MAHDOUDE'},
                                         {'label': 'آبخوان‌ها', 'value': 'AQUIFER'},
                                     ],
+                                    value=["MAHDOUDE"],
                                     id="ADD_WATER_MAP-TAB_HOME_SIDEBAR",
                                     labelClassName  ="list-group-item p-0 m-0 py-2",
                                     inputClassName="mx-2"

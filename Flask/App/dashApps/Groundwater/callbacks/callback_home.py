@@ -5,7 +5,7 @@ import dash
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import dash_html_components as html
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output, State, MATCH, ALL, ALLSMALLER
 from dash.exceptions import PreventUpdate
 from dash_html_components.Hr import Hr
 import dash_leaflet as dl
@@ -19,7 +19,8 @@ import plotly.graph_objects as go
 import dash_table
 import geojson
 import ast
-
+import time
+import utm
 
 from App.dashApps.Groundwater.callbacks.data_analysis import *
 
@@ -165,15 +166,14 @@ def groundwater_callback_home(app):
         Output("MAP_ITEM-TAB_HOME_BODY", "data"),
         Input("ADD_POLITICAL_MAP-TAB_HOME_SIDEBAR", "value"),
         Input("ADD_WATER_MAP-TAB_HOME_SIDEBAR", "value"),
+        Input("INTERVAL_COMPONENT-TAB_HOME_BODY", "n_intervals"),
         State("MAP-TAB_HOME_BODY", "children"),
         State("ADD_WATER_MAP-TAB_HOME_SIDEBAR", "value"),
     )
     def FUNCTION_ADD_SELECTED_GEOJSON_MAP_TAB_HOME_SIDEBAR(
-        political_map_value, water_map_value,
+        political_map_value, water_map_value, n,
         map_children_state, water_map_state
     ):
-        global inputs_callback
-
         if (not political_map_value) & (not water_map_value):
             map_items = []
         elif (not political_map_value):
@@ -184,24 +184,20 @@ def groundwater_callback_home(app):
             map_items = political_map_value + water_map_value
 
         if not map_items:
-            result = map_children_state[:4]
-            inputs_callback = [Input(f"{i}_MAP-TAB_HOME_BODY", "hover_feature") for i in map_items]
+            result = map_children_state[:7]
+            map_items = []
             return result, map_items
         
-        result = map_children_state[:4]
+        result = map_children_state[:7]
 
         for i in map_items:
 
-            with open(GEOJSON_LOCATION[i]["url"]) as f:
-                data = geojson.load(f)
-
-            data = dlx.geojson_to_geobuf(data)
-
-            ID = f"{i}_MAP-TAB_HOME_BODY"
-
-            result = result + [dl.GeoJSON(
-                data=data,
-                id=ID,
+            NEW_MAP = dl.GeoJSON(
+                data=GEOJSON_LOCATION[i]["data"],
+                id={
+                    'type': '*_MAP-TAB_HOME_BODY',
+                    'index': i
+                },
                 format="geobuf",
                 zoomToBounds=True,
                 hoverStyle=arrow_function(
@@ -213,247 +209,273 @@ def groundwater_callback_home(app):
                     )
                 ),
                 options=GEOJSON_LOCATION[i]["options"],
-                )
-            ]
-        inputs_callback = [Input(f"{i}_MAP-TAB_HOME_BODY", "hover_feature") for i in map_items]
+            )
+
+            result.append(NEW_MAP)
+
         return result, map_items
 
 
-    
-
     @app.callback(
-        Output("test", "children"),
-        # Input('interval-component', 'n_intervals'),
-        inputs_callback,
+        Output("MAP_INFO-TAB_HOME_BODY", "children"),
+        Input({"type": "*_MAP-TAB_HOME_BODY", 'index': ALL}, 'hover_feature')
     )
     def FUNCTION_MAP_INFO_TAB_HOME_BODY(
-        *args
+        maps
     ):
-        for i in args:
-            print("inja:", i)
-        return "inputs_callback"
-
-
-
-
-    
-        
-        
-    # @app.callback(
-    #     Output("MAP_INFO-TAB_HOME_BODY", "children"),
-    #     Input('interval-component', 'n_intervals'),
-    #     Input('MAP_ITEM-TAB_HOME_BODY', 'data'),
-    # )
-    # def FUNCTION_MAP_INFO_TAB_HOME_BODY(
-    #     n, A,
-    # ):
-    #     print(A)
-    #     return html.Span("موس را روی یک عارضه نگه دارید")
-
-        # if BASIN1:
-        #     return [
-        #         html.Span("حوزه آبریز درجه یک"),
-        #         html.H6(BASIN1['properties']['FULL_NAME']),
-        #         html.Hr(className="mt-0 mb-1 py-0"),
-        #         html.Span("کد حوزه آبریز: "),
-        #         html.Span(BASIN1['properties']['CODE'], className="text-info"),
-        #         html.Br(),
-        #         html.Span("مساحت: "),
-        #         html.Span(f"{int(round(BASIN1['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
-        #         html.Br(),
-        #         html.Span("محیط: "),
-        #         html.Span(f"{int(round(BASIN1['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
-        #     ]
-        # elif BASIN2:
-        #     return [
-        #         html.Span("حوزه آبریز درجه دو"),
-        #         html.H6(BASIN2['properties']['FULL_NAME']),
-        #         html.Hr(className="mt-0 mb-1 py-0"),
-        #         html.Span("کد حوزه آبریز: "),
-        #         html.Span(BASIN2['properties']['CODE'], className="text-info"),
-        #         html.Br(),
-        #         html.Span("مساحت: "),
-        #         html.Span(f"{int(round(BASIN2['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
-        #         html.Br(),
-        #         html.Span("محیط: "),
-        #         html.Span(f"{int(round(BASIN2['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
-        #     ]
-        # else:
-        #     return html.Span("موس را روی یک عارضه نگه دارید")
-
-        # elif f_mahdoude:
-        #     return [
-        #         html.Span("محدوده مطالعاتی"),
-        #         html.H6(f_mahdoude['properties']['NAME']),
-        #         html.Hr(className="mt-0 mb-1 py-0"),
-        #         html.Span("کد محدوده مطالعاتی: "),
-        #         html.Span(f_mahdoude['properties']['CODE'], className="text-info"),
-        #         html.Br(),
-        #         html.Span("امور: "),
-        #         html.Span(f_mahdoude['properties']['OMOR'], className="text-info"),
-        #         html.Br(),
-        #         html.Span("مساحت: "),
-        #         html.Span(f"{int(round(f_mahdoude['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
-        #         html.Br(),
-        #         html.Span("محیط: "),
-        #         html.Span(f"{int(round(f_mahdoude['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
-        #     ]
-        # elif f_ostan:
-        #     return [
-        #         html.Span("استان"),
-        #         html.H6(f_ostan['properties']['NAME']),
-        #         html.Hr(className="mt-0 mb-1 py-0"),
-        #         html.Span("مساحت: "),
-        #         html.Span(f"{int(round(f_ostan['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
-        #         html.Br(),
-        #         html.Span("محیط: "),
-        #         html.Span(f"{int(round(f_ostan['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
-        #     ]
-        # elif f_shahrestan:
-        #     return [
-        #         html.Span("شهرستان"),
-        #         html.H6(f_shahrestan['properties']['NAME']),
-        #         html.Hr(className="mt-0 mb-1 py-0"),
-        #         html.Span("استان: "),
-        #         html.Span(f_shahrestan['properties']['OSTAN'], className="text-info"),
-        #         html.Br(),
-        #         html.Span("مساحت: "),
-        #         html.Span(f"{int(round(f_shahrestan['properties']['AREA'],0))} کیلومتر مربع", className="text-info"),
-        #         html.Br(),
-        #         html.Span("محیط: "),
-        #         html.Span(f"{int(round(f_shahrestan['properties']['PERIMETER'],0))} کیلومتر", className="text-info"),
-        #     ]
-        # 
-
-
-
-
-
-
-
-
-
-
-
-
-    @app.callback(
-        Output("search_coordinate", "placeholder"),
-        Input("select_coordinate", "value"),
-    )
-    def search_coordinate_placeholder(coordinate):    
-        if coordinate == "LatLon":
-            return "Lat: 36.30 Lon: 59.60"
+        map_name = eval(dash.callback_context.triggered[0]["prop_id"].split('.')[0])["index"]
+        if dash.callback_context.triggered[0]['value']:
+            map_properties = dash.callback_context.triggered[0]['value']['properties']
+            if map_name == "BASIN1":
+                return [
+                    html.Span("حوزه آبریز درجه یک"),
+                    html.H6(map_properties['FULL_NAME']),
+                    html.Hr(className="mt-0 mb-1 py-0"),
+                    html.Span("کد حوزه آبریز: "),
+                    html.Span(map_properties['CODE'], className="text-info"),
+                    html.Br(),
+                    html.Span("مساحت: "),
+                    html.Span(f"{int(round(map_properties['AREA'],0))} کیلومتر مربع", className="text-info"),
+                    html.Br(),
+                    html.Span("محیط: "),
+                    html.Span(f"{int(round(map_properties['PERIMETER'],0))} کیلومتر", className="text-info"),
+                ]
+            elif map_name == "BASIN2":
+                return [
+                    html.Span("حوزه آبریز درجه دو"),
+                    html.H6(map_properties['FULL_NAME']),
+                    html.Hr(className="mt-0 mb-1 py-0"),
+                    html.Span("کد حوزه آبریز: "),
+                    html.Span(map_properties['CODE'], className="text-info"),
+                    html.Br(),
+                    html.Span("مساحت: "),
+                    html.Span(f"{int(round(map_properties['AREA'],0))} کیلومتر مربع", className="text-info"),
+                    html.Br(),
+                    html.Span("محیط: "),
+                    html.Span(f"{int(round(map_properties['PERIMETER'],0))} کیلومتر", className="text-info"),
+                ]
+            elif map_name == "MAHDOUDE":
+                return [
+                    html.Span("محدوده مطالعاتی"),
+                    html.H6(map_properties['NAME']),
+                    html.Hr(className="mt-0 mb-1 py-0"),
+                    html.Span("کد محدوده مطالعاتی: "),
+                    html.Span(map_properties['CODE'], className="text-info"),
+                    html.Br(),
+                    html.Span("امور: "),
+                    html.Span(map_properties['OMOR'], className="text-info"),
+                    html.Br(),
+                    html.Span("مساحت: "),
+                    html.Span(f"{int(round(map_properties['AREA'],0))} کیلومتر مربع", className="text-info"),
+                    html.Br(),
+                    html.Span("محیط: "),
+                    html.Span(f"{int(round(map_properties['PERIMETER'],0))} کیلومتر", className="text-info"),
+                ]
+            elif map_name == "AQUIFER":
+                return [
+                    html.Span("آبخوان"),
+                    html.H6(map_properties['AQUIFER_NAME']),
+                    html.Hr(className="mt-0 mb-1 py-0"),
+                    html.Span("محدوده مطالعاتی: "),
+                    html.Span(map_properties['MAHDOUDE_NAME'], className="text-info"),
+                    html.Br(),
+                    html.Span("کد محدوده مطالعاتی: "),
+                    html.Span(map_properties['MAHDOUDE_CODE'], className="text-info"),
+                    html.Br(),
+                    html.Span("مساحت: "),
+                    html.Span(f"{int(round(map_properties['AREA'],0))} کیلومتر مربع", className="text-info"),
+                ]
+            elif map_name == "COUNTRY":
+                return [
+                    html.Span("کشور"),
+                    html.H6(map_properties['NAME']),
+                    html.Hr(className="mt-0 mb-1 py-0"),
+                    html.Span("کد کشور: "),
+                    html.Span(map_properties['CODE'], className="text-info"),
+                ]
+            elif map_name == "PROVINCE":
+                return [
+                    html.Span("استان"),
+                    html.H6(map_properties['NAME']),
+                    html.Hr(className="mt-0 mb-1 py-0"),
+                    html.Span("کد استان: "),
+                    html.Span(map_properties['CODE'], className="text-info"),
+                ]
+            elif map_name == "COUNTY":
+                return [
+                    html.Span("شهرستان"),
+                    html.H6(map_properties['NAME']),
+                    html.Hr(className="mt-0 mb-1 py-0"),
+                    html.Span("استان: "),
+                    html.Span(map_properties['OSTAN'], className="text-info"),
+                    html.Br(),
+                    html.Span("مساحت: "),
+                    html.Span(f"{int(round(map_properties['AREA'],0))} کیلومتر مربع", className="text-info"),
+                    html.Br(),
+                    html.Span("محیط: "),
+                    html.Span(f"{int(round(map_properties['PERIMETER'],0))} کیلومتر", className="text-info"),
+                ]
+            elif map_name == "DISTRICT":
+                return [
+                    html.Span("بخش"),
+                    html.H6(map_properties['NAME']),
+                    html.Hr(className="mt-0 mb-1 py-0"),
+                    html.Span("شهرستان: "),
+                    html.Span(map_properties['SHAHRESTAN'], className="text-info"),
+                    html.Br(),
+                    html.Span("استان: "),
+                    html.Span(map_properties['OSTAN'], className="text-info"),
+                    html.Br(),
+                    html.Span("مساحت: "),
+                    html.Span(f"{int(round(map_properties['AREA'],0))} کیلومتر مربع", className="text-info"),
+                    html.Br(),
+                    html.Span("محیط: "),
+                    html.Span(f"{int(round(map_properties['PERIMETER'],0))} کیلومتر", className="text-info"),
+                ]
+            else:
+                return html.Span("موس را روی یک عارضه نگه دارید")
         else:
-            return "40S 433967 4016252"
+            return html.Span("موس را روی یک عارضه نگه دارید")
+
 
     @app.callback(
-        Output("layer", "children"),
-        Output("search_coordinate", "value"),
-        Output("map", "center"),
-        Input("map", "dbl_click_lat_lng"),
-        Input("search_coordinate", "value")
+        Output("CLICK_LAYER-TAB_HOME_BODY", "children"),
+        Output("SEARCH-TAB_HOME_BODY", "value"),
+        Output("MAP-TAB_HOME_BODY", "center"),
+        Input("MAP-TAB_HOME_BODY", "dbl_click_lat_lng"),
+        Input("SEARCH-TAB_HOME_BODY", "value")
     )
-    def map_dbl_click_or_search(dbl_click_lat_lng, search):    
-        if search is None or search == "" and dbl_click_lat_lng:
+    def map_dbl_click_or_search(dbl_click_lat_lng, search):
+
+        if (search is None or search == "") and (dbl_click_lat_lng is not None):
+            latlong_to_utm = utm.from_latlon(dbl_click_lat_lng[0], dbl_click_lat_lng[1])
             result = dl.Marker(
                 children=dl.Tooltip(
-                    "({:.3f}, {:.3f})".format(*dbl_click_lat_lng)
+                    html.Div(
+                        [
+                            html.Span("Lat: {:.2f}, Long: {:.2f}".format(dbl_click_lat_lng[0], dbl_click_lat_lng[1]), className="p-0 m-1"),
+                            html.Hr(className="p-0 m-1"),
+                            html.Span("{}{} {:.2f} {:.2f}".format(latlong_to_utm[2], latlong_to_utm[3], latlong_to_utm[0], latlong_to_utm[1]), className="p-0 m-1")
+                        ],
+                        className="text-center"
+                    ),
+                    direction="center"
                 ),
-                position=dbl_click_lat_lng
+                position=dbl_click_lat_lng,
             )
-            return [result], "", dbl_click_lat_lng      
+            return [result], "", dbl_click_lat_lng
+
         else:
-            search = list(
-                filter(
-                    ("").__ne__,
-                    search.split(" ")
-                )
-            )
+            if (search is not None and search != ""):
 
-            search = [check_user_input(x) for x in search]
-
-            print("1: ", search)
-
-            if len(search) == 2 and all([isinstance(x, (int, float)) for x in search]):
-                try:
-                    search_lat_lng = [float(x) for x in search]
-                    print("2: ", search_lat_lng)
-                    result = dl.Marker(
-                        children=dl.Tooltip(
-                            "({:.2f}, {:.2f})".format(*search_lat_lng)
-                        ),
-                        position=search_lat_lng
+                search = list(
+                    filter(
+                        ("").__ne__,
+                        search.split(" ")
                     )
-                    return [result], "", search_lat_lng
-                except:
-                    raise PreventUpdate
-            elif (len(search) == 4 or len(search) == 6) and all([isinstance(x, (int)) for x in search]):
-                if len(search) == 6:
+                )
+
+                search = [check_user_input(x) for x in search]
+
+                if len(search) == 2 and all([isinstance(x, (int, float)) for x in search]):
                     try:
-                        lat = search[0] + (search[1]/60) + (search[2]/3600)
-                        lng = search[3] + (search[4]/60) + (search[5]/3600)
-                        search_lat_lng = [lat, lng]
-                        print("3: ", search_lat_lng)
+                        search_lat_lng = [float(x) for x in search]
+                        latlong_to_utm = utm.from_latlon(search_lat_lng[0], search_lat_lng[1])
                         result = dl.Marker(
                             children=dl.Tooltip(
-                                "({:.2f}, {:.2f})".format(*search_lat_lng)
+                                html.Div(
+                                    [
+                                        html.Span("Lat: {:.2f}, Long: {:.2f}".format(search_lat_lng[0], search_lat_lng[1]), className="p-0 m-1"),
+                                        html.Hr(className="p-0 m-1"),
+                                        html.Span("{}{} {:.2f} {:.2f}".format(latlong_to_utm[2], latlong_to_utm[3], latlong_to_utm[0], latlong_to_utm[1]), className="p-0 m-1")
+                                    ],
+                                    className="text-center p-0 m-1"
+                                ),
+                                direction="center"
                             ),
                             position=search_lat_lng
                         )
                         return [result], "", search_lat_lng
                     except:
                         raise PreventUpdate
-                elif len(search) == 4:
+                elif (len(search) == 4 or len(search) == 6) and all([isinstance(x, (int)) for x in search]):
+                    if len(search) == 6:
+                        try:
+                            lat = search[0] + (search[1]/60) + (search[2]/3600)
+                            lng = search[3] + (search[4]/60) + (search[5]/3600)
+                            search_lat_lng = [lat, lng]
+                            latlong_to_utm = utm.from_latlon(search_lat_lng[0], search_lat_lng[1])
+                            result = dl.Marker(
+                                children=dl.Tooltip(
+                                    html.Div(
+                                        [
+                                            html.Span("Lat: {:.2f}, Long: {:.2f}".format(search_lat_lng[0], search_lat_lng[1]), className="p-0 m-1"),
+                                            html.Hr(className="p-0 m-1"),
+                                            html.Span("{}{} {:.2f} {:.2f}".format(latlong_to_utm[2], latlong_to_utm[3], latlong_to_utm[0], latlong_to_utm[1]), className="p-0 m-1")
+                                        ],
+                                        className="text-center p-0 m-1"
+                                    ),
+                                    direction="center"
+                                ),
+                                position=search_lat_lng
+                            )
+                            return [result], "", search_lat_lng
+                        except:
+                            raise PreventUpdate
+                    elif len(search) == 4:
+                        try:
+                            lat = search[0] + (search[1]/60)
+                            lng = search[2] + (search[3]/60)
+                            search_lat_lng = [lat, lng]
+                            latlong_to_utm = utm.from_latlon(search_lat_lng[0], search_lat_lng[1])
+                            result = dl.Marker(
+                                children=dl.Tooltip(
+                                    html.Div(
+                                        [
+                                            html.Span("Lat: {:.2f}, Long: {:.2f}".format(search_lat_lng[0], search_lat_lng[1]), className="p-0 m-1"),
+                                            html.Hr(className="p-0 m-1"),
+                                            html.Span("{}{} {:.2f} {:.2f}".format(latlong_to_utm[2], latlong_to_utm[3], latlong_to_utm[0], latlong_to_utm[1]), className="p-0 m-1")
+                                        ],
+                                        className="text-center p-0 m-1"
+                                    ),
+                                    direction="center"
+                                ),
+                                position=search_lat_lng
+                            )
+                            return [result], "", search_lat_lng
+                        except:
+                            raise PreventUpdate
+                    else:
+                        raise PreventUpdate
+                elif len(search) == 3 and isinstance(search[0], (str)) and\
+                    all([isinstance(x, (int, float)) for x in search[1:3]]) and\
+                        len(str(int(search[1]))) == 6 and len(str(int(search[2]))) == 7:
                     try:
-                        lat = search[0] + (search[1]/60)
-                        lng = search[2] + (search[3]/60)
-                        search_lat_lng = [lat, lng]
-                        print("4: ", search_lat_lng)
+                        p = pyproj.Proj(proj='utm', ellps='WGS84', zone=int(search[0][0:2]))
+                        p = p(float(search[1]), float(search[2]), inverse=True)
                         result = dl.Marker(
                             children=dl.Tooltip(
-                                "({:.2f}, {:.2f})".format(*search_lat_lng)
+                                html.Div(
+                                    [
+                                        html.Span("Lat: {:.2f}, Long: {:.2f}".format(p[1], p[0]), className="p-0 m-1"),
+                                        html.Hr(className="p-0 m-1"),
+                                        html.Span("{} {} {}".format(search[0], search[1], search[2]), className="p-0 m-1")
+                                    ],
+                                    className="text-center p-0 m-1"
+                                ),
+                                direction="center",
                             ),
-                            position=search_lat_lng
+                            position=(p[1], p[0])
                         )
-                        return [result], "", search_lat_lng
+                        return [result], "", (p[1], p[0])
                     except:
                         raise PreventUpdate
                 else:
                     raise PreventUpdate
-            elif len(search) == 3 and isinstance(search[0], (str)) and\
-                all([isinstance(x, (int, float)) for x in search[1:3]]) and\
-                    len(str(int(search[1]))) == 6 and len(str(int(search[2]))) == 7:
-                try:
-                    p = pyproj.Proj(proj='utm', ellps='WGS84', zone=int(search[0][0:2]))
-                    p = p(float(search[1]), float(search[2]), inverse=True)
-                    print("5: ", p)
-                    result = dl.Marker(
-                        children=dl.Tooltip(
-                            "({:.2f}, {:.2f})".format(p[1], p[0])
-                        ),
-                        position=(p[1], p[0])
-                    )
-                    return [result], "", (p[1], p[0])
-                except:
-                    raise PreventUpdate
             else:
                 raise PreventUpdate
-                
-        
 
 
-
-    @app.callback(
-        Output("ostan", "children"),
-        Input("ostan", "hover_feature"),
-    )
-    def oss(feature_ostan):
-        if feature_ostan is not None:
-            return dl.Tooltip(
-                f"{feature_ostan['properties']['ostn_name']}"
-            )
-        else:
-            raise PreventUpdate
 
 
 

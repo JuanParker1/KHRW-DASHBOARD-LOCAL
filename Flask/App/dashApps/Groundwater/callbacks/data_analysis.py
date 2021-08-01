@@ -12,6 +12,9 @@ import json
 import sqlite3
 from dash.dependencies import Input, Output, State
 
+import dash_leaflet.express as dlx
+import geojson
+
 
 # -----------------------------------------------------------------------------
 # GEOJSON LOCATION
@@ -19,6 +22,7 @@ from dash.dependencies import Input, Output, State
 GEOJSON_LOCATION = {
     "COUNTRY" : {
         "url": "./Assets/GeoJson/Country.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Country.geojson"))),
         "options": {
             "weight": "1",
             # "dashArray": "10, 10",
@@ -31,6 +35,7 @@ GEOJSON_LOCATION = {
     },
     "PROVINCE" : {
         "url": "./Assets/GeoJson/Province.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Province.geojson"))),
         "options": {
             "weight": "1",
             # "dashArray": "10, 10",
@@ -43,6 +48,7 @@ GEOJSON_LOCATION = {
     },
     "COUNTY" : {
         "url": "./Assets/GeoJson/County.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/County.geojson"))),
         "options": {
             "weight": "1",
             # "dashArray": "10, 10",
@@ -55,6 +61,7 @@ GEOJSON_LOCATION = {
     },
     "DISTRICT" : {
         "url": "./Assets/GeoJson/District.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/District.geojson"))),
         "options": {
             "weight": "1",
             # "dashArray": "10, 10",
@@ -67,6 +74,7 @@ GEOJSON_LOCATION = {
     },
     "BASIN1" : {
         "url": "./Assets/GeoJson/Basin1.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Basin1.geojson"))),
         "options": {
             "weight": "5",
             # "dashArray": "10, 10",
@@ -79,6 +87,7 @@ GEOJSON_LOCATION = {
     },
     "BASIN2" : {
         "url": "./Assets/GeoJson/Basin2.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Basin2.geojson"))),
         "options": {
             "weight": "5",
             # "dashArray": "10, 10",
@@ -91,6 +100,7 @@ GEOJSON_LOCATION = {
     },
     "MAHDOUDE" : {
         "url": "./Assets/GeoJson/Mahdoude.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Mahdoude.geojson"))),
         "options": {
             "weight": "5",
             # "dashArray": "10, 10",
@@ -103,6 +113,7 @@ GEOJSON_LOCATION = {
     },
     "AQUIFER" : {
         "url": "./Assets/GeoJson/Aquifer.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Aquifer.geojson"))),
         "options": {
             "weight": "5",
             # "dashArray": "10, 10",
@@ -112,10 +123,8 @@ GEOJSON_LOCATION = {
             "fillColor": "blue",
             "fillOpacity": "0.01",
         }
-    },
+    }
 }
-
-inputs_callback = [Input(f"AQUIFER_MAP-TAB_HOME_BODY", "hover_feature")]
 
 # -----------------------------------------------------------------------------
 # IMAGE LOCATION
