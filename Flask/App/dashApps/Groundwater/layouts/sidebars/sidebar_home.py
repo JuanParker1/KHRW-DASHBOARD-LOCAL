@@ -171,15 +171,28 @@ COLLAPSE_POLITICAL_MAP = html.Div(
     children=[
         html.H6(
             children=[
-                html.I(
-                    className="fas fa-caret-left ml-2",
-                    id="ARROW-TAB_HOME_SIDEBAR_COLLAPSE_POLITICAL_MAP"
+                html.Div(
+                    children = [
+                        html.I(
+                            className="fas fa-caret-left ml-2",
+                            id="ARROW-TAB_HOME_SIDEBAR_COLLAPSE_POLITICAL_MAP"
+                        ),
+                       "مرزهای سیاسی",
+                    ]            
                 ),
-                "مرزهای سیاسی",        
+                dbc.Badge(
+                    0, 
+                    color="primary", 
+                    className="m-0 p-2",
+                    id="NUMBER_SELECTED_POLITICAL_MAP-TAB_HOME_SIDEBAR_COLLAPSE_POLITICAL_MAP")         
             ],
             id="OPEN_CLOSE-TAB_HOME_SIDEBAR_COLLAPSE_POLITICAL_MAP",
             n_clicks=0,
-            className="inline COLLAPSE-CARD-HEADER"
+            className="inline COLLAPSE-CARD-HEADER",
+            style={
+                'display': 'flex',
+                'justify-content': 'space-between'
+            }
         ),
         dbc.Collapse(
             children=[
@@ -217,16 +230,29 @@ COLLAPSE_WATER_MAP = html.Div(
     children=[
         html.H6(
             children=[
-                html.I(
-                    className="fas fa-caret-left ml-2",
-                    id="ARROW-TAB_HOME_SIDEBAR_COLLAPSE_WATER_MAP"
+                html.Div(
+                    children = [
+                        html.I(
+                            className="fas fa-caret-left ml-2",
+                            id="ARROW-TAB_HOME_SIDEBAR_COLLAPSE_WATER_MAP"
+                        ),
+                        "مرزهای آبی",
+                    ]            
                 ),
-                "مرزهای آبی",
-          
+                dbc.Badge(
+                    0, 
+                    color="primary", 
+                    className="m-0 p-2",
+                    id="NUMBER_SELECTED_WATER_MAP-TAB_HOME_SIDEBAR_COLLAPSE_WATER_MAP"
+                )         
             ],
             id="OPEN_CLOSE-TAB_HOME_SIDEBAR_COLLAPSE_WATER_MAP",
             n_clicks=0,
-            className="inline COLLAPSE-CARD-HEADER"
+            className="inline COLLAPSE-CARD-HEADER",
+            style={
+                'display': 'flex',
+                'justify-content': 'space-between'
+            }
         ),
         dbc.Collapse(
             children=[

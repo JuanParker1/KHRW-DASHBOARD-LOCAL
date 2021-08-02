@@ -44,17 +44,17 @@ def groundwater_callback_home(app):
                 sidebar_style = "SIDEBAR-HIDEN"
                 content_style = "CONTENT-WITHOUT-SIDEBAR"
                 cur_nclick = "HIDDEN"
-                btn_classname = "fas fa-align-justify fa-2x BTN-SIDEBAR-CLOSE"
+                btn_classname = "BTN-SIDEBAR-CLOSE"
             else:
                 sidebar_style = "SIDEBAR-SHOW"
                 content_style = "CONTENT-WITH-SIDEBAR"
                 cur_nclick = "SHOW"
-                btn_classname = "fas fa-angle-double-right fa-3x BTN-SIDEBAR-OPEN"
+                btn_classname = "BTN-SIDEBAR-OPEN"
         else:
             sidebar_style = "SIDEBAR-HIDEN"
             content_style = "CONTENT-WITHOUT-SIDEBAR"
             cur_nclick = 'HIDDEN'
-            btn_classname = "fas fa-align-justify fa-2x BTN-SIDEBAR-CLOSE"
+            btn_classname = "BTN-SIDEBAR-CLOSE"
 
         return sidebar_style, content_style, cur_nclick, btn_classname
 
@@ -164,6 +164,8 @@ def groundwater_callback_home(app):
     @app.callback(
         Output("MAP-TAB_HOME_BODY", "children"),
         Output("MAP_ITEM-TAB_HOME_BODY", "data"),
+        Output("NUMBER_SELECTED_POLITICAL_MAP-TAB_HOME_SIDEBAR_COLLAPSE_POLITICAL_MAP", "children"),
+        Output("NUMBER_SELECTED_WATER_MAP-TAB_HOME_SIDEBAR_COLLAPSE_WATER_MAP", "children"),
         Input("ADD_POLITICAL_MAP-TAB_HOME_SIDEBAR", "value"),
         Input("ADD_WATER_MAP-TAB_HOME_SIDEBAR", "value"),
         Input("INTERVAL_COMPONENT-TAB_HOME_BODY", "n_intervals"),
@@ -184,11 +186,10 @@ def groundwater_callback_home(app):
             map_items = political_map_value + water_map_value
 
         if not map_items:
-            result = map_children_state[:7]
+            result = map_children_state[:8]
             map_items = []
-            return result, map_items
-        
-        result = map_children_state[:7]
+            return result, map_items, 0, 0
+        result = map_children_state[:8]
 
         for i in map_items:
 
@@ -213,7 +214,9 @@ def groundwater_callback_home(app):
 
             result.append(NEW_MAP)
 
-        return result, map_items
+        return result, map_items,\
+            0 if not political_map_value else len(political_map_value),\
+                0 if not water_map_value else len(water_map_value)
 
 
     @app.callback(

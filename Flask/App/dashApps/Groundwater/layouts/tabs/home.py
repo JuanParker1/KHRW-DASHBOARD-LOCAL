@@ -30,7 +30,7 @@ HOME = html.Div(
             id='INTERVAL_COMPONENT-TAB_HOME_BODY',
             interval=1 * 1000,
             n_intervals=0,
-            max_intervals=5
+            max_intervals=2
         ),
 
         # Sidebar ---------------------

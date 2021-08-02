@@ -13,28 +13,44 @@ from App.dashApps.Groundwater.callbacks.data_analysis import *
 # ELEMAN ON MAP
 # -----------------------------------------------------------------------------
 
+# SIDEBAR_BUTTON = html.Div(
+#     children=[
+#         html.I(
+#             className="fas fa-outdent fa-2x BTN-SIDEBAR-CLOSE",
+#             id="SIDEBAR_BUTTON-TAB_HOME_BODY"
+#         )
+#     ]
+# )
 SIDEBAR_BUTTON = html.Div(
     children=[
         html.I(
-            className="fas fa-align-justify fa-2x BTN-SIDEBAR-CLOSE",
+            html.Img(
+                src='data:image/png;base64,{}'.format(KHRW_LOGO),
+                height="42px",
+                className="m-1"
+            ),
+            className="BTN-SIDEBAR-CLOSE",
             id="SIDEBAR_BUTTON-TAB_HOME_BODY"
         )
     ]
 )
 
 
+TITLE = html.Div(
+    id="TITLE-TAB_HOME_BODY",
+    children=[
+        html.H5("گروه آب‌های زیرزمینی‏", className="p-0 m-0 mb-1 mr-1"),
+        html.P("دفتر مطالعات پایه منابع آب شرکت سهامی آب منطقه‌ای خراسان رضوی", className="text-primary p-0 m-0"),
+    ],
+    className="TILTE-SHOW",
+    dir="rtl"
+)
+
+
+
 MAP_INFO = html.Div(
     id="MAP_INFO-TAB_HOME_BODY",
-    className="info",
-    style={
-        "position": "absolute",
-        "bottom": "10px",
-        "left": "10px",
-        "zIndex": "1000",
-        "font-family": "Vazir",
-        "font-size": "small",
-        "line-height": "1.5"
-    },
+    className="MAP-INFO",
     dir="rtl"
 )
 
@@ -57,6 +73,7 @@ SHOW_COORDINATE = html.Div(
 
 
 SEARCH_BAR = html.Div(
+    id="SEARCH_BAR-TAB_HOME_BODY",
     children=[
         dcc.Input(
             id="SEARCH-TAB_HOME_BODY",
@@ -125,12 +142,7 @@ SEARCH_BAR = html.Div(
             },
         ),
     ],
-    style={
-        "position": "absolute",
-        "top": "10px",
-        "left": "50px",
-        "zIndex": "1000"
-    },
+    className="SEARCH-BAR",
     dir="ltr"
 )
 
@@ -159,6 +171,7 @@ BODY_TAB_HOME = html.Div(
                             id="CLICK_LAYER-TAB_HOME_BODY"
                         ),
                         dl.LocateControl(
+                            id="LOCATE_CONTROL-TAB_HOME_BODY",
                             options={
                                 'locateOptions': {
                                     'enableHighAccuracy': True
@@ -166,20 +179,21 @@ BODY_TAB_HOME = html.Div(
                             }
                         ),
                         dl.MeasureControl(
+                            id="MEASURE_CONTROL-TAB_HOME_BODY",
                             position="topleft",
                             primaryLengthUnit="kilometers",
                             primaryAreaUnit="hectares",
                             activeColor="#214097",
                             completedColor="#972158",
                         ),
-                        dl.FeatureGroup([
+                        dl.FeatureGroup([                            
                             dl.EditControl(id="edit_control"),
-                            
-                        ]),
-
-                        # SIDEBAR_BUTTON,
-                        SEARCH_BAR,
+                        ],
+                        id="FEATURE_GROUP-TAB_HOME_BODY",
+                        ),
                         MAP_INFO,
+                        SEARCH_BAR,
+                        TITLE,
                         # SHOW_COORDINATE
                     ],
                     style={

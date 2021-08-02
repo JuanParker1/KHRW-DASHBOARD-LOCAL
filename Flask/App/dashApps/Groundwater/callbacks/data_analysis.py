@@ -189,7 +189,10 @@ DARK = base64.b64encode(
 
 DARK_URL = 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png'
 
-
+# KHRW LOGO
+KHRW_LOGO = base64.b64encode(
+    open("./App/static/images/KHRW_LOGO.png", 'rb').read()
+).decode()
 
 
 
