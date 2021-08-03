@@ -11,7 +11,7 @@ from App.dashApps.Groundwater.layouts.bodies import *
 # -----------------------------------------------------------------------------
 
 
-HOME = html.Div(
+HOME_TAB = html.Div(
     children=[
 
         # Sidebar ---------------------

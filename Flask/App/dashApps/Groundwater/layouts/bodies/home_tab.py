@@ -197,7 +197,7 @@ BODY_TAB_HOME = html.Div(
                         # SHOW_COORDINATE
                     ],
                     style={
-                        'height': '93vh',
+                        'height': '95vh',
                         "font-family": "Tanha-FD",
                         "font-size": "medium"
                     },

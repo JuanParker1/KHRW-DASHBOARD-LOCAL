@@ -1,4 +1,4 @@
-from App.dashApps.Groundwater.callbacks.home import groundwater_callback_home
+from App.dashApps.Groundwater.callbacks.home_tab import groundwater_callback_home
 from App.dashApps.Groundwater.callbacks.callback_tab1 import groundwater_callback_tab1
 from App.dashApps.Groundwater.callbacks.callback_tab2 import groundwater_callback_tab2
 from App.dashApps.Groundwater.callbacks.callback_tab3 import groundwater_callback_tab3
