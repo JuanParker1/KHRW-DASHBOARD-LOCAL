@@ -1,6 +1,6 @@
 import dash_html_components as html
 import dash_dangerously_set_inner_html
-from App.dashApps.Groundwater.layouts.tabs.tab import *
+from App.dashApps.Groundwater.layouts.tabs import *
 
 
 # -----------------------------------------------------------------------------

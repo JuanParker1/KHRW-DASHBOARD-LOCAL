@@ -10,7 +10,7 @@ import plotly.express as px
 from dash.exceptions import PreventUpdate
 
 
-from App.dashApps.Groundwater.callbacks.data_analysis import *
+from App.dashApps.Groundwater.callbacks.config import *
 
 
 

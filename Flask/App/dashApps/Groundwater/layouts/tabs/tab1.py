@@ -2,10 +2,8 @@ import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 
-from App.dashApps.Groundwater.layouts.headers.header import *
-from App.dashApps.Groundwater.layouts.sidebars.sidebar import *
-from App.dashApps.Groundwater.layouts.bodies.body import *
-from App.dashApps.Groundwater.layouts.footers.footer import *
+from App.dashApps.Groundwater.layouts.sidebars import *
+from App.dashApps.Groundwater.layouts.bodies import *
 
 
 # -----------------------------------------------------------------------------
@@ -15,18 +13,6 @@ from App.dashApps.Groundwater.layouts.footers.footer import *
 
 TAB_1 = html.Div(
     children=[
-        # Header --------------------------------------------------------------
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        # TAB_1_HEADER
-                    ],
-                    className="col text-center"
-                )
-            ],
-            className="row"
-        ),
         # Sidebars & Body ------------------------------------------------------
         html.Div(
             children=[
@@ -56,18 +42,6 @@ TAB_1 = html.Div(
                 ),
             ],
             className="row p-0 m-0 w-100"
-        ),
-        # Footer --------------------------------------------------------------
-        html.Div(
-            children=[
-                html.Div(
-                    children=[
-                        TAB_1_FOOTER
-                    ],
-                    className="col"
-                )
-            ],
-            className="row"
         ),
         # Hidden Div For Store Data--------------------------------------------
         html.Div(

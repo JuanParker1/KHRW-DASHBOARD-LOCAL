@@ -5,7 +5,7 @@ from dash.dependencies import Input, Output, State
 import plotly.graph_objects as go
 import plotly.express as px
 
-from App.dashApps.Groundwater.callbacks.data_analysis import *
+from App.dashApps.Groundwater.callbacks.config import *
 
 
 

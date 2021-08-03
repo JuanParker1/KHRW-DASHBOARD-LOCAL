@@ -2,10 +2,8 @@ import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 
-from App.dashApps.Groundwater.layouts.headers.header import *
-from App.dashApps.Groundwater.layouts.sidebars.sidebar import *
-from App.dashApps.Groundwater.layouts.bodies.body import *
-from App.dashApps.Groundwater.layouts.footers.footer import *
+from App.dashApps.Groundwater.layouts.sidebars import *
+from App.dashApps.Groundwater.layouts.bodies import *
 
 
 # -----------------------------------------------------------------------------
@@ -15,6 +13,12 @@ from App.dashApps.Groundwater.layouts.footers.footer import *
 
 HOME = html.Div(
     children=[
+
+        # Sidebar ---------------------
+        SIDEBAR_TAB_HOME,
+
+        # Body ------------------------
+        BODY_TAB_HOME,
 
         # Store State Sidebar ---------
         dcc.Store(
@@ -31,13 +35,7 @@ HOME = html.Div(
             interval=1 * 1000,
             n_intervals=0,
             max_intervals=2
-        ),
-
-        # Sidebar ---------------------
-        SIDEBAR_TAB_HOME,
-
-        # Body ------------------------
-        BODY_TAB_HOME        
+        ),     
 
     ],
     className="container-fluid p-0 m-0"

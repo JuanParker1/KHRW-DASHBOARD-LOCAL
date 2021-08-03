@@ -22,7 +22,7 @@ import ast
 import time
 import utm
 
-from App.dashApps.Groundwater.callbacks.data_analysis import *
+from App.dashApps.Groundwater.callbacks.config import *
 
 
 

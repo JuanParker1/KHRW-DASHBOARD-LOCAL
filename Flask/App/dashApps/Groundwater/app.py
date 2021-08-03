@@ -2,7 +2,7 @@ import dash
 from flask_login.utils import login_required
 
 from App.dashApps.Groundwater.layouts.main import MAIN_LAYOUT
-from App.dashApps.Groundwater.callbacks.callback import groundwater_callback
+from App.dashApps.Groundwater.callbacks import groundwater_callback
 
 
 # EXTERNAL STYLESHEETS

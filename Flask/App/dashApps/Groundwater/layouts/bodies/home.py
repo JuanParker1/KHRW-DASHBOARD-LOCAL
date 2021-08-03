@@ -6,7 +6,7 @@ import dash_leaflet.express as dlx
 from dash_extensions.javascript import arrow_function
 import geopandas as gpd
 
-from App.dashApps.Groundwater.callbacks.data_analysis import *
+from App.dashApps.Groundwater.callbacks.config import *
 
 
 # -----------------------------------------------------------------------------

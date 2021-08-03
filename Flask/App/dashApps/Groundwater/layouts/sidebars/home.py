@@ -1,11 +1,8 @@
-import base64
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
-from dash_html_components.Button import Button
 
-from App.dashApps.Groundwater.layouts.visualizations.visualization import *
-from App.dashApps.Groundwater.callbacks.data_analysis import *
+from App.dashApps.Groundwater.callbacks.config import *
 
 # -------------------------------------------------------------------------------------------------
 # SIDEBAR - TAB HOME
