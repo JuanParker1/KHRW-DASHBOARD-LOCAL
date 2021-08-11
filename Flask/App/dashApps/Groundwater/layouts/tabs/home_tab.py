@@ -30,6 +30,22 @@ HOME_TAB = html.Div(
             id="MAP_ITEM-TAB_HOME_BODY",
         ),
 
+        dcc.Store(
+            id="RAW_DATA-TAB_HOME_BODY",
+        ),
+        
+        dcc.Store(
+            id="DUMMY_COMPONENT-TAB_HOME_BODY",
+            data="OK"
+        ),
+        
+        dcc.Interval(
+            id='INTERVAL_COMPONENT_DATA_CLEANSING-TAB_HOME_BODY',
+            interval=1 * 1000,
+            n_intervals=0,
+            max_intervals=2
+        ), 
+
         dcc.Interval(
             id='INTERVAL_COMPONENT-TAB_HOME_BODY',
             interval=1 * 1000,

@@ -1,5 +1,6 @@
 import base64
 import io
+import string
 import re
 import pandas as pd
 import numpy as np
@@ -14,6 +15,47 @@ from dash.dependencies import Input, Output, State
 
 import dash_leaflet.express as dlx
 import geojson
+
+# -----------------------------------------------------------------------------
+# MAPBOX TOKEN
+# -----------------------------------------------------------------------------
+PATH_MAPBOX_TOKEN = "./Assets/.mapbox_token"
+MAPBOX_TOKEN = open(PATH_MAPBOX_TOKEN).read()
+
+
+# -----------------------------------------------------------------------------
+# DATABASE
+# -----------------------------------------------------------------------------
+PATH_DB_GROUNDWATER = './Assets/Database/groundwater.db'
+DB_GROUNDWATER = sqlite3.connect(PATH_DB_GROUNDWATER, check_same_thread=False)
+
+
+# -----------------------------------------------------------------------------
+# ALL ENGLISH CHARECTER
+# -----------------------------------------------------------------------------
+EN_CHAR = list(string.ascii_lowercase) + list(string.ascii_uppercase) + ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "_"]
+
+
+
+# table_name = pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", db)
+
+
+# try:
+#     if table_name['name'].str.contains('RawDATA').any():
+#         RawDATA = pd.read_sql_query(sql="SELECT * FROM RawDATA", con=db)
+#         GeoInfoData = extract_geo_info_dataset(RawDATA)
+#     else:
+#         print("ERROR: RawDATA TABLE NOT EXIST")
+# except:
+#     print("ERROR: DATABASE NOT EXIST")
+
+# try:
+#     if table_name['name'].str.contains('AquiferDATA').any():
+#         AquiferDATA = pd.read_sql_query(sql="SELECT * FROM AquiferDATA", con=db)
+#     else:
+#         print("ERROR: AquiferDATA TABLE NOT EXIST")
+# except:
+#     print("ERROR: DATABASE NOT EXIST")
 
 
 # -----------------------------------------------------------------------------
@@ -126,10 +168,11 @@ import geojson
 #     }
 # }
 
+
+
 # -----------------------------------------------------------------------------
 # IMAGE LOCATION
 # -----------------------------------------------------------------------------
-
 
 # ATTRIBUTION
 ATTRIBUTION = '&copy; <a href="http://www.khrw.ir/">Khorasan Regional Water Company</a>'
@@ -191,10 +234,26 @@ DARK_URL = 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r
 
 # KHRW LOGO
 KHRW_LOGO = base64.b64encode(
-    open("./App/static/images/KHRW_LOGO.png", 'rb').read()
+    open("./App/static/images/logo/Khrw_Logo.png", 'rb').read()
+).decode()
+
+# DATABASE LOGO
+DATABASE_LOGO = base64.b64encode(
+    open("./App/static/images/logo/Database_Logo.png", 'rb').read()
+).decode()
+
+# DATABASE CONNECTION LOGO
+DATABASE_CONNECTION_LOGO = base64.b64encode(
+    open("./App/static/images/logo/Database_Connection_Logo.png", 'rb').read()
 ).decode()
 
 
+# -----------------------------------------------------------------------------
+# COLUMNS "HydrographDataSample.xlsx"
+# -----------------------------------------------------------------------------
+HydrographDataSample = pd.ExcelFile('./Assets/Files/Groundwater/HydrographDataSample.xlsx')
+HydrographDataSample_DataColumns = pd.read_excel(HydrographDataSample, sheet_name='Data').columns
+HydrographDataSample_GeoInfoColumns = pd.read_excel(HydrographDataSample, sheet_name='GeoInfo').columns
 
 # -----------------------------------------------------------------------------
 # CHECK USER INPUT
@@ -217,15 +276,18 @@ def check_user_input(x):
 # -----------------------------------------------------------------------------
 # CASE-DEPENDENT
 # WARNING : EXCEL FILE WITH SEVERAL SHEET
-def read_multiple_worksheets(contents, filename):
-    if 'xlsx' in filename or 'xls' in filename:
+def read_spreadsheet(contents, filename):
+    if '.xlsx' in filename or '.xls' in filename:
         data = {}
         content_type, content_string = contents.split(',')
         decoded = base64.b64decode(content_string)
         spreadsheet_file = pd.ExcelFile(io.BytesIO(decoded))
-        for sheet_name in spreadsheet_file.sheet_names:
-            data[sheet_name] = spreadsheet_file.parse(sheet_name)
-        return data
+        if len(spreadsheet_file.sheet_names) >= 2:
+            for sheet_name in spreadsheet_file.sheet_names:
+                data[sheet_name] = spreadsheet_file.parse(sheet_name).to_dict()
+            return data, spreadsheet_file.sheet_names
+        else:
+            return None, None
 
 
 # -----------------------------------------------------------------------------
@@ -246,312 +308,321 @@ def extract_geo_info_dataset(data):
 # DATA CLEANSING
 # -----------------------------------------------------------------------------
 # CASE-DEPENDENT
-def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_all, threshold=0.5):
-    result = pd.DataFrame()
-    result_aquifer = pd.DataFrame()
+def data_cleansing(GeoInfo, Data):
+    pass
 
-    for aquifer in well_info_data_all['Aquifer_Name'].unique():
-        well_info_data = well_info_data_all[well_info_data_all['Aquifer_Name'] == aquifer]
-        dtw_data = dtw_data_all[dtw_data_all['Aquifer_Name'] == aquifer]
-        thiessen_data = thiessen_data_all[thiessen_data_all['Aquifer_Name'] == aquifer]
-        sc_data = sc_data_all[sc_data_all['Aquifer_Name'] == aquifer]
 
-        # Well Info Data:------------------------------------------------------
-        Columns_Info = list(compress(well_info_data.columns.tolist(),
-                                     list(map(lambda x: isinstance(x, str),
-                                              well_info_data.columns.tolist()))))
 
-        Well_Info = well_info_data[Columns_Info]
 
-        Well_Info['Aquifer_Name'] = Well_Info['Aquifer_Name'].apply(lambda x: x.rstrip())
-        Well_Info['Aquifer_Name'] = Well_Info['Aquifer_Name'].apply(lambda x: x.lstrip())
-        Well_Info['Well_Name'] = Well_Info['Well_Name'].apply(lambda x: x.rstrip())
-        Well_Info['Well_Name'] = Well_Info['Well_Name'].apply(lambda x: x.lstrip())
 
-        # Depth to Water (DTW) Data:--------------------------------------------
 
-        # Extract Dates From Columns Name
-        id_vars = list(compress(dtw_data.columns.tolist(),
-                                list(map(lambda x: isinstance(x, str),
-                                         dtw_data.columns.tolist()))))
 
-        dtw_data['Aquifer_Name'] = dtw_data['Aquifer_Name'].apply(lambda x: x.rstrip())
-        dtw_data['Aquifer_Name'] = dtw_data['Aquifer_Name'].apply(lambda x: x.lstrip())
-        dtw_data['Well_Name'] = dtw_data['Well_Name'].apply(lambda x: x.rstrip())
-        dtw_data['Well_Name'] = dtw_data['Well_Name'].apply(lambda x: x.lstrip())
+# def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_all, threshold=0.5):
+#     result = pd.DataFrame()
+#     result_aquifer = pd.DataFrame()
 
-        # Convert DTW Data to Wide Format
-        DTW_Wide = pd.melt(frame=dtw_data,
-                           id_vars=id_vars,
-                           var_name="Date",
-                           value_name="Depth_To_Water").pivot(index='Date',
-                                                              columns='ID',
-                                                              values='Depth_To_Water').reset_index()
+#     for aquifer in well_info_data_all['Aquifer_Name'].unique():
+#         well_info_data = well_info_data_all[well_info_data_all['Aquifer_Name'] == aquifer]
+#         dtw_data = dtw_data_all[dtw_data_all['Aquifer_Name'] == aquifer]
+#         thiessen_data = thiessen_data_all[thiessen_data_all['Aquifer_Name'] == aquifer]
+#         sc_data = sc_data_all[sc_data_all['Aquifer_Name'] == aquifer]
 
-        # Modify Columns Name
-        DTW_Wide.columns = [col for col in DTW_Wide.columns]
+#         # Well Info Data:------------------------------------------------------
+#         Columns_Info = list(compress(well_info_data.columns.tolist(),
+#                                      list(map(lambda x: isinstance(x, str),
+#                                               well_info_data.columns.tolist()))))
 
-        # Modified Date - Add Gregorian Date
-        DTW_Wide["Date_Gregorian"] = list(map(lambda i: pd.to_datetime(i - 2, unit='D', origin='1900-01-01').date(),
-                                              DTW_Wide["Date"]))
+#         Well_Info = well_info_data[Columns_Info]
 
-        # Modified Date - Add Persian Date
-        DTW_Wide["Date_Persian"] = list(map(lambda i: jalali.Gregorian(i).persian_string(),
-                                            DTW_Wide["Date_Gregorian"]))
+#         Well_Info['Aquifer_Name'] = Well_Info['Aquifer_Name'].apply(lambda x: x.rstrip())
+#         Well_Info['Aquifer_Name'] = Well_Info['Aquifer_Name'].apply(lambda x: x.lstrip())
+#         Well_Info['Well_Name'] = Well_Info['Well_Name'].apply(lambda x: x.rstrip())
+#         Well_Info['Well_Name'] = Well_Info['Well_Name'].apply(lambda x: x.lstrip())
 
-        # Reorder Columns
-        DTW_Wide = DTW_Wide.reindex(columns=(['Date', 'Date_Gregorian', 'Date_Persian'] + list(
-            [a for a in DTW_Wide.columns if a not in ['Date', 'Date_Gregorian', 'Date_Persian']])))
+#         # Depth to Water (DTW) Data:--------------------------------------------
 
-        # Convert DTW_Wide Data Into A Tidy Format
-        DTW = pd.melt(frame=DTW_Wide,
-                      id_vars=['Date_Gregorian', 'Date', 'Date_Persian'],
-                      value_name='Depth_To_Water',
-                      var_name='ID').sort_values(['ID', 'Date_Gregorian']).drop('Date', axis=1)
-        DTW = DTW[['ID', 'Date_Gregorian', 'Date_Persian', 'Depth_To_Water']]
+#         # Extract Dates From Columns Name
+#         id_vars = list(compress(dtw_data.columns.tolist(),
+#                                 list(map(lambda x: isinstance(x, str),
+#                                          dtw_data.columns.tolist()))))
 
-        # Thiessen Weights Data:----------------------------------------------
+#         dtw_data['Aquifer_Name'] = dtw_data['Aquifer_Name'].apply(lambda x: x.rstrip())
+#         dtw_data['Aquifer_Name'] = dtw_data['Aquifer_Name'].apply(lambda x: x.lstrip())
+#         dtw_data['Well_Name'] = dtw_data['Well_Name'].apply(lambda x: x.rstrip())
+#         dtw_data['Well_Name'] = dtw_data['Well_Name'].apply(lambda x: x.lstrip())
 
-        # Extract Dates From Columns Name
-        id_vars = list(compress(thiessen_data.columns.tolist(),
-                                list(map(lambda x: isinstance(x, str),
-                                         thiessen_data.columns.tolist()))))
+#         # Convert DTW Data to Wide Format
+#         DTW_Wide = pd.melt(frame=dtw_data,
+#                            id_vars=id_vars,
+#                            var_name="Date",
+#                            value_name="Depth_To_Water").pivot(index='Date',
+#                                                               columns='ID',
+#                                                               values='Depth_To_Water').reset_index()
 
-        thiessen_data['Aquifer_Name'] = thiessen_data['Aquifer_Name'].apply(lambda x: x.rstrip())
-        thiessen_data['Aquifer_Name'] = thiessen_data['Aquifer_Name'].apply(lambda x: x.lstrip())
-        thiessen_data['Well_Name'] = thiessen_data['Well_Name'].apply(lambda x: x.rstrip())
-        thiessen_data['Well_Name'] = thiessen_data['Well_Name'].apply(lambda x: x.lstrip())
+#         # Modify Columns Name
+#         DTW_Wide.columns = [col for col in DTW_Wide.columns]
 
-        # Convert Thiessen Data to Wide Format
-        Thiessen_Wide = pd.melt(frame=thiessen_data,
-                                id_vars=id_vars,
-                                var_name="Date",
-                                value_name="Area").pivot(index='Date',
-                                                         columns='ID',
-                                                         values='Area').reset_index()
+#         # Modified Date - Add Gregorian Date
+#         DTW_Wide["Date_Gregorian"] = list(map(lambda i: pd.to_datetime(i - 2, unit='D', origin='1900-01-01').date(),
+#                                               DTW_Wide["Date"]))
 
-        # Modify Columns Name
-        Thiessen_Wide.columns = [col for col in Thiessen_Wide.columns]
+#         # Modified Date - Add Persian Date
+#         DTW_Wide["Date_Persian"] = list(map(lambda i: jalali.Gregorian(i).persian_string(),
+#                                             DTW_Wide["Date_Gregorian"]))
 
-        # Modified Date - Add Gregorian Date
-        Thiessen_Wide["Date_Gregorian"] = list(map(lambda i: pd.to_datetime(i - 2, unit='D', origin='1900-01-01').date(),
-                                                   Thiessen_Wide["Date"]))
+#         # Reorder Columns
+#         DTW_Wide = DTW_Wide.reindex(columns=(['Date', 'Date_Gregorian', 'Date_Persian'] + list(
+#             [a for a in DTW_Wide.columns if a not in ['Date', 'Date_Gregorian', 'Date_Persian']])))
 
-        # Modified Date - Add Persian Date
-        Thiessen_Wide["Date_Persian"] = list(map(lambda i: jalali.Gregorian(i).persian_string(),
-                                                 Thiessen_Wide["Date_Gregorian"]))
+#         # Convert DTW_Wide Data Into A Tidy Format
+#         DTW = pd.melt(frame=DTW_Wide,
+#                       id_vars=['Date_Gregorian', 'Date', 'Date_Persian'],
+#                       value_name='Depth_To_Water',
+#                       var_name='ID').sort_values(['ID', 'Date_Gregorian']).drop('Date', axis=1)
+#         DTW = DTW[['ID', 'Date_Gregorian', 'Date_Persian', 'Depth_To_Water']]
 
-        # Reorder Columns
-        Thiessen_Wide = Thiessen_Wide.reindex(columns=(['Date', 'Date_Gregorian', 'Date_Persian'] + list(
-            [a for a in Thiessen_Wide.columns if a not in ['Date', 'Date_Gregorian', 'Date_Persian']])))
+#         # Thiessen Weights Data:----------------------------------------------
 
-        # Convert DTW_Wide Data Into A Tidy Format
-        Thiessen = pd.melt(frame=Thiessen_Wide,
-                           id_vars=['Date_Gregorian', 'Date', 'Date_Persian'],
-                           value_name='Area',
-                           var_name='ID').sort_values(['ID', 'Date_Gregorian']).drop('Date', axis=1)
-        Thiessen = Thiessen[['ID', 'Date_Gregorian', 'Date_Persian', 'Area']]
+#         # Extract Dates From Columns Name
+#         id_vars = list(compress(thiessen_data.columns.tolist(),
+#                                 list(map(lambda x: isinstance(x, str),
+#                                          thiessen_data.columns.tolist()))))
 
-        # Sum Thiessen for Each Month (Area Aquifer)
-        Thiessen = pd.merge(left=Thiessen,
-                            right=Thiessen.groupby(by='Date_Gregorian').sum().reset_index().rename(
-                                columns={'Area': 'Aquifer_Area'}),
-                            how='outer',
-                            on='Date_Gregorian').sort_values(['ID', 'Date_Gregorian'])
+#         thiessen_data['Aquifer_Name'] = thiessen_data['Aquifer_Name'].apply(lambda x: x.rstrip())
+#         thiessen_data['Aquifer_Name'] = thiessen_data['Aquifer_Name'].apply(lambda x: x.lstrip())
+#         thiessen_data['Well_Name'] = thiessen_data['Well_Name'].apply(lambda x: x.rstrip())
+#         thiessen_data['Well_Name'] = thiessen_data['Well_Name'].apply(lambda x: x.lstrip())
 
-        # Storage Coefficient Data:------------------------------------------
+#         # Convert Thiessen Data to Wide Format
+#         Thiessen_Wide = pd.melt(frame=thiessen_data,
+#                                 id_vars=id_vars,
+#                                 var_name="Date",
+#                                 value_name="Area").pivot(index='Date',
+#                                                          columns='ID',
+#                                                          values='Area').reset_index()
 
-        # Extract Dates From Columns Name
-        id_vars = list(compress(sc_data.columns.tolist(),
-                                list(map(lambda x: isinstance(x, str),
-                                         sc_data.columns.tolist()))))
+#         # Modify Columns Name
+#         Thiessen_Wide.columns = [col for col in Thiessen_Wide.columns]
 
-        sc_data['Aquifer_Name'] = sc_data['Aquifer_Name'].apply(lambda x: x.rstrip())
-        sc_data['Aquifer_Name'] = sc_data['Aquifer_Name'].apply(lambda x: x.lstrip())
-        sc_data['Well_Name'] = sc_data['Well_Name'].apply(lambda x: x.rstrip())
-        sc_data['Well_Name'] = sc_data['Well_Name'].apply(lambda x: x.lstrip())
+#         # Modified Date - Add Gregorian Date
+#         Thiessen_Wide["Date_Gregorian"] = list(map(lambda i: pd.to_datetime(i - 2, unit='D', origin='1900-01-01').date(),
+#                                                    Thiessen_Wide["Date"]))
 
-        # Convert Storage Coefficient Data to Wide Format
-        Storage_Coefficient_Wide = pd.melt(frame=sc_data,
-                                           id_vars=id_vars,
-                                           var_name="Date",
-                                           value_name="Storage_Coefficient").pivot(index='Date',
-                                                                                   columns='ID',
-                                                                                   values='Storage_Coefficient').reset_index()
+#         # Modified Date - Add Persian Date
+#         Thiessen_Wide["Date_Persian"] = list(map(lambda i: jalali.Gregorian(i).persian_string(),
+#                                                  Thiessen_Wide["Date_Gregorian"]))
 
-        # Modify Columns Name
-        Storage_Coefficient_Wide.columns = [col for col in Storage_Coefficient_Wide.columns]
+#         # Reorder Columns
+#         Thiessen_Wide = Thiessen_Wide.reindex(columns=(['Date', 'Date_Gregorian', 'Date_Persian'] + list(
+#             [a for a in Thiessen_Wide.columns if a not in ['Date', 'Date_Gregorian', 'Date_Persian']])))
 
-        # Modified Date - Add Gregorian Date
-        Storage_Coefficient_Wide["Date_Gregorian"] = list(
-            map(lambda i: pd.to_datetime(i - 2, unit='D', origin='1900-01-01').date(),
-                Storage_Coefficient_Wide["Date"]))
+#         # Convert DTW_Wide Data Into A Tidy Format
+#         Thiessen = pd.melt(frame=Thiessen_Wide,
+#                            id_vars=['Date_Gregorian', 'Date', 'Date_Persian'],
+#                            value_name='Area',
+#                            var_name='ID').sort_values(['ID', 'Date_Gregorian']).drop('Date', axis=1)
+#         Thiessen = Thiessen[['ID', 'Date_Gregorian', 'Date_Persian', 'Area']]
 
-        # Modified Date - Add Persian Date
-        Storage_Coefficient_Wide["Date_Persian"] = list(map(lambda i: jalali.Gregorian(i).persian_string(),
-                                                            Storage_Coefficient_Wide["Date_Gregorian"]))
+#         # Sum Thiessen for Each Month (Area Aquifer)
+#         Thiessen = pd.merge(left=Thiessen,
+#                             right=Thiessen.groupby(by='Date_Gregorian').sum().reset_index().rename(
+#                                 columns={'Area': 'Aquifer_Area'}),
+#                             how='outer',
+#                             on='Date_Gregorian').sort_values(['ID', 'Date_Gregorian'])
 
-        # Reorder Columns
-        Storage_Coefficient_Wide = Storage_Coefficient_Wide.reindex(columns=(
-                    ['Date', 'Date_Gregorian', 'Date_Persian'] + list(
-                [a for a in Storage_Coefficient_Wide.columns if a not in ['Date', 'Date_Gregorian', 'Date_Persian']])))
+#         # Storage Coefficient Data:------------------------------------------
 
-        # Convert Storage_Coefficient_Wide Data Into A Tidy Format
-        Storage_Coefficient = pd.melt(frame=Storage_Coefficient_Wide,
-                                      id_vars=['Date_Gregorian', 'Date', 'Date_Persian'],
-                                      value_name='Storage_Coefficient',
-                                      var_name='ID').sort_values(['ID', 'Date_Gregorian']).drop('Date', axis=1)
-        Storage_Coefficient = Storage_Coefficient[['ID', 'Date_Gregorian', 'Date_Persian', 'Storage_Coefficient']]
+#         # Extract Dates From Columns Name
+#         id_vars = list(compress(sc_data.columns.tolist(),
+#                                 list(map(lambda x: isinstance(x, str),
+#                                          sc_data.columns.tolist()))))
 
-        # Surface Elevation of Observation Well:----------------------------
-        # Extract Surface Elevation of Observation Well From NASA Shuttle Radar Topography Mission (SRTM) Version 3.0
-        # srtm1_data = Srtm1HeightMapCollection()
+#         sc_data['Aquifer_Name'] = sc_data['Aquifer_Name'].apply(lambda x: x.rstrip())
+#         sc_data['Aquifer_Name'] = sc_data['Aquifer_Name'].apply(lambda x: x.lstrip())
+#         sc_data['Well_Name'] = sc_data['Well_Name'].apply(lambda x: x.rstrip())
+#         sc_data['Well_Name'] = sc_data['Well_Name'].apply(lambda x: x.lstrip())
 
-        # Well_Info["G.S.L_DEM_SRTM1"] = list(
-        #     map(lambda LonLat: srtm1_data.get_altitude(longitude=LonLat[0], latitude=LonLat[1]),
-        #         zip(Well_Info.X_Decimal, Well_Info.Y_Decimal)))
+#         # Convert Storage Coefficient Data to Wide Format
+#         Storage_Coefficient_Wide = pd.melt(frame=sc_data,
+#                                            id_vars=id_vars,
+#                                            var_name="Date",
+#                                            value_name="Storage_Coefficient").pivot(index='Date',
+#                                                                                    columns='ID',
+#                                                                                    values='Storage_Coefficient').reset_index()
 
-        Well_Info["G.S.L_DEM_SRTM1"] = Well_Info["Final_Elevation"]
+#         # Modify Columns Name
+#         Storage_Coefficient_Wide.columns = [col for col in Storage_Coefficient_Wide.columns]
 
-        Elevation = Well_Info[['ID', 'G.S.L_M.S.L', 'Final_Elevation', 'G.S.L_DEM_SRTM1']]
-        # Elevation = Well_Info[['ID', 'G.S.L_M.S.L', 'Final_Elevation']]
+#         # Modified Date - Add Gregorian Date
+#         Storage_Coefficient_Wide["Date_Gregorian"] = list(
+#             map(lambda i: pd.to_datetime(i - 2, unit='D', origin='1900-01-01').date(),
+#                 Storage_Coefficient_Wide["Date"]))
 
-        Elevation.columns = ['ID', 'MSL_Elevation', 'Final_Elevation', 'Elevation']
-        # Elevation.columns = ['ID', 'MSL_Elevation', 'Final_Elevation']
+#         # Modified Date - Add Persian Date
+#         Storage_Coefficient_Wide["Date_Persian"] = list(map(lambda i: jalali.Gregorian(i).persian_string(),
+#                                                             Storage_Coefficient_Wide["Date_Gregorian"]))
 
-        # Combine Data:-----------------------------------------------------
-        data = pd.merge(left=DTW,
-                        right=Elevation,
-                        how='outer',
-                        on=['ID']).merge(right=Thiessen,
-                                         how='outer',
-                                         on=['ID', 'Date_Gregorian', 'Date_Persian']).merge(right=Storage_Coefficient,
-                                                                                            how='outer',
-                                                                                            on=['ID', 'Date_Gregorian',
-                                                                                                'Date_Persian']).sort_values(
-            ['ID', 'Date_Gregorian'])
+#         # Reorder Columns
+#         Storage_Coefficient_Wide = Storage_Coefficient_Wide.reindex(columns=(
+#                     ['Date', 'Date_Gregorian', 'Date_Persian'] + list(
+#                 [a for a in Storage_Coefficient_Wide.columns if a not in ['Date', 'Date_Gregorian', 'Date_Persian']])))
 
-        data.to_csv(f"{aquifer}.csv")
+#         # Convert Storage_Coefficient_Wide Data Into A Tidy Format
+#         Storage_Coefficient = pd.melt(frame=Storage_Coefficient_Wide,
+#                                       id_vars=['Date_Gregorian', 'Date', 'Date_Persian'],
+#                                       value_name='Storage_Coefficient',
+#                                       var_name='ID').sort_values(['ID', 'Date_Gregorian']).drop('Date', axis=1)
+#         Storage_Coefficient = Storage_Coefficient[['ID', 'Date_Gregorian', 'Date_Persian', 'Storage_Coefficient']]
 
-        # Calculate Aquifer Storage Coefficient:------------------------------------
-        data['Unit_Aquifer_Storage_Coefficient'] = (data['Storage_Coefficient'] * data['Area']) / data['Aquifer_Area']
+#         # Surface Elevation of Observation Well:----------------------------
+#         # Extract Surface Elevation of Observation Well From NASA Shuttle Radar Topography Mission (SRTM) Version 3.0
+#         # srtm1_data = Srtm1HeightMapCollection()
 
-        # Sum Aquifer Storage Coefficient for Each Month (Aquifer Storage Coefficient)
-        df = data.groupby(by=['Date_Gregorian', 'Date_Persian']).sum().reset_index()[
-            ['Date_Gregorian', 'Date_Persian', 'Unit_Aquifer_Storage_Coefficient']].rename(
-            columns={'Unit_Aquifer_Storage_Coefficient': 'Aquifer_Storage_Coefficient'})
+#         # Well_Info["G.S.L_DEM_SRTM1"] = list(
+#         #     map(lambda LonLat: srtm1_data.get_altitude(longitude=LonLat[0], latitude=LonLat[1]),
+#         #         zip(Well_Info.X_Decimal, Well_Info.Y_Decimal)))
 
-        data = data.merge(right=df,
-                          how='outer',
-                          on=['Date_Gregorian', 'Date_Persian']).sort_values(['ID', 'Date_Gregorian'])
+#         Well_Info["G.S.L_DEM_SRTM1"] = Well_Info["Final_Elevation"]
 
-        #  Calculate Well Head:----------------------------------------------
-        data['Well_Head'] = data['Final_Elevation'] - data['Depth_To_Water']
+#         Elevation = Well_Info[['ID', 'G.S.L_M.S.L', 'Final_Elevation', 'G.S.L_DEM_SRTM1']]
+#         # Elevation = Well_Info[['ID', 'G.S.L_M.S.L', 'Final_Elevation']]
 
-        # Calculate Aquifer Head:--------------------------------------------
-        data['Unit_Aquifer_Head'] = (data['Well_Head'] * data['Area']) / data['Aquifer_Area']
+#         Elevation.columns = ['ID', 'MSL_Elevation', 'Final_Elevation', 'Elevation']
+#         # Elevation.columns = ['ID', 'MSL_Elevation', 'Final_Elevation']
 
-        # Sum Units Aquifer Head for Each Month (Aquifer_Head)
-        df = data.groupby(by=['Date_Gregorian', 'Date_Persian']).sum().reset_index()[
-            ['Date_Gregorian', 'Date_Persian', 'Unit_Aquifer_Head']].rename(columns={'Unit_Aquifer_Head': 'Aquifer_Head'})
+#         # Combine Data:-----------------------------------------------------
+#         data = pd.merge(left=DTW,
+#                         right=Elevation,
+#                         how='outer',
+#                         on=['ID']).merge(right=Thiessen,
+#                                          how='outer',
+#                                          on=['ID', 'Date_Gregorian', 'Date_Persian']).merge(right=Storage_Coefficient,
+#                                                                                             how='outer',
+#                                                                                             on=['ID', 'Date_Gregorian',
+#                                                                                                 'Date_Persian']).sort_values(
+#             ['ID', 'Date_Gregorian'])
 
-        data = data.merge(right=df,
-                          how='outer',
-                          on=['Date_Gregorian', 'Date_Persian']).sort_values(['ID', 'Date_Gregorian'])
+#         data.to_csv(f"{aquifer}.csv")
 
-        df = data[['Date_Gregorian', 'Date_Persian', 'Well_Head']].groupby(by=['Date_Gregorian', 'Date_Persian']).agg({
-            'Well_Head': [statistics.mean, statistics.geometric_mean, statistics.harmonic_mean]
-        }).reset_index()
+#         # Calculate Aquifer Storage Coefficient:------------------------------------
+#         data['Unit_Aquifer_Storage_Coefficient'] = (data['Storage_Coefficient'] * data['Area']) / data['Aquifer_Area']
 
-        df.columns = [col for col in df.columns]
+#         # Sum Aquifer Storage Coefficient for Each Month (Aquifer Storage Coefficient)
+#         df = data.groupby(by=['Date_Gregorian', 'Date_Persian']).sum().reset_index()[
+#             ['Date_Gregorian', 'Date_Persian', 'Unit_Aquifer_Storage_Coefficient']].rename(
+#             columns={'Unit_Aquifer_Storage_Coefficient': 'Aquifer_Storage_Coefficient'})
 
-        df.columns = ['Date_Gregorian', 'Date_Persian', 'Aquifer_Head_Arithmetic_Mean', 'Aquifer_Head_Geometric_Mean', 'Aquifer_Head_Harmonic_Mean']
+#         data = data.merge(right=df,
+#                           how='outer',
+#                           on=['Date_Gregorian', 'Date_Persian']).sort_values(['ID', 'Date_Gregorian'])
 
-        data = data.merge(right=df,
-                          how='outer',
-                          on=['Date_Gregorian', 'Date_Persian']).sort_values(['ID', 'Date_Gregorian'])
+#         #  Calculate Well Head:----------------------------------------------
+#         data['Well_Head'] = data['Final_Elevation'] - data['Depth_To_Water']
+
+#         # Calculate Aquifer Head:--------------------------------------------
+#         data['Unit_Aquifer_Head'] = (data['Well_Head'] * data['Area']) / data['Aquifer_Area']
+
+#         # Sum Units Aquifer Head for Each Month (Aquifer_Head)
+#         df = data.groupby(by=['Date_Gregorian', 'Date_Persian']).sum().reset_index()[
+#             ['Date_Gregorian', 'Date_Persian', 'Unit_Aquifer_Head']].rename(columns={'Unit_Aquifer_Head': 'Aquifer_Head'})
+
+#         data = data.merge(right=df,
+#                           how='outer',
+#                           on=['Date_Gregorian', 'Date_Persian']).sort_values(['ID', 'Date_Gregorian'])
+
+#         df = data[['Date_Gregorian', 'Date_Persian', 'Well_Head']].groupby(by=['Date_Gregorian', 'Date_Persian']).agg({
+#             'Well_Head': [statistics.mean, statistics.geometric_mean, statistics.harmonic_mean]
+#         }).reset_index()
+
+#         df.columns = [col for col in df.columns]
+
+#         df.columns = ['Date_Gregorian', 'Date_Persian', 'Aquifer_Head_Arithmetic_Mean', 'Aquifer_Head_Geometric_Mean', 'Aquifer_Head_Harmonic_Mean']
+
+#         data = data.merge(right=df,
+#                           how='outer',
+#                           on=['Date_Gregorian', 'Date_Persian']).sort_values(['ID', 'Date_Gregorian'])
         
         
 
-        # Add Name Well
-        data = data.merge(right=Well_Info[
-            ['Mahdodeh_Name', 'Mahdodeh_Code', 'Aquifer_Name', 'Well_Name', 'ID', 'X_UTM', 'Y_UTM', 'X_Decimal',
-             'Y_Decimal']],
-                          how='outer',
-                          left_on=['ID'],
-                          right_on=['ID']).sort_values(['ID', 'Date_Gregorian'])
+#         # Add Name Well
+#         data = data.merge(right=Well_Info[
+#             ['Mahdodeh_Name', 'Mahdodeh_Code', 'Aquifer_Name', 'Well_Name', 'ID', 'X_UTM', 'Y_UTM', 'X_Decimal',
+#              'Y_Decimal']],
+#                           how='outer',
+#                           left_on=['ID'],
+#                           right_on=['ID']).sort_values(['ID', 'Date_Gregorian'])
         
-        result = result.append(data)
-        
-
-
-        # ADJUSMENT AQUIFER HEAD
-        data_aquifer = data.drop_duplicates(subset=['Date_Gregorian', 'Date_Persian'], keep='last').reset_index()
-        
-        data_aquifer = data_aquifer[[
-            "Date_Gregorian", "Date_Persian",
-            "Aquifer_Area", "Aquifer_Storage_Coefficient", "Aquifer_Head",
-            "Aquifer_Head_Arithmetic_Mean", "Aquifer_Head_Geometric_Mean", "Aquifer_Head_Harmonic_Mean",
-            "Mahdodeh_Name", 'Mahdodeh_Code', "Aquifer_Name"
-        ]]
-
-        data_aquifer.replace(0, np.nan, inplace=True)
-        data_aquifer['Delta'] = data_aquifer['Aquifer_Head'].diff().fillna(0)
-        data_aquifer['Index'] = abs(data_aquifer['Delta']).apply(lambda x: 1 if x >= threshold else 0)
-        data_aquifer['Adjusted_Aquifer_Head'] = data_aquifer['Aquifer_Head']
+#         result = result.append(data)
         
 
-        n = data_aquifer.index[data_aquifer['Index'] == True].tolist()
+
+#         # ADJUSMENT AQUIFER HEAD
+#         data_aquifer = data.drop_duplicates(subset=['Date_Gregorian', 'Date_Persian'], keep='last').reset_index()
+        
+#         data_aquifer = data_aquifer[[
+#             "Date_Gregorian", "Date_Persian",
+#             "Aquifer_Area", "Aquifer_Storage_Coefficient", "Aquifer_Head",
+#             "Aquifer_Head_Arithmetic_Mean", "Aquifer_Head_Geometric_Mean", "Aquifer_Head_Harmonic_Mean",
+#             "Mahdodeh_Name", 'Mahdodeh_Code', "Aquifer_Name"
+#         ]]
+
+#         data_aquifer.replace(0, np.nan, inplace=True)
+#         data_aquifer['Delta'] = data_aquifer['Aquifer_Head'].diff().fillna(0)
+#         data_aquifer['Index'] = abs(data_aquifer['Delta']).apply(lambda x: 1 if x >= threshold else 0)
+#         data_aquifer['Adjusted_Aquifer_Head'] = data_aquifer['Aquifer_Head']
+        
+
+#         n = data_aquifer.index[data_aquifer['Index'] == True].tolist()
         
         
-        if len(n) > 0:
-            while len(n) != 0:
-                delta = data_aquifer['Delta'][n[0]]
-                data_aquifer['Temp_Aquifer_Head'] = data_aquifer['Adjusted_Aquifer_Head']
-                for i in range(n[0]):
-                    data_aquifer['Temp_Aquifer_Head'][i] = data_aquifer['Adjusted_Aquifer_Head'][i] + delta
-                    data_aquifer['Adjusted_Aquifer_Head'] = data_aquifer['Temp_Aquifer_Head']
-                    data_aquifer['Delta'] = data_aquifer['Adjusted_Aquifer_Head'].diff().fillna(0)
-                    data_aquifer['Index'] = abs(data_aquifer['Delta']).apply(lambda x: 1 if x >= threshold else 0)
-                    n = data_aquifer.index[data_aquifer['Index'] == True].tolist()
+#         if len(n) > 0:
+#             while len(n) != 0:
+#                 delta = data_aquifer['Delta'][n[0]]
+#                 data_aquifer['Temp_Aquifer_Head'] = data_aquifer['Adjusted_Aquifer_Head']
+#                 for i in range(n[0]):
+#                     data_aquifer['Temp_Aquifer_Head'][i] = data_aquifer['Adjusted_Aquifer_Head'][i] + delta
+#                     data_aquifer['Adjusted_Aquifer_Head'] = data_aquifer['Temp_Aquifer_Head']
+#                     data_aquifer['Delta'] = data_aquifer['Adjusted_Aquifer_Head'].diff().fillna(0)
+#                     data_aquifer['Index'] = abs(data_aquifer['Delta']).apply(lambda x: 1 if x >= threshold else 0)
+#                     n = data_aquifer.index[data_aquifer['Index'] == True].tolist()
                     
         
-        if 'Temp_Aquifer_Head' in data_aquifer.columns:
-            data_aquifer = data_aquifer.drop(['Temp_Aquifer_Head'], axis=1)
+#         if 'Temp_Aquifer_Head' in data_aquifer.columns:
+#             data_aquifer = data_aquifer.drop(['Temp_Aquifer_Head'], axis=1)
 
-        if 'Delta' in data_aquifer.columns:
-            data_aquifer = data_aquifer.drop(['Delta'], axis=1)
+#         if 'Delta' in data_aquifer.columns:
+#             data_aquifer = data_aquifer.drop(['Delta'], axis=1)
 
-        if 'Index' in data_aquifer.columns:
-            data_aquifer = data_aquifer.drop(['Index'], axis=1)
+#         if 'Index' in data_aquifer.columns:
+#             data_aquifer = data_aquifer.drop(['Index'], axis=1)
 
                 
-        result_aquifer = result_aquifer.append(data_aquifer)
+#         result_aquifer = result_aquifer.append(data_aquifer)
 
         
-    result['Aquifer_Name'] = result['Aquifer_Name'].apply(lambda x: x.rstrip())
-    result['Aquifer_Name'] = result['Aquifer_Name'].apply(lambda x: x.lstrip())
-    result['Well_Name'] = result['Well_Name'].apply(lambda x: x.rstrip())
-    result['Well_Name'] = result['Well_Name'].apply(lambda x: x.lstrip())
-    result_aquifer['Aquifer_Name'] = result_aquifer['Aquifer_Name'].apply(lambda x: x.rstrip())
-    result_aquifer['Aquifer_Name'] = result_aquifer['Aquifer_Name'].apply(lambda x: x.lstrip())
+#     result['Aquifer_Name'] = result['Aquifer_Name'].apply(lambda x: x.rstrip())
+#     result['Aquifer_Name'] = result['Aquifer_Name'].apply(lambda x: x.lstrip())
+#     result['Well_Name'] = result['Well_Name'].apply(lambda x: x.rstrip())
+#     result['Well_Name'] = result['Well_Name'].apply(lambda x: x.lstrip())
+#     result_aquifer['Aquifer_Name'] = result_aquifer['Aquifer_Name'].apply(lambda x: x.rstrip())
+#     result_aquifer['Aquifer_Name'] = result_aquifer['Aquifer_Name'].apply(lambda x: x.lstrip())
     
-    result[['year_Date_Persian', 'month_Date_Persian', 'day_Date_Persian']] = result.Date_Persian.str.split('-', expand=True)
-    result['year_Date_Persian'] = result['year_Date_Persian'].astype(int)
-    result['month_Date_Persian'] = result['month_Date_Persian'].astype(int)
-    result['day_Date_Persian'] = result['day_Date_Persian'].astype(int)
-    result['Date_Gregorian'] = pd.to_datetime(result['Date_Gregorian'])
+#     result[['year_Date_Persian', 'month_Date_Persian', 'day_Date_Persian']] = result.Date_Persian.str.split('-', expand=True)
+#     result['year_Date_Persian'] = result['year_Date_Persian'].astype(int)
+#     result['month_Date_Persian'] = result['month_Date_Persian'].astype(int)
+#     result['day_Date_Persian'] = result['day_Date_Persian'].astype(int)
+#     result['Date_Gregorian'] = pd.to_datetime(result['Date_Gregorian'])
     
-    result_aquifer[['year_Date_Persian', 'month_Date_Persian', 'day_Date_Persian']] = result_aquifer.Date_Persian.str.split('-', expand=True)
-    result_aquifer['year_Date_Persian'] = result_aquifer['year_Date_Persian'].astype(int)
-    result_aquifer['month_Date_Persian'] = result_aquifer['month_Date_Persian'].astype(int)
-    result_aquifer['day_Date_Persian'] = result_aquifer['day_Date_Persian'].astype(int)
-    result_aquifer['Date_Gregorian'] = pd.to_datetime(result_aquifer['Date_Gregorian'])
+#     result_aquifer[['year_Date_Persian', 'month_Date_Persian', 'day_Date_Persian']] = result_aquifer.Date_Persian.str.split('-', expand=True)
+#     result_aquifer['year_Date_Persian'] = result_aquifer['year_Date_Persian'].astype(int)
+#     result_aquifer['month_Date_Persian'] = result_aquifer['month_Date_Persian'].astype(int)
+#     result_aquifer['day_Date_Persian'] = result_aquifer['day_Date_Persian'].astype(int)
+#     result_aquifer['Date_Gregorian'] = pd.to_datetime(result_aquifer['Date_Gregorian'])
     
     
-    result.to_csv("ddd.csv")
+#     result.to_csv("ddd.csv")
     
-    return result, result_aquifer
+#     return result, result_aquifer
 
 
 
@@ -577,34 +648,7 @@ def data_cleansing(well_info_data_all, dtw_data_all, thiessen_data_all, sc_data_
 
 
 
-# -----------------------------------------------------------------------------
-# LOAD DATABASE
-# -----------------------------------------------------------------------------
-db_path = './Assets/Database/groundwater.sqlite'
 
-TOKEN_PATH = "./Assets/.mapbox_token"
-token = open(TOKEN_PATH).read()
-
-db = sqlite3.connect(db_path)
-table_name = pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", db)
-
-
-try:
-    if table_name['name'].str.contains('RawDATA').any():
-        RawDATA = pd.read_sql_query(sql="SELECT * FROM RawDATA", con=db)
-        GeoInfoData = extract_geo_info_dataset(RawDATA)
-    else:
-        print("ERROR: RawDATA TABLE NOT EXIST")
-except:
-    print("ERROR: DATABASE NOT EXIST")
-
-try:
-    if table_name['name'].str.contains('AquiferDATA').any():
-        AquiferDATA = pd.read_sql_query(sql="SELECT * FROM AquiferDATA", con=db)
-    else:
-        print("ERROR: AquiferDATA TABLE NOT EXIST")
-except:
-    print("ERROR: DATABASE NOT EXIST")
 
 
 

@@ -1,3 +1,4 @@
+from dash_html_components.Hr import Hr
 import dash_leaflet as dl
 import dash_html_components as html
 import dash_core_components as dcc
@@ -13,14 +14,6 @@ from App.dashApps.Groundwater.callbacks.config import *
 # ELEMAN ON MAP
 # -----------------------------------------------------------------------------
 
-# SIDEBAR_BUTTON = html.Div(
-#     children=[
-#         html.I(
-#             className="fas fa-outdent fa-2x BTN-SIDEBAR-CLOSE",
-#             id="SIDEBAR_BUTTON-TAB_HOME_BODY"
-#         )
-#     ]
-# )
 SIDEBAR_BUTTON = html.Div(
     children=[
         html.I(
@@ -44,6 +37,501 @@ TITLE = html.Div(
     ],
     className="TILTE-SHOW",
     dir="rtl"
+)
+
+
+
+# USER SETTINGS
+# -----------------------------------------------------------------------------
+
+USER_SETTINGS = html.Span(
+    id="USER_SETTINGS-TAB_HOME_BODY",
+    children=[
+        html.I(
+            className="fas fa-user-cog fa-2x text-dark",
+        ),
+        dbc.Tooltip(
+            "تنظیمات داشبورد مدیریتی",
+            target="USER_SETTINGS-TAB_HOME_BODY",
+        ),
+    ],
+    n_clicks=0,
+    className="USER-SETTINGS",
+    dir="rtl"
+)
+
+
+IP_SERVER_DATABASE = html.Div(
+    children=[
+        
+        html.Div(
+            children=[
+                "اتصال به پایگاه داده از طریق نشانی آی‌پی"
+            ],
+            className='row p-0 m-0 pb-3 text-center text-info',
+        ),
+        
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        dcc.Input(
+                            id='IP_SERVER_DATABASE-TAB_HOME_BODY', 
+                            className='form-group ip-box p-0 m-0 text-center w-100 h-100',
+                            type='text',
+                            placeholder='127.0.0.1:8080',
+                        )
+                    ],
+                    className='col-xl-8 col-lg-8 col-8 p-0 m-0 py-1',
+                ),
+                html.Div(
+                    children=[
+                        html.Button(
+                            id='SUBMIT_IP_SERVER_DATABASE-TAB_HOME_BODY', 
+                            className='btn btn-primary rounded-0 p-0 m-0 w-100 h-100',
+                            n_clicks=0,
+                            children=[
+                                html.I(
+                                    className="fa fa-plug ml-2"
+                                ),
+                                "اتصال",                                
+                            ],
+                            style={
+                                "height": "40px",
+                                "line-height": "40px"
+                            }
+                        )
+                    ],
+                    className='col-xl-4 col-lg-4 col-4 p-0 m-0 py-1',
+                ),
+            ],
+            className='row p-0 m-0 align-items-center justify-content-center',
+        ),
+        
+        dbc.Toast(
+            id="POPUP_IP_SERVER_DATABASE-TAB_HOME_BODY",
+            is_open=False,
+            dismissable=True,
+            duration=5000,
+            className="popup-notification",
+        )
+        
+    ],
+    className="form-group p-0 m-0"
+)
+
+
+SPREADSHEET_DATABASE = html.Div(
+    children=[
+        
+        html.Div(
+            children=[
+                "ایجاد پایگاه داده از فایل صفحه گسترده"
+            ],
+            className='row p-0 m-0 pb-3 text-center text-info',
+        ),
+        # TODO: Use "dash-uploader" Instead "dcc.Upload"
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        dcc.Upload(
+                            children=[
+                                html.B(
+                                    children=[
+                                        'انتخاب فایل',
+                                        html.I(
+                                            className="fas fa-cloud-upload-alt ml-2"
+                                        ),
+                                    ],
+                                    className='font-weight-light',
+                                ),
+                            ],
+                            className="upload-button m-auto rounded",
+                            id="CHOOSE_SPREADSHEET-TAB_HOME_BODY",
+                            accept=".xlsx, .xls",
+                        ),
+                    ],
+                    className='col-xl-5 col-lg-5 col-5 p-0 m-0',
+                    dir="ltr"
+                ),
+                html.Div(
+                    id='CHOOSEED_FILE_NAME-TAB_HOME_BODY',
+                    children=[
+                        "فایلی انتخاب نشده است!"
+                    ],
+                    className='col-xl-7 col-lg-7 col-7 p-0 m-0 pr-2',
+                ),
+
+            ],
+            className='row p-0 m-0 align-items-center justify-content-center',
+        ),
+        
+        html.P("", className="breakLine p-0 my-3 mx-auto w-75 text-info"),
+        
+        html.Div(
+            children=[
+                "انتخاب کاربرگ"
+            ],
+            className='row p-0 m-0 align-items-center justify-content-center text-center',
+            dir="rtl"
+        ),
+        
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Span(
+                            children=[
+                                "کاربرگ مشخصات"
+                            ]
+                        ),
+                        dcc.Dropdown(
+                            id="SELECT_GEOINFO_WORKSHEET_SPREADSHEET_DATABASE-TAB_HOME_BODY",
+                            placeholder="انتخاب...",
+                            clearable=False,
+                            style={
+                                "line-height": "40px",
+                            }
+                        )
+                    ],
+                    className='col-6 p-0 m-0 text-center',
+                ),
+                html.Div(
+                    children=[
+                        html.Span(
+                            children=[
+                                "کاربرگ داده‏‌ها"
+                            ]
+                        ),
+                        dcc.Dropdown(
+                            id="SELECT_DATA_WORKSHEET_SPREADSHEET_DATABASE-TAB_HOME_BODY",
+                            placeholder="انتخاب...",
+                            clearable=False,
+                            style={
+                                "line-height": "40px",
+                            }
+                        )
+                    ],
+                    className='col-6 p-0 m-0 text-center ',
+                ),
+            ],
+            className='row p-0 m-0 align-items-center justify-content-center',
+        ),
+        
+        html.P("", className="breakLine p-0 my-3 mx-auto w-75 text-info"),
+        
+        html.Div(
+            children=[
+                "انتخاب نام جدول"
+            ],
+            className='row p-0 m-0 align-items-center justify-content-center text-center',
+            dir="rtl"
+        ),
+        
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Span(
+                            children=[
+                                "جدول مشخصات"
+                            ]
+                        ),
+                        dcc.Input(
+                            id="INPUT_GEOINFO_TABLE_NAME-TAB_HOME_BODY",
+                            className="text-center w-100",
+                            value='',
+                            style={
+                                "line-height": "40px",
+                                "border": "solid 1px #ccc",
+                                "border-radius": "4px",
+                                "direction": "ltr"
+                            }
+                        )
+                    ],
+                    className='col-6 p-0 m-0 text-center',
+                ),
+                html.Div(
+                    children=[
+                        html.Span(
+                            children=[
+                                "جدول داده‌ها"
+                            ]
+                        ),
+                        dcc.Input(
+                            id="INPUT_DATA_TABLE_NAME-TAB_HOME_BODY",
+                            className="text-center w-100",
+                            value='',
+                            style={
+                                "line-height": "40px",
+                                "border": "solid 1px #ccc",
+                                "border-radius": "4px",
+                                "direction": "ltr"
+                            }
+                        )
+                    ],
+                    className='col-6 p-0 m-0 text-center ',
+                ),
+            ],
+            className='row p-0 m-0 pb-3 align-items-center justify-content-center',
+        ),       
+        
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Button(
+                            id='SUBMIT_SPREADSHEET_DATABASE-TAB_HOME_BODY', 
+                            className='btn btn-primary rounded p-0 m-0 w-100 h-100',
+                            n_clicks=0,
+                            children=[
+                                html.I(
+                                    className="fa fa-database ml-2"
+                                ),
+                                "ایجاد",                                
+                            ],
+                            style={
+                                "height": "40px",
+                                "line-height": "40px"
+                            }
+                        )
+                    ],
+                    className='col-4 p-0 m-0 ',
+                ),
+            ],
+            className='row p-0 m-0 align-items-center justify-content-center',
+        ), 
+        
+        dbc.Toast(
+            id="POPUP_CONNECT_TO_SPREADSHEET_DATABASE-TAB_HOME_BODY",
+            is_open=False,
+            dismissable=True,
+            duration=5000,
+            className="popup-notification",
+        ),
+        
+    ],
+    className="form-group p-0 m-0"
+)
+
+
+DATABASE_CARD = html.Div(
+    children=[
+        # CARD HEADER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        html.H5(
+            children=[
+                html.Img(
+                    src='data:image/png;base64,{}'.format(DATABASE_LOGO),
+                    height=30,
+                    className="ml-2"
+                ),
+                "پایگاه داده",
+            ],
+            className='card-header text-right'
+        ),
+        # CARD BODY +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        html.Ul(
+            children=[
+                html.Li(
+                    children=[
+                        IP_SERVER_DATABASE
+                    ],
+                    className="list-group-item border-bottom border-top border-dark"
+                ),
+                html.Li(
+                    children=[
+                        SPREADSHEET_DATABASE
+                    ],
+                    className="list-group-item"
+                )
+            ],
+            className="list-group list-group-flush"
+        )
+    ],
+    className="card border-dark rounded p-0 m-0"
+)
+
+
+DATA_CLEANSING_CARD_PART_1 = html.Div(
+    children=[
+        
+        html.Label(
+            children=[
+                "1- انتخاب جدول از پایگاه داده:"
+            ],
+            className='row pb-2 m-0 text-center',
+            dir="rtl"
+        ),
+        
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Span(
+                            children=[
+                                "جدول مشخصات"
+                            ]
+                        ),
+                        dcc.Dropdown(
+                            id="SELECT_GEOINFO_TABLE_DATA_CLEANSING-TAB_HOME_BODY",
+                            placeholder="انتخاب...",
+                            clearable=False,
+                            style={
+                                "line-height": "40px",
+                            }
+                        )
+                    ],
+                    className='col-6 p-0 m-0 text-center',
+                ),
+                html.Div(
+                    children=[
+                        html.Span(
+                            children=[
+                                "جدول داده‏‌ها"
+                            ]
+                        ),
+                        dcc.Dropdown(
+                            id="SELECT_DATA_TABLE_DATA_CLEANSING-TAB_HOME_BODY",
+                            placeholder="انتخاب...",
+                            clearable=False,
+                            style={
+                                "line-height": "40px",
+                            }
+                        )
+                    ],
+                    className='col-6 p-0 m-0 text-center ',
+                ),
+            ],
+            className='row p-0 m-0 align-items-center justify-content-center',
+        ),
+        
+    ],
+    className="p-0 m-0"
+)
+
+
+DATA_CLEANSING_CARD_PART_2 = html.Div(
+    children=[
+        
+    ],
+    className="p-0 m-0"
+)
+
+
+DATA_CLEANSING_CARD = html.Div(
+    children=[
+        # CARD HEADER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        html.H5(
+            children=[
+                html.Img(
+                    src='data:image/png;base64,{}'.format(DATABASE_LOGO),
+                    height=30,
+                    className="ml-2"
+                ),
+                "پاکسازی داده‌ها",
+            ],
+            className='card-header text-right'
+        ),
+        # CARD BODY +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        DATA_CLEANSING_CARD_PART_1
+                    ],
+                    className='col-xl-6 col-lg-12 col-md-12 p-0 m-0 ',
+                ),
+                html.Div(
+                    children=[
+                        DATA_CLEANSING_CARD_PART_2
+                    ],
+                    className='col-xl-6 col-lg-12 col-md-12 p-0 m-0 ',
+                ),
+            ],
+            className='row p-3 m-0 border-bottom border-top border-dark',
+        ),
+        html.Div(
+            children=[
+                "sd"
+            ],
+            className='row p-3 m-0',
+        ),
+    ],
+    className="card border-dark rounded p-0 m-0 h-100"
+)
+
+
+
+
+
+USER_SETTINGS_MODEL_BODY_TAB_HOME = html.Div(
+    children=[
+        html.Div(
+            children=[
+                DATABASE_CARD,
+            ],
+            className='col-xl-4 col-lg-6 col-md-12 p-1 m-0',
+        ),
+        html.Div(
+            children=[
+                DATA_CLEANSING_CARD
+            ],
+            className='col-xl-8 col-lg-6 col-md-12 p-1 m-0',
+        )
+    ],
+    dir='rtl',
+    className='row p-0 m-0',
+)
+
+
+USER_SETTINGS_MODEL = dbc.Modal(
+    children=[
+        
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.H4("تنظیمات داشبورد مدیریتی"),
+                    ],
+                    className='col-11 p-0 m-0 text-center',
+                ),
+                html.Div(
+                    children=[
+                        dbc.Button(
+                            "بستن",
+                            id="CLOSE_USER_SETTINGS_MODEL-TAB_HOME_BODY",
+                            className="btn btn-danger btn-sm",
+                            n_clicks=0,
+                        ),
+                    ],
+                    className='col-1 p-0 m-0 text-left',
+                ),                
+            ],
+            className="row p-0 pt-3 pb-1 mx-3 justify-content-between"
+        ),
+        
+        html.Hr(
+            className="p-0 m-0"    
+        ),
+        
+        dbc.ModalBody(
+            children=[
+                USER_SETTINGS_MODEL_BODY_TAB_HOME,
+            ],
+            className="p-1 py-2 m-0"   
+        ),
+        
+    ],
+    id="USER_SETTINGS_MODEL-TAB_HOME_BODY",
+    is_open=True,
+    size="xl",
+    backdrop="static",
+    keyboard=False,
+    scrollable=True,
+    centered=False,
+    autoFocus=True,
+    fade=True,
 )
 
 
@@ -147,6 +635,7 @@ SEARCH_BAR = html.Div(
 )
 
 
+
 # -------------------------------------------------------------------------------------------------
 # TAB HOME - BODY
 # -------------------------------------------------------------------------------------------------
@@ -194,6 +683,8 @@ BODY_TAB_HOME = html.Div(
                         MAP_INFO,
                         SEARCH_BAR,
                         TITLE,
+                        USER_SETTINGS,
+                        USER_SETTINGS_MODEL,
                         # SHOW_COORDINATE
                     ],
                     style={

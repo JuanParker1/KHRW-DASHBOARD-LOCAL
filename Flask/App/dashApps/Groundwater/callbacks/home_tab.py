@@ -27,7 +27,7 @@ from App.dashApps.Groundwater.callbacks.config import *
 
 
 
-def groundwater_callback_home(app):
+def groundwater_callback_home_tab(app):
 
 
     @app.callback(
@@ -481,6 +481,443 @@ def groundwater_callback_home(app):
 
 
 
+    @app.callback(
+        Output("USER_SETTINGS_MODEL-TAB_HOME_BODY", "is_open"),
+        Input("USER_SETTINGS-TAB_HOME_BODY", "n_clicks"),
+        Input("CLOSE_USER_SETTINGS_MODEL-TAB_HOME_BODY", "n_clicks"),
+        State("USER_SETTINGS_MODEL-TAB_HOME_BODY", "is_open"),
+    )
+    def toggle_modal(n1, n2, is_open):
+        if n1 or n2:
+            return not is_open
+        return is_open
+
+
+
+
+    # -----------------------------------------------------------------------------
+    # CONNECT TO IP SERVER DATABASE - TAB HOME BODY
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output("SUBMIT_IP_SERVER_DATABASE-TAB_HOME_BODY", "n_clicks"),    
+        Output("IP_SERVER_DATABASE-TAB_HOME_BODY", "value"),
+        Output("POPUP_IP_SERVER_DATABASE-TAB_HOME_BODY", "is_open"),
+        Output("POPUP_IP_SERVER_DATABASE-TAB_HOME_BODY", "icon"),
+        Output("POPUP_IP_SERVER_DATABASE-TAB_HOME_BODY", "header"),    
+        Output("POPUP_IP_SERVER_DATABASE-TAB_HOME_BODY", "children"),
+        Output("POPUP_IP_SERVER_DATABASE-TAB_HOME_BODY", "headerClassName"),
+        Input("SUBMIT_IP_SERVER_DATABASE-TAB_HOME_BODY", "n_clicks"),
+        State("IP_SERVER_DATABASE-TAB_HOME_BODY", "value"),
+    )
+    def FUNCTION_CONNECT_TO_IP_SERVER_DATABASE_TAB_HOME_BODY(n, ip_address):
+        if n != 0:
+            result = [
+                0,
+                "",
+                True,
+                None,
+                "اطلاعات",
+                "این بخش در حال تکمیل می‌باشد.",
+                "popup-notification-header-info"            
+            ]
+            return result
+        else:
+            result = [
+                0,
+                "",
+                False,
+                None,
+                None,
+                None,
+                None          
+            ]
+            return result
+        
+        
+    # -----------------------------------------------------------------------------
+    # CONNECT TO SPREADSHEET FILE AND CREATE DATABASE - TAB HOME BODY
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output("SUBMIT_SPREADSHEET_DATABASE-TAB_HOME_BODY", "n_clicks"),        
+        Output("CHOOSEED_FILE_NAME-TAB_HOME_BODY", "children"),
+        Output("CHOOSEED_FILE_NAME-TAB_HOME_BODY", "style"),                
+        Output("POPUP_CONNECT_TO_SPREADSHEET_DATABASE-TAB_HOME_BODY", "is_open"),
+        Output("POPUP_CONNECT_TO_SPREADSHEET_DATABASE-TAB_HOME_BODY", "icon"),
+        Output("POPUP_CONNECT_TO_SPREADSHEET_DATABASE-TAB_HOME_BODY", "header"),
+        Output("POPUP_CONNECT_TO_SPREADSHEET_DATABASE-TAB_HOME_BODY", "children"),
+        Output("POPUP_CONNECT_TO_SPREADSHEET_DATABASE-TAB_HOME_BODY", "headerClassName"),        
+        Output('CHOOSE_SPREADSHEET-TAB_HOME_BODY', 'contents'),
+        Output('SELECT_GEOINFO_WORKSHEET_SPREADSHEET_DATABASE-TAB_HOME_BODY', 'options'),
+        Output('SELECT_DATA_WORKSHEET_SPREADSHEET_DATABASE-TAB_HOME_BODY', 'options'),
+        Output('RAW_DATA-TAB_HOME_BODY', 'data'),
+        Output('INPUT_GEOINFO_TABLE_NAME-TAB_HOME_BODY', 'value'),
+        Output('INPUT_DATA_TABLE_NAME-TAB_HOME_BODY', 'value'),       
+        Output('INTERVAL_COMPONENT_DATA_CLEANSING-TAB_HOME_BODY', 'n_intervals'),       
+                      
+        Input("SUBMIT_SPREADSHEET_DATABASE-TAB_HOME_BODY", "n_clicks"),        
+        Input('CHOOSE_SPREADSHEET-TAB_HOME_BODY', 'contents'),
+        State('INPUT_GEOINFO_TABLE_NAME-TAB_HOME_BODY', 'value'),
+        State('INPUT_DATA_TABLE_NAME-TAB_HOME_BODY', 'value'),
+        State('CHOOSE_SPREADSHEET-TAB_HOME_BODY', 'contents'),
+        State('CHOOSE_SPREADSHEET-TAB_HOME_BODY', 'filename'),
+        State('SELECT_GEOINFO_WORKSHEET_SPREADSHEET_DATABASE-TAB_HOME_BODY', 'value'),
+        State('SELECT_DATA_WORKSHEET_SPREADSHEET_DATABASE-TAB_HOME_BODY', 'value'),      
+        State('SELECT_GEOINFO_WORKSHEET_SPREADSHEET_DATABASE-TAB_HOME_BODY', 'options'),
+        State('SELECT_DATA_WORKSHEET_SPREADSHEET_DATABASE-TAB_HOME_BODY', 'options'),
+        State('RAW_DATA-TAB_HOME_BODY', 'data'),      
+    )
+    def FUNCTION_CONNECT_TO_SPREADSHEET_DATABASE_TAB_HOME_BODY(
+        submit_btn, content,
+        GEOINFO_TABLE_NAME, DATA_TABLE_NAME,
+        state_content, filename, 
+        GEOINFO_WORKSHEET_NAME, DATA_WORKSHEET_NAME,
+        GEOINFO_WORKSHEET_OPTIONS, DATA_WORKSHEET_OPTIONS,
+        RAW_DATA
+    ):
+
+        if (submit_btn != 0 and content is None):
+            result = [
+                0,
+                "فایلی انتخاب نشده است!",
+                {'direction': 'rtl', 'color': 'red', 'text-align': 'right'},
+                True,
+                None,
+                "هشدار",
+                "فایل صفحه گسترده‌ای انتخاب نشده است.",
+                "popup-notification-header-warning",
+                None,
+                [],
+                [],
+                None,       
+                [],                   
+                [],
+                0      
+            ]
+            return result
+        
+        elif submit_btn == 0 and content is not None:
+            
+            raw_data, worksheet_name = read_spreadsheet(contents=content, filename=filename)
+                     
+            if worksheet_name is None:
+                result = [
+                    0,
+                    "فایلی انتخاب نشده است!",
+                    {'direction': 'rtl', 'color': 'red', 'text-align': 'right'},
+                    True,
+                    None,
+                    "اخطار",
+                    "تعداد کاربرگ‏‌های فایل ورودی باید حداقل دو عدد باشند.",
+                    "popup-notification-header-danger",
+                    None,      
+                    [],
+                    [],
+                    None,     
+                    [],                   
+                    [],
+                    0     
+                ]
+                return result
+
+            result = [
+                0,
+                f"{filename[0:14]}..." if len(filename) >= 18 else filename,
+                {'direction': 'ltr', 'color': 'green', 'text-align': 'left'},
+                False,
+                None,
+                None,
+                None,
+                None,
+                state_content,
+                [{'label': wn, 'value': wn} for wn in worksheet_name],
+                [{'label': wn, 'value': wn} for wn in worksheet_name],
+                raw_data,
+                GEOINFO_TABLE_NAME,
+                DATA_TABLE_NAME,
+                0
+                
+            ]
+            return result
+        
+        elif submit_btn != 0 and content is not None:
+            
+            if (GEOINFO_WORKSHEET_NAME is None) | (DATA_WORKSHEET_NAME is None):
+                result = [
+                    1,
+                    f"{filename[0:14]}..." if len(filename) >= 18 else filename,
+                    {'direction': 'ltr', 'color': 'green', 'text-align': 'left'},
+                    True,
+                    None,
+                    "هشدار",
+                    "کاربرگ مشخصات یا کاربرگ داده‌ها انتخاب نشده است!",
+                    "popup-notification-header-warning",
+                    state_content,
+                    GEOINFO_WORKSHEET_OPTIONS,
+                    DATA_WORKSHEET_OPTIONS,
+                    RAW_DATA,
+                    GEOINFO_TABLE_NAME,
+                    DATA_TABLE_NAME,
+                    0             
+                ]
+                return result 
+            
+            elif GEOINFO_WORKSHEET_NAME == DATA_WORKSHEET_NAME:
+                result = [
+                    1,
+                    f"{filename[0:14]}..." if len(filename) >= 18 else filename,
+                    {'direction': 'ltr', 'color': 'green', 'text-align': 'left'},
+                    True,
+                    None,
+                    "هشدار",
+                    "کاربرگ مشخصات و کاربرگ داده‌ها نمی‌توانند یکسان باشند!",
+                    "popup-notification-header-warning",
+                    state_content,
+                    GEOINFO_WORKSHEET_OPTIONS,
+                    DATA_WORKSHEET_OPTIONS,
+                    RAW_DATA,
+                    GEOINFO_TABLE_NAME,
+                    DATA_TABLE_NAME,
+                    0
+                                 
+                ]
+                return result
+            
+            elif set(RAW_DATA[GEOINFO_WORKSHEET_NAME].keys()) != set(HydrographDataSample_GeoInfoColumns):
+                result = [
+                    0,
+                    "فایلی انتخاب نشده است!",
+                    {'direction': 'rtl', 'color': 'red', 'text-align': 'right'},
+                    True,
+                    None,
+                    "اخطار",
+                    "سر ستون‌های «کاربرگ مشخصات» با فایل نمونه همخوانی ندارند!",
+                    "popup-notification-header-danger",
+                    None,
+                    [],
+                    [],
+                    None,
+                    [],                   
+                    [], 
+                    0 
+                                   
+                ]
+                return result
+            
+            elif set(RAW_DATA[DATA_WORKSHEET_NAME].keys()) != set(HydrographDataSample_DataColumns):
+                result = [
+                    0,
+                    "فایلی انتخاب نشده است!",
+                    {'direction': 'rtl', 'color': 'red', 'text-align': 'right'},
+                    True,
+                    None,
+                    "اخطار",
+                    "سر ستون‌های «کاربرگ داده‌ها» با فایل نمونه همخوانی ندارند!",
+                    "popup-notification-header-danger",
+                    None,
+                    [],
+                    [],
+                    None,              
+                    [],                   
+                    [],  
+                    0              
+                ]
+                return result
+            
+            elif (GEOINFO_TABLE_NAME is None) | (DATA_TABLE_NAME is None) | (GEOINFO_TABLE_NAME == "") | (DATA_TABLE_NAME == ""):
+                result = [
+                    1,
+                    f"{filename[0:14]}..." if len(filename) >= 18 else filename,
+                    {'direction': 'ltr', 'color': 'green', 'text-align': 'left'},
+                    True,
+                    None,
+                    "هشدار",
+                    "نام جداول نمی‌تواند خالی باشد!",
+                    "popup-notification-header-warning",
+                    state_content,
+                    GEOINFO_WORKSHEET_OPTIONS,
+                    DATA_WORKSHEET_OPTIONS,
+                    RAW_DATA,
+                    GEOINFO_TABLE_NAME,
+                    DATA_TABLE_NAME,
+                    0             
+                ]
+                return result 
+            
+            elif GEOINFO_TABLE_NAME == DATA_TABLE_NAME:
+                result = [
+                    1,
+                    f"{filename[0:14]}..." if len(filename) >= 18 else filename,
+                    {'direction': 'ltr', 'color': 'green', 'text-align': 'left'},
+                    True,
+                    None,
+                    "هشدار",
+                    "نام جداول نمی‌تواند یکسان باشند!",
+                    "popup-notification-header-warning",
+                    state_content,
+                    GEOINFO_WORKSHEET_OPTIONS,
+                    DATA_WORKSHEET_OPTIONS,
+                    RAW_DATA,
+                    GEOINFO_TABLE_NAME,
+                    DATA_TABLE_NAME,
+                    0              
+                ]
+                return result
+            
+            elif (not all(c in EN_CHAR for c in GEOINFO_TABLE_NAME)) | (not all(c in EN_CHAR for c in DATA_TABLE_NAME)):
+                result = [
+                    1,
+                    f"{filename[0:14]}..." if len(filename) >= 18 else filename,
+                    {'direction': 'ltr', 'color': 'green', 'text-align': 'left'},
+                    True,
+                    None,
+                    "هشدار",
+                    "در نامگذاری جداول فقط می‌توان از حروف کوچک و بزرگ انگلیسی، اعداد و خط زیر استفاده کرد!",
+                    "popup-notification-header-warning",
+                    state_content,
+                    GEOINFO_WORKSHEET_OPTIONS,
+                    DATA_WORKSHEET_OPTIONS,
+                    RAW_DATA,
+                    GEOINFO_TABLE_NAME,
+                    DATA_TABLE_NAME,
+                    0
+                ]
+                return result
+            
+            elif (GEOINFO_TABLE_NAME.lower() in [i.lower() for i in list(pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", DB_GROUNDWATER).name)]) |\
+                ((GEOINFO_TABLE_NAME.lower() + "_raw") in [i.lower() for i in list(pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", DB_GROUNDWATER).name)]):
+                result = [
+                    1,
+                    f"{filename[0:14]}..." if len(filename) >= 18 else filename,
+                    {'direction': 'ltr', 'color': 'green', 'text-align': 'left'},
+                    True,
+                    None,
+                    "هشدار",
+                    f"در پایگاه داده جدولی با نام {GEOINFO_TABLE_NAME} موجود می‌باشد!",
+                    "popup-notification-header-warning",
+                    state_content,
+                    GEOINFO_WORKSHEET_OPTIONS,
+                    DATA_WORKSHEET_OPTIONS,
+                    RAW_DATA,
+                    "",
+                    DATA_TABLE_NAME,
+                    0
+                ]
+                return result
+            
+            elif (DATA_TABLE_NAME.lower() in [i.lower() for i in list(pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", DB_GROUNDWATER).name)]) |\
+                ((DATA_TABLE_NAME.lower() + "_raw") in [i.lower() for i in list(pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", DB_GROUNDWATER).name)]):
+                result = [
+                    1,
+                    f"{filename[0:14]}..." if len(filename) >= 18 else filename,
+                    {'direction': 'ltr', 'color': 'green', 'text-align': 'left'},
+                    True,
+                    None,
+                    "هشدار",
+                    f"در پایگاه داده جدولی با نام {DATA_TABLE_NAME} موجود می‌باشد!",
+                    "popup-notification-header-warning",
+                    state_content,
+                    GEOINFO_WORKSHEET_OPTIONS,
+                    DATA_WORKSHEET_OPTIONS,
+                    RAW_DATA,
+                    GEOINFO_TABLE_NAME,
+                    "",
+                    0
+                ]
+                return result
+            
+
+            pd.DataFrame.from_dict(RAW_DATA[GEOINFO_WORKSHEET_NAME]).to_sql(
+                name=GEOINFO_TABLE_NAME.lower() + "_raw",
+                con=DB_GROUNDWATER,
+                if_exists="replace"
+            )
+            
+            
+            pd.DataFrame.from_dict(RAW_DATA[DATA_WORKSHEET_NAME]).to_sql(
+                name=DATA_TABLE_NAME.lower() + "_raw",
+                con=DB_GROUNDWATER,
+                if_exists="replace"
+            )
+
+                
+            result = [
+                0,
+                "فایلی انتخاب نشده است!",
+                {'direction': 'rtl', 'color': 'red', 'text-align': 'right'},
+                True,
+                None,
+                "موفقیت آمیز",
+                "پایگاه داده با موفقیت ایجاد شد.",
+                "popup-notification-header-success",
+                None,
+                [],
+                [],
+                None,                   
+                [],                   
+                [],
+                0                   
+            ]
+            return result 
+             
+        else:
+            result = [
+                0,
+                "فایلی انتخاب نشده است!",
+                {'direction': 'rtl', 'color': 'red', 'text-align': 'right'},
+                False,
+                None,
+                None,
+                None,
+                None,
+                None,        
+                [],
+                [],
+                None,        
+                [],                   
+                [],
+                0         
+            ]
+            return result
+
+
+    # -----------------------------------------------------------------------------
+    # DATA CLEANSING - TAB HOME BODY
+    # -----------------------------------------------------------------------------
+    @app.callback(
+        Output('SELECT_GEOINFO_TABLE_DATA_CLEANSING-TAB_HOME_BODY', 'options'),
+        Output('SELECT_DATA_TABLE_DATA_CLEANSING-TAB_HOME_BODY', 'options'),
+        Output('DUMMY_COMPONENT-TAB_HOME_BODY', 'data'),
+        Input("INTERVAL_COMPONENT_DATA_CLEANSING-TAB_HOME_BODY", "n_intervals"),
+        State('DUMMY_COMPONENT-TAB_HOME_BODY', 'data'),
+    )
+    def FUNCTION_DATA_CLEANSING_TAB_HOME_BODY(
+        n, DUMMY_COMPONENT_STATE      
+    ):
+        if DUMMY_COMPONENT_STATE == "OK":
+                    
+            DB_GROUNDWATER_TABELS = list(pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", DB_GROUNDWATER).name)
+            
+            print(DB_GROUNDWATER_TABELS)
+            
+            result = [
+                [{'label': t, 'value': t} for t in DB_GROUNDWATER_TABELS],
+                [{'label': t, 'value': t} for t in DB_GROUNDWATER_TABELS],
+                "OK"
+            ]
+            
+            return result
+        else:
+            print("Errorrrrr")
+            
+            result = [
+                [],
+                [],
+                "OK"
+            ]
+            
+            return result
+
+
 
 
     # df = pd.read_csv('https://gist.githubusercontent.com/chriddyp/5d1ea79569ed194d432e56108a04d188/raw/a9f9e8076b837d541398e999dcbac2b2826a81f8/gdp-life-exp-2007.csv')
@@ -556,114 +993,3 @@ def groundwater_callback_home(app):
     #     else:
     #         raise PreventUpdate
 
-
-    # -----------------------------------------------------------------------------
-    # CONNECT TO SERVER DATABASE - COLLAPSE 1
-    # -----------------------------------------------------------------------------
-    @app.callback(
-        Output("CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "n_clicks"),    
-        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "is_open"),
-        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "icon"),
-        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "header"),    
-        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "children"),
-        Output("POPUP_CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "headerClassName"),
-        Input("CONNECT_TO_SERVER_DATABASE-TAB_HOME_COLLAPSE1", "n_clicks")
-    )
-    def FUNCTION_CONNECT_TO_SERVER_DATABASE_TAB_HOME_COLLAPSE1(n):
-        if n != 0:
-            result = [
-                0,
-                True,
-                None,
-                "اطلاعات",
-                "این بخش در حال تکمیل می‌باشد.",
-                "popup-notification-header-info"            
-            ]
-            return result
-        else:
-            result = [
-                0,
-                False,
-                None,
-                None,
-                None,
-                None          
-            ]
-            return result
-
-
-    # -----------------------------------------------------------------------------
-    # CONNECT TO SPREADSHEET FILE AND CREATE DATABASE - COLLAPSE 1
-    # -----------------------------------------------------------------------------
-    @app.callback(
-        Output("CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1", "n_clicks"),
-        Output("FILENAME_SPREADSHEET-TAB_HOME_COLLAPSE1", "children"),
-        Output("FILENAME_SPREADSHEET-TAB_HOME_COLLAPSE1", "className"),
-        Output("POPUP_CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1", "is_open"),
-        Output("POPUP_CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1", "icon"),
-        Output("POPUP_CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1", "header"),
-        Output("POPUP_CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1", "children"),
-        Output("POPUP_CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1", "headerClassName"),
-        Input('CONNECT_TO_SPREADSHEET-TAB_HOME_COLLAPSE1', 'n_clicks'),    
-        Input('CHOOSE_SPREADSHEET-TAB_HOME_COLLAPSE1', 'contents'), 
-        State('CHOOSE_SPREADSHEET-TAB_HOME_COLLAPSE1', 'filename')
-    )
-    def FUNCTION_CONNECT_TO_SPREADSHEET_TAB_HOME_COLLAPSE1(n, content, filename):
-        if n != 0 and content is None:
-            result = [
-                0,
-                "فایلی انتخاب نشده است!",
-                "text-danger",
-                True,
-                None,
-                "هشدار",
-                "فایل صفحه گسترده‌ای انتخاب نشده است.",
-                "popup-notification-header-warning"            
-            ]
-            return result
-        elif n == 0 and content is not None:
-            result = [
-                0,
-                "فایل انتخابی شما: " + filename,
-                "text-success",
-                False,
-                None,
-                None,
-                None,
-                None           
-            ]
-            return result
-        elif n != 0 and content is not None:
-            raw_data = read_spreadsheet(contents=content, filename=filename)
-            data, data_aquifer = data_cleansing(
-                well_info_data_all=raw_data['Info'],
-                dtw_data_all=raw_data['Depth_To_Water'],
-                thiessen_data_all=raw_data['Thiessen'],
-                sc_data_all=raw_data['Storage_Coefficient']
-            )
-            db = sqlite3.connect(database="groundwater.sqlite")
-            data.to_sql(name="RawAquiferDATA", con=db, if_exists="replace")
-            data_aquifer.to_sql(name="AquiferDATA", con=db, if_exists="replace")
-            result = [
-                1,
-                "فایل انتخابی شما: " + filename,
-                "text-success",
-                True,
-                None,
-                "موفقیت آمیز",
-                "پایگاه داده با موفقیت ایجاد شد.",
-                "popup-notification-header-success"            
-            ]
-            return result    
-        else:
-            result = [
-                0,
-                "فایلی انتخاب نشده است!",
-                "text-danger",
-                False,
-                None,
-                None,
-                None,
-                None           
-            ]
-            return result
