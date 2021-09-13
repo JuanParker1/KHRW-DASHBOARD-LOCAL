@@ -33,7 +33,9 @@ DB_GROUNDWATER = sqlite3.connect(PATH_DB_GROUNDWATER, check_same_thread=False)
 # -----------------------------------------------------------------------------
 # ALL ENGLISH CHARECTER
 # -----------------------------------------------------------------------------
-EN_CHAR = list(string.ascii_lowercase) + list(string.ascii_uppercase) + ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "_"]
+EN_CHAR = list(string.ascii_lowercase) +\
+    list(string.ascii_uppercase) +\
+        ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "_"]
 
 
 
@@ -307,9 +309,244 @@ def extract_geo_info_dataset(data):
 # -----------------------------------------------------------------------------
 # DATA CLEANSING
 # -----------------------------------------------------------------------------
-# CASE-DEPENDENT
-def data_cleansing(GeoInfo, Data):
-    pass
+def convert_to_day_15(info, date, value, date_type="persian"):
+    df = info.copy()
+    if date_type == "gregorian":
+        df["DATE_GREGORIAN"] = date.apply(pd.to_datetime)
+        df["DATE_PERSIAN"] = list(
+            map(
+                lambda i: jalali.Gregorian(i.date()).persian_string(),
+                df["DATE_GREGORIAN"]
+            )
+        )
+    elif date_type == "persian":
+        df["DATE_PERSIAN"] = date
+        df["DATE_GREGORIAN"] = list(
+            map(
+                lambda i: jalali.Persian(i).gregorian_string(),
+                df["DATE_PERSIAN"]
+            )
+        )
+        df["DATE_GREGORIAN"] = df["DATE_GREGORIAN"].apply(pd.to_datetime)    
+    else:
+        pass
+    df["VALUE"] = value        
+    df["DELTA_DAY"] = df["DATE_GREGORIAN"].diff().dt.days
+    df["DATE_PERSIAN_NEW"] = list(
+        map(
+            lambda i: f"{int(i.split('-')[0])}-{int(i.split('-')[1])}-{15}",
+            df["DATE_PERSIAN"]
+        )
+    )
+    df["DATE_GREGORIAN_NEW"] = list(
+        map(
+            lambda i: jalali.Persian(i).gregorian_string(),
+            df["DATE_PERSIAN_NEW"]
+        )
+    )
+    df["DATE_GREGORIAN_NEW"] = df["DATE_GREGORIAN_NEW"].apply(pd.to_datetime)
+    df["VALUE_NEW"] = df["VALUE"]
+    A = []
+    A.append(df["VALUE"][0])
+    for i in range(1, len(df)):
+        if int(df["DATE_PERSIAN"][i].split('-')[2]) >= 15:
+            NEW_VALUE = df["VALUE"][i-1] + ((((df["DATE_GREGORIAN_NEW"][i] - df["DATE_GREGORIAN"][i-1]).days) / ((df["DATE_GREGORIAN"][i] - df["DATE_GREGORIAN"][i-1]).days)) * (df["VALUE"][i] - df["VALUE"][i-1]))
+            A.append(NEW_VALUE)
+        else:
+            NEW_VALUE = df["VALUE"][i] + ((((df["DATE_GREGORIAN_NEW"][i] - df["DATE_GREGORIAN"][i]).days) / ((df["DATE_GREGORIAN"][i+1] - df["DATE_GREGORIAN"][i]).days)) * (df["VALUE"][i+1] - df["VALUE"][i]))
+            A.append(NEW_VALUE)
+    df["VALUE_NEW"] = A
+    return df
+
+
+def create_date_day15(min, max):    
+    result = []
+    min_list = list(map(lambda x: int(x), min.split("-")))
+    max_list = list(map(lambda x: int(x), max.split("-")))
+    for y in range(min_list[0], max_list[0] + 1):
+        for m in range(1, 13):
+            result.append(f"{y}-{m}-15")
+
+    result = pd.DataFrame(
+        {"DATE_PERSIAN" : result}
+    )
+    result['DATE_GREGORIAN'] = result.apply(
+        lambda x: jalali.Persian(x["DATE_PERSIAN"]).gregorian_string(), 
+        axis=1
+    )
+    result["DATE_GREGORIAN"] = result["DATE_GREGORIAN"].apply(pd.to_datetime)
+    result = result[result["DATE_GREGORIAN"] >= pd.to_datetime(jalali.Persian(min).gregorian_string())]
+    result = result[result["DATE_GREGORIAN"] <= pd.to_datetime(jalali.Persian(max).gregorian_string())]
+    result["DATE_GREGORIAN"] = result["DATE_GREGORIAN"].apply(pd.to_datetime)  
+    return result
+
+
+def data_cleansing(
+    GeoInfo,
+    Data,
+    DateType,
+    InterpolateMethod,
+    Order,
+    Limit
+):
+    """Data Cleansing
+
+    Args:
+        GeoInfo (str): Name of GeoInfo Table in Database
+        Data (str): Name of Data Table in Database
+
+    Returns:
+        [type]: [description]
+    """
+    
+    # LOAD GeoInfo DATA
+    geoInfo = pd.read_sql_query(
+        sql=f"SELECT * FROM {GeoInfo}",
+        con=DB_GROUNDWATER
+    )
+    
+    # LOAD DATA
+    data = pd.read_sql_query(
+        sql=f"SELECT * FROM {Data}",
+        con=DB_GROUNDWATER
+    )
+    
+    # REMOVE ANY SPACE AT THE START AND END STRING
+    COLs = ['MAHDOUDE_NAME', 'AQUIFER_NAME', 'LOCATION_NAME']
+    geoInfo[COLs] = geoInfo[COLs].apply(lambda x: x.str.rstrip())
+    geoInfo[COLs] = geoInfo[COLs].apply(lambda x: x.str.lstrip())
+    data[COLs] = data[COLs].apply(lambda x: x.str.rstrip())
+    data[COLs] = data[COLs].apply(lambda x: x.str.lstrip())
+    
+    # CONVERT GREGORIAN DATE
+    data["DATE_GREGORIAN_RAW"] = data["DATE_GREGORIAN_RAW"].apply(pd.to_datetime)
+    
+    # CREATE A DATE CHECK COLUMN
+    data['DATE_CHECK'] = np.where(
+        data["DATE_PERSIAN_RAW"].isna(),
+        np.where(
+            data["DATE_GREGORIAN_RAW"].isna(),
+            np.NaN,
+            "G"
+        ),
+        "P"  
+    )
+    
+    # CONVERT DATE (PERSIAN <--> GREGORIAN)
+    data['DATE_PERSIAN_RAW'] = data.apply(
+        lambda x: jalali.Gregorian(x["DATE_GREGORIAN_RAW"].date()).persian_string() if x["DATE_CHECK"] == "G" else x["DATE_PERSIAN_RAW"], 
+        axis=1
+    )
+
+    data['DATE_GREGORIAN_RAW'] = data.apply(
+        lambda x: jalali.Persian(x["DATE_PERSIAN_RAW"]).gregorian_string() if x["DATE_CHECK"] == "P" else x["DATE_GREGORIAN_RAW"], 
+        axis=1
+    )
+
+    data["DATE_GREGORIAN_RAW"] = data["DATE_GREGORIAN_RAW"].apply(pd.to_datetime)
+    
+    # REMOVE DATE CHECK COLUMN
+    data.drop(
+        ['DATE_CHECK'],
+        axis=1,
+        inplace=True
+    )
+    
+    data.sort_values(
+        by=["MAHDOUDE_NAME", "AQUIFER_NAME", "LOCATION_NAME", "DATE_GREGORIAN_RAW"], 
+        inplace=True
+    )
+    
+    # REMOVE NA ROW IN COLUMN "WATER_TABLE_RAW"
+    data.dropna(
+        subset=["WATER_TABLE_RAW"],
+        inplace=True
+    )
+
+    data.reset_index(
+        inplace=True,
+        drop=True
+    )
+    
+    # CONVERT TO DAY 15
+    wt_date_converted = convert_to_day_15(
+        info=data[["MAHDOUDE_NAME", "AQUIFER_NAME", "LOCATION_NAME"]],
+        date=data["DATE_PERSIAN_RAW"],
+        value=data["WATER_TABLE_RAW"],
+        date_type=DateType
+    )[["MAHDOUDE_NAME", "AQUIFER_NAME", "LOCATION_NAME", "DATE_PERSIAN", "DATE_PERSIAN_NEW", "DATE_GREGORIAN", "DATE_GREGORIAN_NEW", "VALUE_NEW"]]
+
+    wt_date_converted.columns = ["MAHDOUDE_NAME", "AQUIFER_NAME", "LOCATION_NAME", "DATE_PERSIAN_RAW", "DATE_PERSIAN", "DATE_GREGORIAN_RAW","DATE_GREGORIAN", "WATER_TABLE"]
+
+    data = data.merge(
+        right=wt_date_converted,
+        how="left",
+        on=["MAHDOUDE_NAME", "AQUIFER_NAME", "LOCATION_NAME", "DATE_PERSIAN_RAW", "DATE_GREGORIAN_RAW"]
+    )
+    
+    # FILL MISSING DAY 15
+    tmp = pd.DataFrame()
+
+    for mn in list(data["MAHDOUDE_NAME"].unique()):
+        for an in list(data["AQUIFER_NAME"].unique()):
+            for ln in list(data["LOCATION_NAME"].unique()):
+                df = data[(data["MAHDOUDE_NAME"] == mn) & (data["MAHDOUDE_NAME"] == an) & (data["LOCATION_NAME"] == ln)]
+                date = create_date_day15(
+                    min = df.DATE_PERSIAN.min(),
+                    max = df.DATE_PERSIAN.max()
+                )
+                df = date.merge(
+                    df,
+                    how="left",
+                    on=["DATE_PERSIAN", "DATE_GREGORIAN"]
+                )
+                
+                if InterpolateMethod in ["polynomial", "spline"]:
+                    if Limit == 0:
+                        df["WATER_TABLE_INTERPOLATED"] = df["WATER_TABLE"].interpolate(
+                            method=InterpolateMethod,
+                            order=Order,
+                            limit=None
+                        )
+                    else:
+                        df["WATER_TABLE_INTERPOLATED"] = df["WATER_TABLE"].interpolate(
+                            method=InterpolateMethod,
+                            order=Order,
+                            limit=Limit
+                        )
+                else:
+                    if Limit == 0:
+                        df["WATER_TABLE_INTERPOLATED"] = df["WATER_TABLE"].interpolate(
+                            method=InterpolateMethod,
+                            limit=None
+                        )
+                    else:
+                        df["WATER_TABLE_INTERPOLATED"] = df["WATER_TABLE"].interpolate(
+                            method=InterpolateMethod,
+                            limit=Limit
+                        )
+                df["WATER_TABLE_INTERPOLATED"] = df["WATER_TABLE_INTERPOLATED"].interpolate(method='ffill')
+                df["WATER_TABLE_INTERPOLATED"] = df["WATER_TABLE_INTERPOLATED"].interpolate(method='bfill')
+                df["MAHDOUDE_NAME"] = mn
+                df["MAHDOUDE_CODE"] = int(df["MAHDOUDE_CODE"].unique()[0])
+                df["AQUIFER_NAME"] = an
+                df["LOCATION_NAME"] = ln
+                df["DATA_STATE"] = df["DATA_STATE"].fillna("M")
+                df["STORAGE_COEFFICIENT_LOCATION"] = df["STORAGE_COEFFICIENT_LOCATION"].unique()[0]
+                df = df[[
+                    "MAHDOUDE_NAME", "MAHDOUDE_CODE", "AQUIFER_NAME", "LOCATION_NAME",
+                    "DATE_GREGORIAN", "DATE_PERSIAN",
+                    "WATER_TABLE", "WATER_TABLE_INTERPOLATED", "STORAGE_COEFFICIENT_LOCATION", "THISSEN_LOCATION", "THISSEN_AQUIFER",
+                    "DATA_STATE", "NO_MEASURE_CODE", "INFO",
+                    "DATE_GREGORIAN_RAW", "DATE_PERSIAN_RAW", "WATER_TABLE_RAW"	
+                ]]
+
+                tmp = pd.concat([tmp, df], axis=0)
+    
+    data_cleaned = tmp.copy() 
+    
+    return geoInfo, data_cleaned
+    
 
 
 

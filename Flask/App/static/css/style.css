@@ -88,11 +88,25 @@
   font-weight: normal;
 }
 
+@font-face {
+  font-family: "Vazir-FD";
+  src: url("../fonts/Vazir-Regular-FD.eot");
+  src: url("../fonts/Vazir-Regular-FD.woff2") format("woff2"),
+    url("../fonts/Vazir-Regular-FD.woff") format("woff"),
+    url("../fonts/Vazir-Regular-FD.ttf") format("truetype");
+  font-weight: normal;
+}
+
+
+.Font-Vazir {
+  font-family: "Vazir";
+}
+
 
 * {
   margin: 0;
   padding: 0;
-  font-family: "Vazir";
+  font-family: "Vazir-FD";
   font-size: medium;
 }
 
@@ -101,8 +115,6 @@ body {
   text-align: right;
   /* max-width: 1920px */
 }
-
-
 
 
 .left-sidebar {
@@ -166,7 +178,7 @@ body {
 }
 
 .fs-small {
-  font-size: small;
+  font-size: small !important;
 }
 
 .fs-medium {
@@ -200,11 +212,11 @@ body {
 }
 
 .breakLine:before {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .breakLine:after {
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 

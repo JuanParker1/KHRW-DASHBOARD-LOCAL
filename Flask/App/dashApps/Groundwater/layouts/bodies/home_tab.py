@@ -68,7 +68,7 @@ IP_SERVER_DATABASE = html.Div(
             children=[
                 "اتصال به پایگاه داده از طریق نشانی آی‌پی"
             ],
-            className='row p-0 m-0 pb-3 text-center text-info',
+            className='row p-0 m-0 pb-3 text-center',
         ),
         
         html.Div(
@@ -128,7 +128,7 @@ SPREADSHEET_DATABASE = html.Div(
             children=[
                 "ایجاد پایگاه داده از فایل صفحه گسترده"
             ],
-            className='row p-0 m-0 pb-3 text-center text-info',
+            className='row p-0 m-0 pb-3 text-center',
         ),
         # TODO: Use "dash-uploader" Instead "dcc.Upload"
         html.Div(
@@ -167,7 +167,7 @@ SPREADSHEET_DATABASE = html.Div(
             className='row p-0 m-0 align-items-center justify-content-center',
         ),
         
-        html.P("", className="breakLine p-0 my-3 mx-auto w-75 text-info"),
+        html.P("", className="breakLine p-0 my-2 mx-auto w-75 text-info"),
         
         html.Div(
             children=[
@@ -219,7 +219,7 @@ SPREADSHEET_DATABASE = html.Div(
             className='row p-0 m-0 align-items-center justify-content-center',
         ),
         
-        html.P("", className="breakLine p-0 my-3 mx-auto w-75 text-info"),
+        html.P("", className="breakLine p-0 my-2 mx-auto w-75 text-info"),
         
         html.Div(
             children=[
@@ -300,7 +300,7 @@ SPREADSHEET_DATABASE = html.Div(
                     className='col-4 p-0 m-0 ',
                 ),
             ],
-            className='row p-0 m-0 align-items-center justify-content-center',
+            className='row p-0 m-0 align-items-end justify-content-center',
         ), 
         
         dbc.Toast(
@@ -349,7 +349,7 @@ DATABASE_CARD = html.Div(
             className="list-group list-group-flush"
         )
     ],
-    className="card border-dark rounded p-0 m-0"
+    className="card border-dark rounded p-0 m-0 h-100 align-self-center"
 )
 
 
@@ -361,7 +361,7 @@ DATA_CLEANSING_CARD_PART_1 = html.Div(
                 "1- انتخاب جدول از پایگاه داده:"
             ],
             className='row pb-2 m-0 text-center',
-            dir="rtl"
+            dir="rtl",
         ),
         
         html.Div(
@@ -371,7 +371,7 @@ DATA_CLEANSING_CARD_PART_1 = html.Div(
                         html.Span(
                             children=[
                                 "جدول مشخصات"
-                            ]
+                            ],
                         ),
                         dcc.Dropdown(
                             id="SELECT_GEOINFO_TABLE_DATA_CLEANSING-TAB_HOME_BODY",
@@ -382,7 +382,7 @@ DATA_CLEANSING_CARD_PART_1 = html.Div(
                             }
                         )
                     ],
-                    className='col-6 p-0 m-0 text-center',
+                    className='col-5 p-0 m-0 text-center',
                 ),
                 html.Div(
                     children=[
@@ -400,23 +400,233 @@ DATA_CLEANSING_CARD_PART_1 = html.Div(
                             }
                         )
                     ],
-                    className='col-6 p-0 m-0 text-center ',
+                    className='col-5 p-0 m-0 text-center ',
                 ),
             ],
             className='row p-0 m-0 align-items-center justify-content-center',
         ),
         
     ],
-    className="p-0 m-0"
+    className="p-1 m-0"
 )
 
 
 DATA_CLEANSING_CARD_PART_2 = html.Div(
     children=[
         
+        html.Label(
+            children=[
+                "2- انتخاب نوع تاریخ ورودی:"
+            ],
+            className='row pb-2 m-0 text-center',
+            dir="rtl",
+        ),
+        
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        dcc.Dropdown(
+                            id="SELECT_DATE_TYPE_DATA_CLEANSING-TAB_HOME_BODY",
+                            clearable=False,
+                            options=[
+                                {'label': 'تاریخ شمسی', 'value': 'persian'},
+                                {'label': 'تاریخ میلادی', 'value': 'gregorian'},
+                            ],
+                            value='persian',
+                            style={
+                                "line-height": "40px",
+                            }
+                        )
+                    ],
+                    className='col-5 p-0 m-0 text-center',
+                ),
+            ],
+            className='row p-0 m-0 align-items-center justify-content-center',
+        ),
+        
     ],
-    className="p-0 m-0"
+    className="p-1 m-0"
 )
+
+
+DATA_CLEANSING_CARD_PART_3 = html.Div(
+    children=[
+        
+        html.Label(
+            children=[
+                "3- انتخاب روش درون‌یابی مقادیر گمشده:"
+            ],
+            className='row pb-2 m-0 text-center',
+            dir="rtl",
+        ),
+        
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        html.Span(
+                            children=[
+                                "روش"
+                            ]
+                        ),
+                        dcc.Dropdown(
+                            id="SELECT_INTERPOLATE_METHOD_DATA_CLEANSING-TAB_HOME_BODY",
+                            clearable=False,
+                            options=[
+                                {'label': 'Back Fill', 'value': 'bfill'},
+                                {'label': 'Forward Fill', 'value': 'ffill'},
+                                {'label': 'Pad', 'value': 'pad'},
+                                {'label': 'Zero', 'value': 'zero'},
+                                {'label': 'Linear', 'value': 'linear'},
+                                {'label': 'Slinear', 'value': 'slinear'},
+                                {'label': 'Akima', 'value': 'akima'},
+                                {'label': 'Nearest', 'value': 'nearest'},
+                                {'label': 'Spline', 'value': 'spline'},
+                                {'label': 'Polynomial', 'value': 'polynomial'},
+                                {'label': 'Cubic', 'value': 'cubic'},
+                                {'label': 'Quadratic', 'value': 'quadratic'},
+                                {'label': 'Barycentric', 'value': 'barycentric'},
+                                {'label': 'Krogh', 'value': 'krogh'},
+                                {'label': 'Piecewise Polynomial', 'value': 'piecewise_polynomial'},
+                                {'label': 'Pchip', 'value': 'pchip'},
+                                {'label': 'Cubicspline', 'value': 'cubicspline'},
+                            ],
+                            value='akima',
+                            style={
+                                "line-height": "40px",
+                            }
+                        )
+                    ],
+                    className='col-8 p-0 m-0 text-center',
+                ),
+                html.Div(
+                    children=[
+                        html.Span(
+                            children=[
+                                "مرتبه"
+                            ]
+                        ),
+                        dcc.Dropdown(
+                            id="SELECT_ORDER_INTERPOLATE_METHOD_DATA_CLEANSING-TAB_HOME_BODY",
+                            clearable=False,
+                            options=[
+                                {'label': '0', 'value': 0},
+                                {'label': '1', 'value': 1},
+                                {'label': '2', 'value': 2},
+                                {'label': '3', 'value': 3},
+                                {'label': '4', 'value': 4},
+                                {'label': '5', 'value': 5},
+                            ],
+                            value=1,
+                            disabled=True,
+                            style={
+                                "line-height": "40px",
+                            },
+                        )
+                    ],
+                    dir="rtl",
+                    className='col-2 p-0 m-0 text-center',
+                ),
+            ],
+            className='row p-0 m-0 align-items-center justify-content-center',
+        ),
+        
+    ],
+    className="p-1 m-0"
+)
+
+DATA_CLEANSING_CARD_PART_4 = html.Div(
+    children=[
+        
+        html.Label(
+            children=[
+                "4- بیشترین تعداد مقادیر گمشده پی در پی:"
+            ],
+            className='row pb-2 m-0 text-center',
+            dir="rtl",
+        ),
+        
+        html.Div(
+            children=[
+                html.Div(
+                    children=[
+                        dcc.Dropdown(
+                            id="SELECT_LIMIT_DATA_CLEANSING-TAB_HOME_BODY",
+                            clearable=False,
+                            options=[
+                                {'label': 'بدون محدودیت', 'value': 0},
+                                {'label': '1', 'value': 1},
+                                {'label': '2', 'value': 2},
+                                {'label': '3', 'value': 3},
+                                {'label': '4', 'value': 4},
+                                {'label': '6', 'value': 6},
+                                {'label': '9', 'value': 9},
+                                {'label': '12', 'value': 12},
+                                {'label': '15', 'value': 15},
+                                {'label': '18', 'value': 18},
+                                {'label': '21', 'value': 21},
+                                {'label': '24', 'value': 24},
+                            ],
+                            value=0,
+                            style={
+                                "line-height": "40px",
+                            }
+                        )
+                    ],
+                    className='col-5 p-0 m-0 text-center',
+                ),
+            ],
+            className='row p-0 m-0 align-items-center justify-content-center',
+        ),
+        
+    ],
+    className="p-1 pb-3 m-0"
+)
+
+
+DATA_CLEANSING_CARD_BUTTON = html.Div(
+    children=[
+        html.Div(
+            children=[
+                html.Button(
+                    # id='SUBMIT_SPREADSHEET_DATABASE-TAB_HOME_BODY', 
+                    className='btn btn-primary rounded p-0 m-0 w-100 h-100',
+                    n_clicks=0,
+                    children=[
+                        html.I(
+                            className="fa fa-database ml-2"
+                        ),
+                        "ایجاد",                                
+                    ],
+                    style={
+                        "height": "40px",
+                        "line-height": "40px"
+                    }
+                )
+            ],
+            className='col-4 p-0 m-0 ',
+        ),
+    ],
+    className='row p-0 m-0 align-items-center justify-content-center',
+)
+
+
+
+DATA_CLEANSING_CARD_BODY = html.Div(
+    children=[
+        DATA_CLEANSING_CARD_PART_1,
+        html.P("", className="breakLine p-0 my-2 mx-auto w-75 text-info"),
+        DATA_CLEANSING_CARD_PART_2,
+        html.P("", className="breakLine p-0 my-2 mx-auto w-75 text-info"),
+        DATA_CLEANSING_CARD_PART_3,
+        html.P("", className="breakLine p-0 my-2 mx-auto w-75 text-info"),
+        DATA_CLEANSING_CARD_PART_4,
+        DATA_CLEANSING_CARD_BUTTON,     
+    ],
+    className="form-group p-0 m-0"
+)
+
 
 
 DATA_CLEANSING_CARD = html.Div(
@@ -434,35 +644,51 @@ DATA_CLEANSING_CARD = html.Div(
             className='card-header text-right'
         ),
         # CARD BODY +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        html.Div(
+        html.Ul(
             children=[
-                html.Div(
+                html.Li(
                     children=[
-                        DATA_CLEANSING_CARD_PART_1
+                        DATA_CLEANSING_CARD_BODY
                     ],
-                    className='col-xl-6 col-lg-12 col-md-12 p-0 m-0 ',
-                ),
-                html.Div(
-                    children=[
-                        DATA_CLEANSING_CARD_PART_2
-                    ],
-                    className='col-xl-6 col-lg-12 col-md-12 p-0 m-0 ',
+                    className="list-group-item border-top border-dark"
                 ),
             ],
-            className='row p-3 m-0 border-bottom border-top border-dark',
-        ),
-        html.Div(
-            children=[
-                "sd"
-            ],
-            className='row p-3 m-0',
-        ),
+            className="list-group list-group-flush"
+        )
     ],
     className="card border-dark rounded p-0 m-0 h-100"
 )
 
 
-
+AQUIFER_HYDROGRAPH_CARD = html.Div(
+    children=[
+        # CARD HEADER +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        html.H5(
+            children=[
+                html.Img(
+                    src='data:image/png;base64,{}'.format(DATABASE_LOGO),
+                    height=30,
+                    className="ml-2"
+                ),
+                "محاسبه هیدروگراف آبخوان",
+            ],
+            className='card-header text-right'
+        ),
+        # CARD BODY +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        html.Ul(
+            children=[
+                html.Li(
+                    children=[
+                        "222"
+                    ],
+                    className="list-group-item border-top border-dark h-100"
+                ),
+            ],
+            className="list-group list-group-flush"
+        )
+    ],
+    className="card border-dark rounded p-0 m-0 h-100"
+)
 
 
 USER_SETTINGS_MODEL_BODY_TAB_HOME = html.Div(
@@ -477,11 +703,17 @@ USER_SETTINGS_MODEL_BODY_TAB_HOME = html.Div(
             children=[
                 DATA_CLEANSING_CARD
             ],
-            className='col-xl-8 col-lg-6 col-md-12 p-1 m-0',
+            className='col-xl-4 col-lg-6 col-md-12 p-1 m-0',
+        ),
+        html.Div(
+            children=[
+                AQUIFER_HYDROGRAPH_CARD
+            ],
+            className='col-xl-4 col-lg-6 col-md-12 p-1 m-0',
         )
     ],
     dir='rtl',
-    className='row p-0 m-0',
+    className='row p-0 m-0 align-self-center justify-content-center h-100',
 )
 
 

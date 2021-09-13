@@ -552,7 +552,7 @@ def groundwater_callback_home_tab(app):
         Output('RAW_DATA-TAB_HOME_BODY', 'data'),
         Output('INPUT_GEOINFO_TABLE_NAME-TAB_HOME_BODY', 'value'),
         Output('INPUT_DATA_TABLE_NAME-TAB_HOME_BODY', 'value'),       
-        Output('INTERVAL_COMPONENT_DATA_CLEANSING-TAB_HOME_BODY', 'n_intervals'),       
+        Output('INTERVAL_COMPONENT_SELECT_TABLE_DATA_CLEANSING-TAB_HOME_BODY', 'n_intervals'),       
                       
         Input("SUBMIT_SPREADSHEET_DATABASE-TAB_HOME_BODY", "n_clicks"),        
         Input('CHOOSE_SPREADSHEET-TAB_HOME_BODY', 'contents'),
@@ -883,41 +883,52 @@ def groundwater_callback_home_tab(app):
     # -----------------------------------------------------------------------------
     # DATA CLEANSING - TAB HOME BODY
     # -----------------------------------------------------------------------------
+    
+    # SECTION 1:
+    # ----------
+    
     @app.callback(
         Output('SELECT_GEOINFO_TABLE_DATA_CLEANSING-TAB_HOME_BODY', 'options'),
         Output('SELECT_DATA_TABLE_DATA_CLEANSING-TAB_HOME_BODY', 'options'),
-        Output('DUMMY_COMPONENT-TAB_HOME_BODY', 'data'),
-        Input("INTERVAL_COMPONENT_DATA_CLEANSING-TAB_HOME_BODY", "n_intervals"),
-        State('DUMMY_COMPONENT-TAB_HOME_BODY', 'data'),
+        Input("INTERVAL_COMPONENT_SELECT_TABLE_DATA_CLEANSING-TAB_HOME_BODY", "n_intervals"),
     )
-    def FUNCTION_DATA_CLEANSING_TAB_HOME_BODY(
-        n, DUMMY_COMPONENT_STATE      
+    def FUNCTION_SELECT_TABLE_NAME_DATA_CLEANSING_TAB_HOME_BODY(
+        n
     ):
-        if DUMMY_COMPONENT_STATE == "OK":
-                    
-            DB_GROUNDWATER_TABELS = list(pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", DB_GROUNDWATER).name)
-            
-            print(DB_GROUNDWATER_TABELS)
-            
-            result = [
-                [{'label': t, 'value': t} for t in DB_GROUNDWATER_TABELS],
-                [{'label': t, 'value': t} for t in DB_GROUNDWATER_TABELS],
-                "OK"
-            ]
-            
-            return result
+        DB_GROUNDWATER_TABELS = list(
+            pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", DB_GROUNDWATER).name
+        )
+                     
+        result = [
+            [{'label': t, 'value': t} for t in DB_GROUNDWATER_TABELS],
+            [{'label': t, 'value': t} for t in DB_GROUNDWATER_TABELS],
+        ]
+        
+        return result
+
+
+    # SECTION 2:
+    # ----------
+    
+    @app.callback(
+        Output('SELECT_ORDER_INTERPOLATE_METHOD_DATA_CLEANSING-TAB_HOME_BODY', 'disabled'),
+        Input('SELECT_INTERPOLATE_METHOD_DATA_CLEANSING-TAB_HOME_BODY', 'value'),
+    )
+    def FUNCTION_SELECT_ORDER_INTERPOLATE_METHOD_DATA_CLEANSING(
+        method
+    ):
+        if method in ["polynomial", "spline"]:
+            return False
         else:
-            print("Errorrrrr")
-            
-            result = [
-                [],
-                [],
-                "OK"
-            ]
-            
-            return result
-
-
+            return True
+        
+    
+    @app.callback(
+        Output('output_id', 'output_prop'),
+        Input('input_id', 'input_prop')
+    )
+    def fn(input_prop):
+        return 
 
 
     # df = pd.read_csv('https://gist.githubusercontent.com/chriddyp/5d1ea79569ed194d432e56108a04d188/raw/a9f9e8076b837d541398e999dcbac2b2826a81f8/gdp-life-exp-2007.csv')

@@ -40,7 +40,7 @@ HOME_TAB = html.Div(
         ),
         
         dcc.Interval(
-            id='INTERVAL_COMPONENT_DATA_CLEANSING-TAB_HOME_BODY',
+            id='INTERVAL_COMPONENT_SELECT_TABLE_DATA_CLEANSING-TAB_HOME_BODY',
             interval=1 * 1000,
             n_intervals=0,
             max_intervals=2
