@@ -356,7 +356,7 @@ def groundwater_callback_home_tab(app):
                 children=dl.Tooltip(
                     html.Div(
                         [
-                            html.Span("Lat: {:.2f}, Long: {:.2f}".format(dbl_click_lat_lng[0], dbl_click_lat_lng[1]), className="p-0 m-1"),
+                            html.Span("عرض: {:.2f}، طول: {:.2f}".format(dbl_click_lat_lng[0], dbl_click_lat_lng[1]), className="p-0 m-1"),
                             html.Hr(className="p-0 m-1"),
                             html.Span("{}{} {:.2f} {:.2f}".format(latlong_to_utm[2], latlong_to_utm[3], latlong_to_utm[0], latlong_to_utm[1]), className="p-0 m-1")
                         ],
@@ -388,7 +388,7 @@ def groundwater_callback_home_tab(app):
                             children=dl.Tooltip(
                                 html.Div(
                                     [
-                                        html.Span("Lat: {:.2f}, Long: {:.2f}".format(search_lat_lng[0], search_lat_lng[1]), className="p-0 m-1"),
+                                        html.Span("عرض: {:.2f}، طول: {:.2f}".format(search_lat_lng[0], search_lat_lng[1]), className="p-0 m-1"),
                                         html.Hr(className="p-0 m-1"),
                                         html.Span("{}{} {:.2f} {:.2f}".format(latlong_to_utm[2], latlong_to_utm[3], latlong_to_utm[0], latlong_to_utm[1]), className="p-0 m-1")
                                     ],
@@ -412,7 +412,7 @@ def groundwater_callback_home_tab(app):
                                 children=dl.Tooltip(
                                     html.Div(
                                         [
-                                            html.Span("Lat: {:.2f}, Long: {:.2f}".format(search_lat_lng[0], search_lat_lng[1]), className="p-0 m-1"),
+                                            html.Span("عرض: {:.2f}، طول: {:.2f}".format(search_lat_lng[0], search_lat_lng[1]), className="p-0 m-1"),
                                             html.Hr(className="p-0 m-1"),
                                             html.Span("{}{} {:.2f} {:.2f}".format(latlong_to_utm[2], latlong_to_utm[3], latlong_to_utm[0], latlong_to_utm[1]), className="p-0 m-1")
                                         ],
@@ -435,7 +435,7 @@ def groundwater_callback_home_tab(app):
                                 children=dl.Tooltip(
                                     html.Div(
                                         [
-                                            html.Span("Lat: {:.2f}, Long: {:.2f}".format(search_lat_lng[0], search_lat_lng[1]), className="p-0 m-1"),
+                                            html.Span("عرض: {:.2f}، طول: {:.2f}".format(search_lat_lng[0], search_lat_lng[1]), className="p-0 m-1"),
                                             html.Hr(className="p-0 m-1"),
                                             html.Span("{}{} {:.2f} {:.2f}".format(latlong_to_utm[2], latlong_to_utm[3], latlong_to_utm[0], latlong_to_utm[1]), className="p-0 m-1")
                                         ],
@@ -460,7 +460,7 @@ def groundwater_callback_home_tab(app):
                             children=dl.Tooltip(
                                 html.Div(
                                     [
-                                        html.Span("Lat: {:.2f}, Long: {:.2f}".format(p[1], p[0]), className="p-0 m-1"),
+                                        html.Span("عرض: {:.2f}، طول: {:.2f}".format(p[1], p[0]), className="p-0 m-1"),
                                         html.Hr(className="p-0 m-1"),
                                         html.Span("{} {} {}".format(search[0], search[1], search[2]), className="p-0 m-1")
                                     ],

@@ -249,6 +249,10 @@ DATABASE_CONNECTION_LOGO = base64.b64encode(
     open("./App/static/images/logo/Database_Connection_Logo.png", 'rb').read()
 ).decode()
 
+# MENU LOGO
+MENU_LOGO = base64.b64encode(
+    open("./App/static/images/logo/Menu.png", 'rb').read()
+).decode()
 
 # -----------------------------------------------------------------------------
 # COLUMNS "HydrographDataSample.xlsx"

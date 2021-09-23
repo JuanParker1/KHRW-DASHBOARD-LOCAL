@@ -18,7 +18,7 @@ SIDEBAR_BUTTON = html.Div(
     children=[
         html.I(
             html.Img(
-                src='data:image/png;base64,{}'.format(KHRW_LOGO),
+                src='data:image/png;base64,{}'.format(MENU_LOGO),
                 height="42px",
                 className="m-1"
             ),
@@ -32,8 +32,8 @@ SIDEBAR_BUTTON = html.Div(
 TITLE = html.Div(
     id="TITLE-TAB_HOME_BODY",
     children=[
-        html.H5("گروه آب‌های زیرزمینی‏", className="p-0 m-0 mb-1 mr-1"),
-        html.P("دفتر مطالعات پایه منابع آب شرکت سهامی آب منطقه‌ای خراسان رضوی", className="text-primary p-0 m-0"),
+        html.P("دفتر مطالعات پایه منابع آب شرکت سهامی آب منطقه‌ای خراسان رضوی", className="p-0 m-0 mb-1"),
+        html.H5("گروه آب‌های زیرزمینی‏", className="text-primary p-0 m-0 mr-1"),
     ],
     className="TILTE-SHOW",
     dir="rtl"
