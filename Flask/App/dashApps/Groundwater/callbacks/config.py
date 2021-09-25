@@ -19,7 +19,7 @@ import geojson
 # -----------------------------------------------------------------------------
 # MAPBOX TOKEN
 # -----------------------------------------------------------------------------
-PATH_MAPBOX_TOKEN = "./Assets/.mapbox_token"
+PATH_MAPBOX_TOKEN = "./Assets/Files/.mapbox_token"
 MAPBOX_TOKEN = open(PATH_MAPBOX_TOKEN).read()
 
 
@@ -244,9 +244,19 @@ DATABASE_LOGO = base64.b64encode(
     open("./App/static/images/logo/Database_Logo.png", 'rb').read()
 ).decode()
 
+# DATA CLEANSING LOGO
+DATACLEANSING_LOGO = base64.b64encode(
+    open("./App/static/images/logo/DataCleansing_Logo.png", 'rb').read()
+).decode()
+
 # DATABASE CONNECTION LOGO
 DATABASE_CONNECTION_LOGO = base64.b64encode(
     open("./App/static/images/logo/Database_Connection_Logo.png", 'rb').read()
+).decode()
+
+# CALCULATE LOGO
+CALCULATE_LOGO = base64.b64encode(
+    open("./App/static/images/logo/Calculate_Logo.png", 'rb').read()
 ).decode()
 
 # MENU LOGO
@@ -257,7 +267,7 @@ MENU_LOGO = base64.b64encode(
 # -----------------------------------------------------------------------------
 # COLUMNS "HydrographDataSample.xlsx"
 # -----------------------------------------------------------------------------
-HydrographDataSample = pd.ExcelFile('./Assets/Files/Groundwater/HydrographDataSample.xlsx')
+HydrographDataSample = pd.ExcelFile('./Assets/Files/Groundwater/HydrographData_Template.xlsx')
 HydrographDataSample_DataColumns = pd.read_excel(HydrographDataSample, sheet_name='Data').columns
 HydrographDataSample_GeoInfoColumns = pd.read_excel(HydrographDataSample, sheet_name='GeoInfo').columns
 

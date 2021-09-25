@@ -6,7 +6,7 @@ from App.dashApps.Groundwater.callbacks.callback_tab3 import groundwater_callbac
 
 def groundwater_callback(app):
     groundwater_callback_home_tab(app=app)
-    # groundwater_callback_settings_tab(app=app)
+    groundwater_callback_settings_tab(app=app)
     # groundwater_callback_tab1(app=app)
     # groundwater_callback_tab2(app=app)
     # groundwater_callback_tab3(app=app)

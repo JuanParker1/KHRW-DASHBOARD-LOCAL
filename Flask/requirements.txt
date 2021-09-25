@@ -1,15 +1,15 @@
-Flask
-Flask-SQLAlchemy
-WTForms
-Flask-WTF
-flask-bcrypt
-flask-login
-email_validator
 numpy
 pandas
 xlrd
 openpyxl
 geopandas
+Flask
+Flask-SQLAlchemy
+Flask-WTF
+flask-bcrypt
+flask-login
+email_validator
+WTForms
 plotly
 dash
 dash-bootstrap-components
@@ -18,7 +18,7 @@ dash_daq
 pyarrow
 folium
 altair
-dash-leaflet == 0.1.16
+dash-leaflet >= 0.1.16
 dash-extensions
 jsbeautifier
 utm

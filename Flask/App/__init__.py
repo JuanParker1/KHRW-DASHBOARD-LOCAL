@@ -26,7 +26,7 @@ UPLOAD_FOLDER = 'App/static/files'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.config['SECRET_KEY'] = 'd3946e1cf4b2b53d4dcf5d9e3b126498ac2876892270735eddbb7e3aca8a7bbe'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../Assets/Database/users.db'
 app.config['SQLALCHEMY_BINDS'] = {
     'precipitation': 'sqlite:///dashApps/precipitation/precipitation.sqlite'
 }
