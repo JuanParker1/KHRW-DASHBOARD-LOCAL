@@ -25,3 +25,6 @@ utm
 scipy
 geojson
 geobuf
+shapely == 1.8a3
+rtree
+pygeos
