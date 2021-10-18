@@ -1,0 +1,17 @@
+{
+"type": "FeatureCollection",
+"name": "Points",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::32640" } },
+"features": [
+{ "type": "Feature", "properties": { "MAHDOUDE_NAME": "M_01", "AQUIFER_NAME": "A_01", "LOCATION_NAME": "ST_01", "X": 59.55, "Y": 36.225, "LEVEL": 1000 }, "geometry": { "type": "Point", "coordinates": [ 729193.835805049864575, 4011919.892411165405065 ] } },
+{ "type": "Feature", "properties": { "MAHDOUDE_NAME": "M_01", "AQUIFER_NAME": "A_01", "LOCATION_NAME": "ST_02", "X": 59.625, "Y": 36.2, "LEVEL": 790 }, "geometry": { "type": "Point", "coordinates": [ 736011.375907039269805, 4009326.106435255613178 ] } },
+{ "type": "Feature", "properties": { "MAHDOUDE_NAME": "M_01", "AQUIFER_NAME": "A_01", "LOCATION_NAME": "ST_03", "X": 59.7, "Y": 36.2, "LEVEL": 700 }, "geometry": { "type": "Point", "coordinates": [ 742756.058281120378524, 4009511.349360906518996 ] } },
+{ "type": "Feature", "properties": { "MAHDOUDE_NAME": "M_01", "AQUIFER_NAME": "A_01", "LOCATION_NAME": "ST_04", "X": 59.625, "Y": 36.125, "LEVEL": 700 }, "geometry": { "type": "Point", "coordinates": [ 736236.500850178766996, 4001004.611198644153774 ] } },
+{ "type": "Feature", "properties": { "MAHDOUDE_NAME": "M_01", "AQUIFER_NAME": "A_01", "LOCATION_NAME": "ST_05", "X": 59.55, "Y": 36.1, "LEVEL": 950 }, "geometry": { "type": "Point", "coordinates": [ 729558.302673937752843, 3998050.984346308279783 ] } },
+{ "type": "Feature", "properties": { "MAHDOUDE_NAME": "M_01", "AQUIFER_NAME": "A_01", "LOCATION_NAME": "ST_06", "X": 59.675, "Y": 36.1, "LEVEL": 690 }, "geometry": { "type": "Point", "coordinates": [ 740813.621225379989482, 3998353.574966969899833 ] } },
+{ "type": "Feature", "properties": { "MAHDOUDE_NAME": "M_01", "AQUIFER_NAME": "A_01", "LOCATION_NAME": "ST_07", "X": 59.6, "Y": 36.05, "LEVEL": 750 }, "geometry": { "type": "Point", "coordinates": [ 734208.727347344858572, 3992622.714469135273248 ] } },
+{ "type": "Feature", "properties": { "MAHDOUDE_NAME": "M_01", "AQUIFER_NAME": "A_01", "LOCATION_NAME": "ST_08", "X": 59.725, "Y": 36.05, "LEVEL": 550 }, "geometry": { "type": "Point", "coordinates": [ 745471.332208349369466, 3992930.934869121294469 ] } },
+{ "type": "Feature", "properties": { "MAHDOUDE_NAME": "M_01", "AQUIFER_NAME": "A_01", "LOCATION_NAME": "ST_09", "X": 59.525, "Y": 36.025, "LEVEL": 950 }, "geometry": { "type": "Point", "coordinates": [ 727523.291683811810799, 3989671.023549341596663 ] } },
+{ "type": "Feature", "properties": { "MAHDOUDE_NAME": "M_01", "AQUIFER_NAME": "A_01", "LOCATION_NAME": "ST_10", "X": 59.675, "Y": 36.025, "LEVEL": 555 }, "geometry": { "type": "Point", "coordinates": [ 741042.492136403918266, 3990032.085953299887478 ] } }
+]
+}

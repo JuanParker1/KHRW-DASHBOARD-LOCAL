@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "Limit",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::32640" } },
+"features": [
+{ "type": "Feature", "properties": { "LAYER": "Unknown Area Type", "Id": 0 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 724627.372498670709319, 4014576.531980080064386 ], [ 747095.101156833348796, 4015185.631619784515351 ], [ 747880.621936144423671, 3987446.580370369832963 ], [ 725341.342406905023381, 3986839.182924760505557 ], [ 724627.372498670709319, 4014576.531980080064386 ] ] ] ] } }
+]
+}
