@@ -194,6 +194,11 @@ body {
   text-align: right !important;
 }
 
+.Select-value {
+  text-align: center !important;
+  padding: 0 !important;
+}
+
 .breakLine {
   display: flex;
   flex-direction: row;

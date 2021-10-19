@@ -30,6 +30,9 @@ TAB_PAN = html.Div(
                         <li class="nav-item tab-width">
                             <a class="nav-link" data-toggle="tab" href="#SETTINGS_TAB">تنظیمات</a>
                         </li>
+                        <li class="nav-item tab-width">
+                            <a class="nav-link" data-toggle="tab" href="#DATA_CLEANSING_TAB">پاک‌سازی داده‌ها</a>
+                        </li>
                     </ul>
             """
         ),
@@ -72,6 +75,13 @@ TAB_PAN = html.Div(
                     ],
                     className="tab-pane fade",
                     id="SETTINGS_TAB"
+                ),
+                html.Div(
+                    children=[
+                        DATA_CLEANSING_TAB
+                    ],
+                    className="tab-pane fade",
+                    id="DATA_CLEANSING_TAB"
                 ),
             ],
             className="tab-content"

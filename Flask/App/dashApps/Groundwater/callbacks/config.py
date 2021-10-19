@@ -961,3 +961,33 @@ def resultTableAquifer(df):
     result["اختلاف ماه سال"] = result["اختلاف ماه سال"].round(2)
     
     return result
+
+
+
+
+# -----------------------------------------------------------------------------
+# DATA CLEANSING TAB
+# -----------------------------------------------------------------------------
+
+# Load GeoDatabase
+# -----------------------------------------------------------------------------
+
+## Well Points
+gdf = gpd.read_file("./Assets/GeoJson/Sample/Wells_Selected.geojson").drop(['INDEX'], axis=1)
+gdf = gdf.set_crs("EPSG:32640", allow_override=True)
+COLs = ['MAHDOUDE_NAME', 'AQUIFER_NAME', 'LOCATION_NAME']
+gdf[COLs] = gdf[COLs].apply(lambda x: x.str.replace('ي','ی'))
+gdf[COLs] = gdf[COLs].apply(lambda x: x.str.replace('ئ','ی'))
+gdf[COLs] = gdf[COLs].apply(lambda x: x.str.replace('ك', 'ک'))
+
+## Boundary
+mask = gpd.read_file("./Assets/GeoJson/Sample/Aquifers_Selected.geojson")
+mask = mask.set_crs("EPSG:32640", allow_override=True)
+COLs = ['AQ_NAME', 'MA_NAME']
+mask[COLs] = mask[COLs].apply(lambda x: x.str.replace('ي','ی'))
+mask[COLs] = mask[COLs].apply(lambda x: x.str.replace('ئ','ی'))
+mask[COLs] = mask[COLs].apply(lambda x: x.str.replace('ك', 'ک'))
+
+
+PATH_DB_GROUNDWATER_RAW_DATA = './Assets/Database/groundwater_raw_data.db'
+DB_GROUNDWATER_RAW_DATA = sqlite3.connect(PATH_DB_GROUNDWATER_RAW_DATA, check_same_thread=False)
