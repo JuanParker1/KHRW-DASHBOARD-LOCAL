@@ -1,3 +1,13 @@
+# -----------------------------------------------------------------------------
+# DATA CLEANSING TAB - BODY
+# -----------------------------------------------------------------------------
+
+
+
+# -------------------------------------
+# MODULES
+# -------------------------------------
+
 import base64
 import numpy as np
 from datetime import date
@@ -8,77 +18,161 @@ import dash_daq as daq
 import dash_table
 
 
-# -----------------------------------------------------------------------------
-# DATA CLEANSING TAB - BODY
-# -----------------------------------------------------------------------------
+
+# -------------------------------------
+# CONTROLS
+# -------------------------------------
+
+# STUDY AREA:
+STUDY_AREA_CARD___CONTROLS___DATA_CLEANSING_TAB = [
+    html.Div(
+        className='form-group text-center', 
+        children=[
+            html.Label(
+                dir='rtl', 
+                children='محدوده مطالعاتی'
+            ),
+            dcc.Dropdown(
+                id='STUDY_AREA_SELECT___CONTROLS___DATA_CLEANSING_TAB', 
+                multi=True,
+                placeholder='انتخاب ...'
+            ) 
+        ]
+    )
+]
+
+# AQUIFER:
+AQUIFER_CARD___CONTROLS___DATA_CLEANSING_TAB = [
+    html.Div(
+        className='form-group text-center', 
+        children=[
+            html.Label(
+                className='text-center',
+                dir='rtl', 
+                children='آبخوان'
+            ),
+            dcc.Dropdown(
+                id='AQUIFER_SELECT___CONTROLS___DATA_CLEANSING_TAB', 
+                multi=True,
+                placeholder='انتخاب ...'
+            ) 
+        ]
+    )
+]
+
+# WELL:
+WELL_CARD___CONTROLS___DATA_CLEANSING_TAB = [
+    html.Div(
+        className='form-group text-center', 
+        children=[
+            html.Label(
+                className='text-center',
+                dir='rtl', 
+                children='چاه مشاهده‌ای'
+            ),
+            dcc.Dropdown(
+                id='WELL_SELECT___CONTROLS___DATA_CLEANSING_TAB', 
+                multi=True,
+                placeholder='انتخاب ...'
+            ) 
+        ]
+    )
+]
+
+# CONTROLS ----------------------------
+CONTROLS___DATA_CLEANSING_TAB = [
+    html.Div(
+        className='col-4',
+        children=STUDY_AREA_CARD___CONTROLS___DATA_CLEANSING_TAB
+    ),
+    html.Div(
+        className='col-4',
+        children=AQUIFER_CARD___CONTROLS___DATA_CLEANSING_TAB
+    ),
+    html.Div(
+        className='col-4',
+        children=WELL_CARD___CONTROLS___DATA_CLEANSING_TAB
+    )
+]
 
 
 
-GRAPH = dcc.Graph(
-    id='GRAPH-DATA_CLEANSING_TAB-BODY',
-    className="w-100 h-100"
-)
+# -------------------------------------
+# GRAPH & MAP
+# -------------------------------------
 
-TABLE = dash_table.DataTable(
-    id='TABLE-DATA_CLEANSING_TAB-BODY',
+# MAP
+MAP___GRAPH_MAP___DATA_CLEANSING_TAB = [
+    dcc.Graph(
+        id='MAP___GRAPH_MAP___DATA_CLEANSING_TAB',
+        className="w-100 h-100" 
+    )    
+]
+
+# GRAPH
+GRAPH___GRAPH_MAP___DATA_CLEANSING_TAB = [
+    dcc.Graph(
+        id='GRAPH___GRAPH_MAP___DATA_CLEANSING_TAB',
+        className="w-100 h-100"
+    )
+]
+
+
+# GRAPH & MAP -------------------------
+GRAPH_MAP___DATA_CLEANSING_TAB = [
+    html.Div(
+        className='col-3 m-0 p-0 border border-top-0 border-dark',
+        children=MAP___GRAPH_MAP___DATA_CLEANSING_TAB
+    ),
+    html.Div(
+        className='col-9 m-0 p-0 border border-top-0 border-right-0 border-dark',
+        children=GRAPH___GRAPH_MAP___DATA_CLEANSING_TAB
+    )
+]
+
+
+
+# -------------------------------------
+# TABLE
+# -------------------------------------
+
+TABLE___DATA_CLEANSING_TAB = dash_table.DataTable(
+    id="TABLE___DATA_CLEANSING_TAB",
     editable=True,
-    filter_action="native",
-    style_table={
-        'overflowX': 'auto',
-        'overflowY': 'auto',
-    },
     style_cell={
-        'whiteSoace': 'normal',
         'border': '1px solid grey',
         'font-size': '14px',
-        'font_family': 'Tanha-FD',
-        'text_align': 'center',
-        'minWidth': 65,
-        'maxWidth': 200,
-        'width': 65,
-        'height': 'auto'
+        'text_align': 'center'
     },
-    style_header={
-        'backgroundColor': 'rgb(220, 220, 220)',
-        'fontWeight': 'bold',
-        'whiteSpace': 'normal',
-        'text_align': 'center',
-        'height': 'auto',
-    },
-    css=[{
-        'selector': '.dash-table-tooltip',
-        'rule': 'background-color: yellow;'
-    }],
-    page_size=30
 )
 
 
 
+# -------------------------------------
+# BUTTONS
+# -------------------------------------
 
+# BUTTON:
+BUTTON___BUTTONS___DATA_CLEANSING_TAB = dbc.Button(
+    id='BUTTON___BUTTONS___DATA_CLEANSING_TAB',
+    className="me-1",
+    size="lg",
+    children='بروزرسانی پایگاه داده', 
+    color='primary',
+    n_clicks=0
+)
 
-DATA_CLEANSING_TAB_BODY = html.Div(
-    children=[
-        html.Div(
-            children=[
-                GRAPH,
-            ],
-            className="row justify-content-center",
-            style={
-                "height": "500px",
-            }
-        ),
-        html.Div(
-            children=[
-                TABLE,
-            ],
-            className="row justify-content-center pb-4",
-        ),
-        html.Button('Update', id='Update', n_clicks=0),
-        html.Div(id='Placeholder', children=[]),
-        dcc.Interval(id='Interval', interval=5000),
-    ]
+# TOAST:
+TOAST___BUTTONS___DATA_CLEANSING_TAB = dbc.Toast(
+    id='TOAST___BUTTONS___DATA_CLEANSING_TAB',
+    is_open=False,
+    dismissable=True,
+    duration=5000
 )
 
 
-
-
+# BUTTONS -----------------------------
+BUTTONS___DATA_CLEANSING_TAB = [
+    BUTTON___BUTTONS___DATA_CLEANSING_TAB,
+    TOAST___BUTTONS___DATA_CLEANSING_TAB,
+]

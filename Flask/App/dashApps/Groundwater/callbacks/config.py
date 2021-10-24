@@ -16,6 +16,11 @@ from dash.dependencies import Input, Output, State
 import dash_leaflet.express as dlx
 import geojson
 
+import plotly.graph_objects as go
+import plotly.express as px
+
+import dash_table
+
 # -----------------------------------------------------------------------------
 # MAPBOX TOKEN
 # -----------------------------------------------------------------------------
@@ -37,6 +42,73 @@ EN_CHAR = list(string.ascii_lowercase) +\
     list(string.ascii_uppercase) +\
         ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "_"]
 
+
+
+# -----------------------------------------------------------------------------
+# NO MATCHING DATA FOUND TEMPLATE
+# -----------------------------------------------------------------------------
+NO_MATCHING_DATA_FOUND_300 = {
+    "layout": {
+        "height": 250,
+        "xaxis": {"visible": False},
+        "yaxis": {"visible": False},
+        "annotations": [
+            {
+                "text": "No Data Found ...",
+                "xref": "paper",
+                "yref": "paper",
+                "showarrow": False,
+                "font": {"size": 36}
+            }
+        ]
+    }
+}
+
+NO_MATCHING_DATA_FOUND = {
+    "layout": {
+        "xaxis": {"visible": False},
+        "yaxis": {"visible": False},
+        "annotations": [
+            {
+                "text": "No Data Found ...",
+                "xref": "paper",
+                "yref": "paper",
+                "showarrow": False,
+                "font": {"size": 36}
+            }
+        ]
+    }
+}
+
+
+
+# -----------------------------------------------------------------------------
+# BASE MAP
+# -----------------------------------------------------------------------------
+BASE_MAP = go.Figure(
+    go.Scattermapbox(
+        lat=[36.25],
+        lon=[59.55],
+        mode='markers',
+        marker=go.scattermapbox.Marker(size=9),
+        text="شهر مشهد"
+    )
+)
+
+BASE_MAP.update_layout(
+    mapbox={
+        'style': "stamen-terrain",
+        'center': {
+            'lon': 59.55,
+            'lat': 36.25
+        },
+        'zoom': 5.5
+    },
+    showlegend=False,
+    hovermode='closest',
+    margin={'l':0, 'r':0, 'b':0, 't':0},
+    autosize=False
+)
 
 
 # table_name = pd.read_sql_query("SELECT name FROM sqlite_master WHERE type='table'", db)
@@ -991,3 +1063,18 @@ mask[COLs] = mask[COLs].apply(lambda x: x.str.replace('ك', 'ک'))
 
 PATH_DB_GROUNDWATER_RAW_DATA = './Assets/Database/groundwater_raw_data.db'
 DB_GROUNDWATER_RAW_DATA = sqlite3.connect(PATH_DB_GROUNDWATER_RAW_DATA, check_same_thread=False)
+
+
+
+
+
+
+
+def create_table(df, id):
+    table = dash_table.DataTable(
+        id=id,
+        columns=[{"name": i, "id": i} for i in df.columns],
+        data=df.to_dict('records'),
+        editable=True
+    )
+    return table

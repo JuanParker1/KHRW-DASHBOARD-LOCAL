@@ -110,8 +110,8 @@
 
 body {
   direction: rtl;
-  text-align: right;
-  /* max-width: 1920px */
+  text-align: right; */
+  /* max-width: 1920px
 }
 
 .left-sidebar {
@@ -589,4 +589,11 @@ BODY
   -webkit-animation: headShake 2s;
   animation: headShake 2s;
   color: gray;
+}
+
+.item-card {
+  box-shadow: 2px 2px 5px #666262;
+  background-color: #fff;
+  border-radius: 2px;
+  transition: 0.3s linear all;
 }
