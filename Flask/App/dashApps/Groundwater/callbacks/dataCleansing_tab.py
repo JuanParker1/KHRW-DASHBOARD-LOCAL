@@ -142,13 +142,15 @@ def groundwater_callback_dataCleansing_tab(app):
     # -----------------------------------------------------------------------------
     @app.callback(
         Output('GRAPH___GRAPH_MAP___DATA_CLEANSING_TAB', 'figure'),   
+        Input('METHOD_1_SELECT___CONTROLS___DATA_CLEANSING_TAB', 'value'),
+        Input('METHOD_2_SELECT___CONTROLS___DATA_CLEANSING_TAB', 'value'),
         Input('LOAD_DATABASE___DATA_CLEANSING_TAB', 'n_intervals'),
         Input('STUDY_AREA_SELECT___CONTROLS___DATA_CLEANSING_TAB', 'value'),
         Input('AQUIFER_SELECT___CONTROLS___DATA_CLEANSING_TAB', 'value'),
         Input('WELL_SELECT___CONTROLS___DATA_CLEANSING_TAB', 'value'),
         State('DATA_STORE___DATA_CLEANSING_TAB', 'data')
     )
-    def FUNCTION___GRAPH___GRAPH_MAP___DATA_CLEANSING_TAB(n_interval, study_area, aquifer, well, data):        
+    def FUNCTION___GRAPH___GRAPH_MAP___DATA_CLEANSING_TAB(n1, n2, n_interval, study_area, aquifer, well, data):        
         if study_area is not None and len(study_area) != 0 and\
             aquifer is not None and len(aquifer) != 0 and\
                 well is not None and len(well) != 0:
@@ -164,13 +166,13 @@ def groundwater_callback_dataCleansing_tab(app):
                     # Method 1:
                     
                     data["DIFF"] = data["WATER_TABLE_MODIFY"].diff().abs()
-                    data["DIFF_MEAN"] = data["DIFF"].rolling(6).mean()
-                    data["CHECK_METHOD_1"] = data["DIFF"] > (data["DIFF_MEAN"] * 2)
+                    data["DIFF_MEAN"] = data["DIFF"].rolling(6, min_periods=1).mean().shift(1)
+                    data["CHECK_METHOD_1"] = data["DIFF"] > (data["DIFF_MEAN"] * n1)
                     data["SHIFT_DATE"] = data["DATE_GREGORIAN_RAW"].shift(periods=1, fill_value=0)                    
                     data[['DATE_GREGORIAN_RAW','SHIFT_DATE']] = data[['DATE_GREGORIAN_RAW','SHIFT_DATE']].apply(pd.to_datetime)                  
                     data["DIFF_DATE"] = (data["DATE_GREGORIAN_RAW"] - data["SHIFT_DATE"]).dt.days.abs()
                     data["DERIVATIV"] = (data["DIFF"] / data["DIFF_DATE"]) * 100
-                    data["CHECK_METHOD_2"] = data["DERIVATIV"] > 2
+                    data["CHECK_METHOD_2"] = data["DERIVATIV"] > n2
 
                                 
                     # PLOT
@@ -191,7 +193,7 @@ def groundwater_callback_dataCleansing_tab(app):
                                 name=f'داده‌های خام - {w}',
                                 marker=dict(
                                     color='black',
-                                    size=8,
+                                    size=10,
                                 ),
                                 line=dict(
                                     color='black',
@@ -208,7 +210,7 @@ def groundwater_callback_dataCleansing_tab(app):
                                 name=f'داده‌های اصلاح شده - {w}',
                                 marker=dict(
                                     color='green',
-                                    size=8,
+                                    size=10,
                                 ),
                                 line=dict(
                                     color='green',
@@ -227,7 +229,7 @@ def groundwater_callback_dataCleansing_tab(app):
                                 mode='markers',
                                 name=f'روش میانگین - {w}',
                                 marker=dict(
-                                    color='orange',
+                                    color='blue',
                                     size=12,
                                     symbol='x'
                                 )

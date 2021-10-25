@@ -79,19 +79,67 @@ WELL_CARD___CONTROLS___DATA_CLEANSING_TAB = [
     )
 ]
 
+# METHOD 1:
+METHOD_1_CARD___CONTROLS___DATA_CLEANSING_TAB = [
+    html.Div(
+        className='form-group text-center', 
+        children=[
+            html.Label(
+                className='text-center',
+                dir='rtl', 
+                children='روش میانگین'
+            ),
+            dcc.Dropdown(
+                id='METHOD_1_SELECT___CONTROLS___DATA_CLEANSING_TAB', 
+                placeholder='انتخاب ...',
+                value=2,
+                options=[{"label": f"{x}x", "value": x} for x in [i for i in range(1, 11)]]
+            ) 
+        ]
+    )
+]
+
+# METHOD 2:
+METHOD_2_CARD___CONTROLS___DATA_CLEANSING_TAB = [
+    html.Div(
+        className='form-group text-center', 
+        children=[
+            html.Label(
+                className='text-center',
+                dir='rtl', 
+                children='روش مشتق'
+            ),
+            dcc.Dropdown(
+                id='METHOD_2_SELECT___CONTROLS___DATA_CLEANSING_TAB', 
+                placeholder='انتخاب ...',
+                value=2,
+                options=[{"label": f"{x}%", "value": x} for x in [i for i in range(1, 11)]]
+            ) 
+        ]
+    ),
+]
+
 # CONTROLS ----------------------------
 CONTROLS___DATA_CLEANSING_TAB = [
     html.Div(
-        className='col-4',
+        className='col-2',
         children=STUDY_AREA_CARD___CONTROLS___DATA_CLEANSING_TAB
     ),
     html.Div(
-        className='col-4',
+        className='col-2',
         children=AQUIFER_CARD___CONTROLS___DATA_CLEANSING_TAB
     ),
     html.Div(
         className='col-4',
         children=WELL_CARD___CONTROLS___DATA_CLEANSING_TAB
+    ),
+    html.Div(
+        className='col-2',
+        children=METHOD_1_CARD___CONTROLS___DATA_CLEANSING_TAB
+    ),
+    html.Div(
+        className='col-2',
+        children=METHOD_2_CARD___CONTROLS___DATA_CLEANSING_TAB
     )
 ]
 
