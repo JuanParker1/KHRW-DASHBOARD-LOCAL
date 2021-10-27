@@ -135,112 +135,112 @@ BASE_MAP.update_layout(
 # -----------------------------------------------------------------------------
 # GEOJSON LOCATION
 # -----------------------------------------------------------------------------
-# GEOJSON_LOCATION = {
-#     "COUNTRY" : {
-#         "url": "./Assets/GeoJson/Country.geojson",
-#         "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Country.geojson"))),
-#         "options": {
-#             "weight": "1",
-#             # "dashArray": "10, 10",
-#             # "dashOffset": "10",
-#             "color": "black",
-#             "opacity": "1",
-#             "fillColor": "black",
-#             "fillOpacity": "0.01",
-#         }
-#     },
-#     "PROVINCE" : {
-#         "url": "./Assets/GeoJson/Province.geojson",
-#         "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Province.geojson"))),
-#         "options": {
-#             "weight": "1",
-#             # "dashArray": "10, 10",
-#             # "dashOffset": "10",
-#             "color": "black",
-#             "opacity": "1",
-#             "fillColor": "black",
-#             "fillOpacity": "0.01",
-#         }
-#     },
-#     "COUNTY" : {
-#         "url": "./Assets/GeoJson/County.geojson",
-#         "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/County.geojson"))),
-#         "options": {
-#             "weight": "1",
-#             # "dashArray": "10, 10",
-#             # "dashOffset": "10",
-#             "color": "black",
-#             "opacity": "1",
-#             "fillColor": "black",
-#             "fillOpacity": "0.01",
-#         }
-#     },
-#     "DISTRICT" : {
-#         "url": "./Assets/GeoJson/District.geojson",
-#         "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/District.geojson"))),
-#         "options": {
-#             "weight": "1",
-#             # "dashArray": "10, 10",
-#             # "dashOffset": "10",
-#             "color": "black",
-#             "opacity": "1",
-#             "fillColor": "black",
-#             "fillOpacity": "0.01",
-#         }
-#     },
-#     "BASIN1" : {
-#         "url": "./Assets/GeoJson/Basin1.geojson",
-#         "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Basin1.geojson"))),
-#         "options": {
-#             "weight": "5",
-#             # "dashArray": "10, 10",
-#             # "dashOffset": "10",
-#             "color": "blue",
-#             "opacity": "1",
-#             "fillColor": "blue",
-#             "fillOpacity": "0.01",
-#         }
-#     },
-#     "BASIN2" : {
-#         "url": "./Assets/GeoJson/Basin2.geojson",
-#         "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Basin2.geojson"))),
-#         "options": {
-#             "weight": "5",
-#             # "dashArray": "10, 10",
-#             # "dashOffset": "10",
-#             "color": "blue",
-#             "opacity": "1",
-#             "fillColor": "blue",
-#             "fillOpacity": "0.01",
-#         }
-#     },
-#     "MAHDOUDE" : {
-#         "url": "./Assets/GeoJson/Mahdoude.geojson",
-#         "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Mahdoude.geojson"))),
-#         "options": {
-#             "weight": "5",
-#             # "dashArray": "10, 10",
-#             # "dashOffset": "10",
-#             "color": "blue",
-#             "opacity": "1",
-#             "fillColor": "blue",
-#             "fillOpacity": "0.01",
-#         }
-#     },
-#     "AQUIFER" : {
-#         "url": "./Assets/GeoJson/Aquifer.geojson",
-#         "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Aquifer.geojson"))),
-#         "options": {
-#             "weight": "5",
-#             # "dashArray": "10, 10",
-#             # "dashOffset": "10",
-#             "color": "blue",
-#             "opacity": "1",
-#             "fillColor": "blue",
-#             "fillOpacity": "0.01",
-#         }
-#     }
-# }
+GEOJSON_LOCATION = {
+    "COUNTRY" : {
+        "url": "./Assets/GeoJson/Country.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Country.geojson"))),
+        "options": {
+            "weight": "1",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "black",
+            "opacity": "1",
+            "fillColor": "black",
+            "fillOpacity": "0.01",
+        }
+    },
+    "PROVINCE" : {
+        "url": "./Assets/GeoJson/Province.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Province.geojson"))),
+        "options": {
+            "weight": "1",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "black",
+            "opacity": "1",
+            "fillColor": "black",
+            "fillOpacity": "0.01",
+        }
+    },
+    "COUNTY" : {
+        "url": "./Assets/GeoJson/County.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/County.geojson"))),
+        "options": {
+            "weight": "1",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "black",
+            "opacity": "1",
+            "fillColor": "black",
+            "fillOpacity": "0.01",
+        }
+    },
+    "DISTRICT" : {
+        "url": "./Assets/GeoJson/District.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/District.geojson"))),
+        "options": {
+            "weight": "1",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "black",
+            "opacity": "1",
+            "fillColor": "black",
+            "fillOpacity": "0.01",
+        }
+    },
+    "BASIN1" : {
+        "url": "./Assets/GeoJson/Basin1.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Basin1.geojson"))),
+        "options": {
+            "weight": "5",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "blue",
+            "opacity": "1",
+            "fillColor": "blue",
+            "fillOpacity": "0.01",
+        }
+    },
+    "BASIN2" : {
+        "url": "./Assets/GeoJson/Basin2.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Basin2.geojson"))),
+        "options": {
+            "weight": "5",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "blue",
+            "opacity": "1",
+            "fillColor": "blue",
+            "fillOpacity": "0.01",
+        }
+    },
+    "MAHDOUDE" : {
+        "url": "./Assets/GeoJson/Mahdoude.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Mahdoude.geojson"))),
+        "options": {
+            "weight": "5",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "blue",
+            "opacity": "1",
+            "fillColor": "blue",
+            "fillOpacity": "0.01",
+        }
+    },
+    "AQUIFER" : {
+        "url": "./Assets/GeoJson/Aquifer.geojson",
+        "data": dlx.geojson_to_geobuf(geojson.load(open("./Assets/GeoJson/Aquifer.geojson"))),
+        "options": {
+            "weight": "5",
+            # "dashArray": "10, 10",
+            # "dashOffset": "10",
+            "color": "blue",
+            "opacity": "1",
+            "fillColor": "blue",
+            "fillOpacity": "0.01",
+        }
+    }
+}
 
 
 
@@ -1063,18 +1063,3 @@ mask[COLs] = mask[COLs].apply(lambda x: x.str.replace('ك', 'ک'))
 
 PATH_DB_GROUNDWATER_RAW_DATA = './Assets/Database/groundwater_raw_data.db'
 DB_GROUNDWATER_RAW_DATA = sqlite3.connect(PATH_DB_GROUNDWATER_RAW_DATA, check_same_thread=False)
-
-
-
-
-
-
-
-def create_table(df, id):
-    table = dash_table.DataTable(
-        id=id,
-        columns=[{"name": i, "id": i} for i in df.columns],
-        data=df.to_dict('records'),
-        editable=True
-    )
-    return table

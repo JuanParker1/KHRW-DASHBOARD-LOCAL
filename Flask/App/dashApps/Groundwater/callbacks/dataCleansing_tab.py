@@ -40,11 +40,11 @@ def groundwater_callback_dataCleansing_tab(app):
                     MN = df.loc[i, "MAHDOUDE_NAME"]
                     AN = df.loc[i, "AQUIFER_NAME"]
                     LN = df.loc[i, "LOCATION_NAME"]
-                    DPR =  df.loc[i, "DATE_PERSIAN_RAW"]                    
+                    DPR =  df.loc[i, "DATE_PERSIAN_RAW"]
                     data.loc[
                         (data['MAHDOUDE_NAME'] == MN) & (data['AQUIFER_NAME'] == AN) & (data['LOCATION_NAME'] == LN) & (data['DATE_PERSIAN_RAW'] == DPR),
                         'WATER_TABLE_MODIFY'
-                    ] = float(df.loc[i, "WATER_TABLE_MODIFY"])
+                    ] = np.nan if (df.loc[i, "WATER_TABLE_MODIFY"] == '') else float(df.loc[i, "WATER_TABLE_MODIFY"])
                 data.to_sql(
                     name="GROUNDWATER_DATA",
                     con=DB_GROUNDWATER_RAW_DATA,
@@ -314,7 +314,67 @@ def groundwater_callback_dataCleansing_tab(app):
             aquifer is not None and len(aquifer) != 0 and\
                 well is not None and len(well) != 0:
                     
-                    return BASE_MAP        
+                    mask_df = mask[mask['MA_NAME'].isin(study_area)]
+                    mask_df = mask_df[mask_df['AQ_NAME'].isin(aquifer)]
+                    j_file = json.loads(mask_df.to_json())
+
+                    for feature in j_file["features"]:
+                        feature['id'] = feature['properties']['AQ_NAME']
+                    
+                    # Create Map
+                    fig = px.choropleth_mapbox(
+                        data_frame=mask_df,
+                        geojson=j_file,
+                        locations='AQ_NAME',
+                        opacity=0.4
+                    )
+                    
+                    gdf_df = gdf[gdf["MAHDOUDE_NAME"].isin(study_area)]
+                    all_wells = gdf_df[gdf_df["AQUIFER_NAME"].isin(aquifer)]                    
+                    selected_wells = all_wells[all_wells["LOCATION_NAME"].isin(well)]
+                    
+                    fig.add_trace(
+                        go.Scattermapbox(
+                            lat=all_wells.Y_,
+                            lon=all_wells.X_,
+                            mode='markers',
+                            marker=go.scattermapbox.Marker(size=8),
+                            text=all_wells["LOCATION_NAME"],
+                            hoverinfo='text',
+                            hovertemplate='<span style="color:white;">%{text}</span><extra></extra>'
+                        )
+                    )
+                    
+                    fig.add_trace(
+                        go.Scattermapbox(
+                            lat=selected_wells.Y_,
+                            lon=selected_wells.X_,
+                            mode='markers',
+                            marker=go.scattermapbox.Marker(
+                                size=10,
+                                color='green'
+                            ),
+                            text=selected_wells["LOCATION_NAME"],
+                            hoverinfo='text',
+                            hovertemplate='<b>%{text}</b><extra></extra>'
+                        ), 
+                    )
+                        
+                    fig.update_layout(
+                        mapbox = {
+                            'style': "stamen-terrain",
+                            'zoom': 6,
+                            'center': {
+                                'lon': selected_wells.X_.mean(),
+                                'lat': selected_wells.Y_.mean()
+                            },
+                        },
+                        showlegend = False,
+                        hovermode='closest',
+                        margin = {'l':0, 'r':0, 'b':0, 't':0}
+                    )
+                    
+                    return fig        
         else:
             return BASE_MAP
 

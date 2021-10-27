@@ -69,7 +69,7 @@ search_bar = html.Div(
         ),
         dbc.Tooltip(
             target="search_coordinate",
-            autohide=True,
+            # autohide=True,
             placement="right",
             hide_arrow=True,
             delay={ "show": 0, "hide": 10 },
