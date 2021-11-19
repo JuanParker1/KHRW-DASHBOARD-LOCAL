@@ -277,7 +277,7 @@ def groundwater_callback_dataCleansing_tab(app):
                         ),
                         margin=dict(
                             l=50,
-                            r=30,
+                            r=10,
                             b=30,
                             t=50,
                             pad=0
@@ -294,7 +294,7 @@ def groundwater_callback_dataCleansing_tab(app):
                                         
                     return fig
         else:
-            return NO_MATCHING_DATA_FOUND
+            return NO_MATCHING_GRAPH_FOUND
     
     
     
@@ -363,7 +363,7 @@ def groundwater_callback_dataCleansing_tab(app):
                     fig.update_layout(
                         mapbox = {
                             'style': "stamen-terrain",
-                            'zoom': 6,
+                            'zoom': 7,
                             'center': {
                                 'lon': selected_wells.X_.mean(),
                                 'lat': selected_wells.Y_.mean()
@@ -376,7 +376,7 @@ def groundwater_callback_dataCleansing_tab(app):
                     
                     return fig        
         else:
-            return BASE_MAP
+            return NO_MATCHING_MAP_FOUND
 
     
     
@@ -386,6 +386,8 @@ def groundwater_callback_dataCleansing_tab(app):
     @app.callback(
         Output('TABLE___DATA_CLEANSING_TAB', 'columns'),
         Output('TABLE___DATA_CLEANSING_TAB', 'data'),
+        Output('TABLE_HOLDER___BODY___DATA_CLEANSING_TAB', 'hidden'),        
+        Output('MAP_HOLDER___BODY___DATA_CLEANSING_TAB', 'className'),        
         Input('LOAD_DATABASE___DATA_CLEANSING_TAB', 'n_intervals'),
         Input('STUDY_AREA_SELECT___CONTROLS___DATA_CLEANSING_TAB', 'value'),
         Input('AQUIFER_SELECT___CONTROLS___DATA_CLEANSING_TAB', 'value'),
@@ -421,9 +423,13 @@ def groundwater_callback_dataCleansing_tab(app):
                         return [
                             [{"name": i, "id": i} for i in df.columns],
                             df.to_dict('records'),
+                            False,
+                            "col-2 m-0 px-2 pt-0 pb-2"
                         ]
         else:
             return [
                 [{}],
-                []
+                [],
+                True,
+                "col-12 m-0 pr-3 pl-5 pt-0 pb-3"
             ]

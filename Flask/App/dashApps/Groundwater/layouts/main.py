@@ -16,7 +16,7 @@ TAB_PAN = html.Div(
             """
                     <ul class="nav nav-tabs mt-1" role="tablist">
                         <li class="nav-item tab-width">
-                            <a class="nav-link active" data-toggle="tab" href="#HOME_TAB">خانه</a>
+                            <a class="nav-link" data-toggle="tab" href="#HOME_TAB">خانه</a>
                         </li>
                         <li class="nav-item tab-width">
                             <a class="nav-link" data-toggle="tab" href="#Tab_1">چاه مشاهده‌ای</a>
@@ -33,6 +33,9 @@ TAB_PAN = html.Div(
                         <li class="nav-item tab-width">
                             <a class="nav-link" data-toggle="tab" href="#DATA_CLEANSING_TAB">پاک‌سازی داده‌ها</a>
                         </li>
+                        <li class="nav-item tab-width">
+                            <a class="nav-link active" data-toggle="tab" href="#MISSING_DATA_TAB">بازسازی داده‌ها</a>
+                        </li>
                     </ul>
             """
         ),
@@ -45,7 +48,7 @@ TAB_PAN = html.Div(
                     children=[
                         HOME_TAB
                     ],
-                    className="tab-pane active",
+                    className="tab-pane fade",
                     id="HOME_TAB"
                 ),
                 html.Div(
@@ -82,6 +85,13 @@ TAB_PAN = html.Div(
                     ],
                     className="tab-pane fade",
                     id="DATA_CLEANSING_TAB"
+                ),
+                html.Div(
+                    children=[
+                        MISSING_DATA_TAB
+                    ],
+                    className="tab-pane active",
+                    id="MISSING_DATA_TAB"
                 ),
             ],
             className="tab-content"

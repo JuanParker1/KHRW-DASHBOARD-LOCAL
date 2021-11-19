@@ -305,7 +305,7 @@ DATABASE_CARD = html.Div(
                     className="row m-2 d-flex align-items-center" 
                 ),
             ],
-            className="card-header justify-content-between p-0"
+            className="card-header justify-content-between p-0 bg-light"
         ),
         
         
@@ -323,12 +323,12 @@ DATABASE_CARD = html.Div(
                     ],
                     className="list-group-item border-bottom border-top border-dark"
                 ),
-                html.Li(
-                    children=[
-                        IP_SERVER_DATABASE
-                    ],
-                    className="list-group-item"
-                )
+                # html.Li(
+                #     children=[
+                #         IP_SERVER_DATABASE
+                #     ],
+                #     className="list-group-item"
+                # )
             ],
             className="list-group list-group-flush"
         )

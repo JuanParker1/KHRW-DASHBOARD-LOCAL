@@ -2,6 +2,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+
+
 # from flask_googlemaps import GoogleMaps
 # from flask_bootstrap import Bootstrap
 # from flask_datepicker import datepicker
@@ -12,6 +14,7 @@ from App.dashApps.Groundwater.app import create_groundwater_app
 # from App.dashApp.precipitation.app import create_precipitation_app
 
 app = Flask(import_name=__name__, static_folder='static')
+
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

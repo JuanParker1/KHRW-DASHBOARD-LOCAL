@@ -97,9 +97,9 @@
   font-weight: normal;
 }
 
-.Font-Vazir {
-  font-family: "Vazir";
-}
+/* ------------------------------------------------------------------------- */
+/* MAIN STYLE */
+/* ------------------------------------------------------------------------- */
 
 * {
   margin: 0;
@@ -110,8 +110,12 @@
 
 body {
   direction: rtl;
-  text-align: right; */
-  /* max-width: 1920px
+  text-align: right;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
 }
 
 .left-sidebar {
@@ -170,33 +174,8 @@ body {
   font-family: "Nunito";
 }
 
-.font_size {
-  font-size: 12px;
-}
-
-.fs-small {
-  font-size: small !important;
-}
-
-.fs-medium {
-  font-size: medium;
-}
-
-.fs-large {
-  font-size: large;
-}
-
-.font_size_14 {
-  font-size: 14px;
-}
-
 .dropdown {
   text-align: right !important;
-}
-
-.Select-value {
-  text-align: center !important;
-  padding: 0 !important;
 }
 
 .breakLine {
@@ -218,11 +197,6 @@ body {
 
 .breakLine:after {
   margin-left: 5px;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
 }
 
 .footer {
@@ -332,10 +306,6 @@ html {
   max-width: 20%;
 }
 
-/* .mm {
-  height: 95vh !important;
-} */
-
 .card-transition:hover {
   box-shadow: 3px 3px 12px #8c8c8c;
   transition: 0.1s linear all;
@@ -359,30 +329,6 @@ html {
   width: 30px !important;
   height: 30px !important;
 }
-
-/* 
-------------------------------------------------------------------------------
-GroundWater App
-------------------------------------------------------------------------------
-*/
-
-/* 
----------------------------------------
-GENERAL
----------------------------------------
-*/
-
-/* 
----------------------------------------
-TAB HOME
----------------------------------------
-*/
-
-/* 
--------------------
-TITLE
--------------------
-*/
 
 .TILTE-SHOW {
   position: absolute;
@@ -524,10 +470,16 @@ input[type="checkbox"] {
 }
 
 #js-plotly-tester {
-  display: none;
+  /* display: none; */
+  position: absolute !important;
+  left: -10000px !important;
+  top: -10000px !important;
+  width: 0px !important;
+  height: 0px !important;
+  z-index: 0 !important;
 }
 
-.Select-value {
+/* .Select-value {
   line-height: 40px !important;
   padding-top: 5px;
 }
@@ -535,7 +487,7 @@ input[type="checkbox"] {
 .Select-placeholder,
 .Select--single > .Select-control .Select-value {
   line-height: 40px !important;
-}
+} */
 
 .h-40 {
   height: 40% !important;
